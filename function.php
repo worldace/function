@@ -429,7 +429,7 @@ class time{
 
 
     static function calendar(int $year = null, int $month = null) :array{
-        $date = ($year and $month) ? new \DateTime("$year-$month") : new \DateTime('first day of');
+        $date = isset($year, $month) ? new \DateTime("$year-$month") : new \DateTime('first day of');
 
         $wday = $date->format('w');
         $days = $date->format('t');
@@ -458,8 +458,68 @@ class time{
 
 
 
-class crypt{
-    
+class random{
+    static function id(){
+        
+    }
+
+
+    static function uuid(bool $hyphen = false) :string{ // http://php.net/manual/en/function.uniqid.php#94959
+        $format = ($hyphen) ? '%04x%04x-%04x-%04x-%04x-%04x%04x%04x' : '%04x%04x%04x%04x%04x%04x%04x%04x';
+        return sprintf($format, mt_rand(0,0xffff),mt_rand(0,0xffff), mt_rand(0,0xffff), mt_rand(0,0x0fff)|0x4000, mt_rand(0,0x3fff)|0x8000, mt_rand(0,0xffff),mt_rand(0,0xffff),mt_rand(0,0xffff));
+    }
+
+
+    static function str(int $length) :string{
+        $chars  = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $max    =  strlen($chars) - 1;
+        $return = '';
+
+        for($i = 0;  $i < $length;  $i++){
+            $return .= $chars[mt_rand(0, $max)];
+        }
+
+        return $return;
+    }
+
+
+    static function password_hash(string $password) :string{
+        return password_hash($password, PASSWORD_DEFAULT);
+    }
+
+
+    static function password_check(string $password, string $hash) :bool{
+        return password_verify($password, $hash);
+    }
+
+
+    static function crypt(string $str, string $password) :string{
+        $iv = openssl_random_pseudo_bytes(16); // openssl_cipher_iv_length('aes-128-cbc') == 16
+        return bin2hex($iv) . openssl_encrypt($str, 'aes-128-cbc', $password, 0, $iv); //先頭32バイトがiv
+    }
+
+
+    static function decrypt(string $str, string $password){
+        $iv = substr($str, 0, 32);
+        return openssl_decrypt(substr($str, 32), 'aes-128-cbc', $password, 0, hex2bin($iv));
+    }
+
+
+    static function chance($chance) :bool{
+        $chance = (float)$chance;
+
+        if($chance <= 0){
+            return false;
+        }
+        else if($chance >= 100){
+            return true;
+        }
+        else{
+            $i = mt_rand(1, round(100/$chance*100000));
+            return $i <= 100000;
+        }
+    }
+
 }
 
 
