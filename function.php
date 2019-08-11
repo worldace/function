@@ -129,6 +129,14 @@ class response{
 }
 
 
+
+class str{
+    
+    
+}
+
+
+
 class http{
     public static $header;
 
@@ -265,8 +273,8 @@ class mail{
 }
 
 
-class fs{
-    static function file_edit(string $file, callable $fn, ...$args){
+class file{
+    static function edit(string $file, callable $fn, ...$args){
         $fp = fopen($file, 'cb+');
         if(!$fp){
             return false;
@@ -293,6 +301,13 @@ class fs{
         }
     }
 }
+
+
+
+class dir{
+    
+}
+
 
 
 class php{
@@ -325,7 +340,7 @@ class php{
     }
 
 
-    static function function_toString($fn){
+    static function function_toString($fn) :string{
         $ref = (is_string($fn) and strpos($fn, '::')) ? new \ReflectionMethod($fn) : new \ReflectionFunction($fn);
 
         $return = implode('', array_slice(file($ref->getFileName()), $ref->getStartLine()-1, $ref->getEndLine()-$ref->getStartLine()+1));
@@ -336,7 +351,7 @@ class php{
     }
 
 
-    static function class_toString($class){
+    static function class_toString(string $class) :string{
         $ref = new \ReflectionClass($class);
 
         $return = implode('', array_slice(file($ref->getFileName()), $ref->getStartLine()-1, $ref->getEndLine()-$ref->getStartLine()+1));
@@ -344,6 +359,28 @@ class php{
         $return = preg_replace("/}.*$/", "}", $return);
 
         return $return;
+    }
+}
+
+
+
+class util{
+    static function base64_encode_urlsafe(string $str) :string{
+        return rtrim(strtr(base64_encode($str), '+/', '-_'), '=');
+    }
+
+
+    static function base64_decode_urlsafe(string $str) :string{
+        return base64_decode(strtr($str, '-_', '+/'));
+    }
+
+
+    static function clip(string $str){
+        if(preg_match('/WIN/', PHP_OS)){
+            $clip = popen('clip', 'w');
+            fputs($clip, $str);
+            pclose($clip);
+        }
     }
 }
 
