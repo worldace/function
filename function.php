@@ -111,17 +111,178 @@ class response{
 }
 
 
+class http{
+    public static $header;
+
+    static function get(string $url, array $query = [], array $request_header = []){
+        if($query){
+            $url .= (strpos($url, '?')) ? '&' : '?';
+            $url .= http_build_query($query, '', '&', PHP_QUERY_RFC3986);
+        }
+
+        $return = file_get_contents($url, false, self::context('GET', $request_header));
+        self::$header = $http_response_header;
+
+        return $return;
+    }
+
+
+    static function get_multi(){
+        
+    }
+
+
+    static function post(string $url, array $query = [], array $request_header = []){
+        $content = http_build_query($query, '', '&');
+
+        $request_header += [
+            'Content-Type'   => 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Content-Length' => strlen($content),
+        ];
+
+        $return = file_get_contents($url, false, self::context('POST', $request_header, $content));
+        self::$header = $http_response_header;
+
+        return $return;
+    }
+
+
+    static function post_file(string $url, array $query = [], array $request_header = []){
+        $_ = sprintf('__%s__', sha1(uniqid()));
+        $n = "\r\n";
+
+        $content = '';
+        foreach($query as $name => $value){
+            $name = str_replace(['"', "\r", "\n"], '', $name);
+            if(is_array($value)){
+                foreach($value as $name2 => $value2){
+                    $name2  = str_replace(['"', "\r", "\n"], '', $name2);
+                    $value2 = is_resource($value2) ? stream_get_contents($value2) : file_get_contents($value2);
+                    if($value2 === false){
+                        continue;
+                    }
+                    $content .= sprintf('--%s%s', $_, $n);
+                    $content .= sprintf('Content-Disposition: form-data; name="%s"; filename="%s"%s', $name, $name2, $n);
+                    $content .= sprintf('Content-Type: %s%s%s', mail::mime_type($name2), $n, $n);
+                    $content .= sprintf('%s%s', $value2, $n);
+                }
+            }
+            else{
+                $content .= sprintf('--%s%s', $_, $n);
+                $content .= sprintf('Content-Disposition: form-data; name="%s"%s%s', $name, $n, $n);
+                $content .= sprintf('%s%s', $value, $n);
+            }
+        }
+        $content .= sprintf('--%s--%s', $_, $n);
+
+        $request_header += [
+            'Content-Type'   => "multipart/form-data; boundary=$__",
+            'Content-Length' => strlen($content),
+        ];
+
+        $return = file_get_contents($url, false, self::context('POST', $request_header, $content));
+        self::$header = $http_response_header;
+
+        return $return;
+    }
+
+
+    private static function context(string $method, array $request_header, string $content = null){
+        $header = '';
+        foreach($request_header as $k => $v){
+            $k = str_replace([':', "\r", "\n"], '', $k);
+            $v = str_replace(["\r", "\n"], '', $v);
+            $header .= sprintf('%s: %s%s', $k, $v "\r\n");
+        }
+
+        $http['method']  = $method;
+        $http['header']  = $header;
+        $http['content'] = $content;
+
+        return stream_context_create(['http'=>$http]);
+    }
+}
+
+
+class mail{
+    function mime_type(string $path) :string{ // http://www.iana.org/assignments/media-types/media-types.xhtml
+        static $mime = [
+            'jpg'  => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png'  => 'image/png',
+            'gif'  => 'image/gif',
+            'bmp'  => 'image/bmp',
+            'svg'  => 'image/svg+xml',
+            'ico'  => 'image/x-icon',
+            'txt'  => 'text/plain',
+            'htm'  => 'text/html',
+            'html' => 'text/html',
+            'css'  => 'text/css',
+            'xml'  => 'text/xml',
+            'csv'  => 'text/csv',
+            'tsv'  => 'text/tab-separated-values',
+            'js'   => 'application/javascript',
+            'json' => 'application/json',
+            'doc'  => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xls'  => 'application/vnd.ms-excel',
+            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'ppt'  => 'application/vnd.ms-powerpoint',
+            'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'pdf'  => 'application/pdf',
+            'swf'  => 'application/x-shockwave-flash',
+            'zip'  => 'application/zip',
+            'lzh'  => 'application/x-lzh',
+            'mp3'  => 'audio/mpeg',
+            'wav'  => 'audio/x-wav',
+            'wmv'  => 'video/x-ms-wmv',
+            '3g2'  => 'video/3gpp2',
+            'mp4'  => 'video/mp4',
+        ];
+
+        $extention = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
+        return $mime[$extention] ?? 'application/octet-stream';
+    }
+}
+
+
 class fs{
-    
+    static function file_edit(string $file, callable $fn, ...$args){
+        $fp = fopen($file, 'cb+');
+        if(!$fp){
+            return false;
+        }
+        flock($fp, LOCK_EX);
+
+        while(($line = fgets($fp)) !== false){
+            $contents[] = $line;
+        }
+        $contents = $fn($contents, ...$args);
+
+        if(is_string($contents) or is_int($contents)){
+            ftruncate($fp, 0);
+        	rewind($fp);
+            fwrite($fp, $contents);
+            flock($fp, LOCK_UN);
+            fclose($fp);
+            return true;
+        }
+        else{
+            flock($fp, LOCK_UN);
+            fclose($fp);
+            return false;
+        }
+    }
 }
 
 
 class php{
     static function autoload(string $dir) :void{
         spl_autoload_register(function($class) use($dir){
-            $class = explode('\\', $class);
-            $class[count($class)-1] = ucfirst($class[count($class)-1]);
-            $file = sprintf('%s/%s.php', $dir, implode('/', $class));
+            $path = strtolower($class);
+            $path = str_replace('\\', '/', $path);
+            $file = sprintf('%s/%s.php', $dir, $path);
 
             if(file_exists($file)){
                 require_once($file);
