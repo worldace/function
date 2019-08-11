@@ -131,6 +131,27 @@ class response{
 
 
 class str{
+    static function match(string $str, string $needle) :bool{
+        return strpos($str, $needle) !== false;
+    }
+
+
+    static function replace_once(string $str, string $needle, string $replace) :string{
+        $pos = strpos($str, $needle);
+        return ($pos === false) ? $str : substr_replace($str, $replace, $pos, strlen($needle));
+    }
+
+
+    static function remove_bom(string $str) :string{
+        return ltrim($str, "\xEF\xBB\xBF");
+    }
+
+
+    static function split_one(string $str) :array{
+        return preg_split('//u', $str, 0, PREG_SPLIT_NO_EMPTY);
+    }
+
+
     static function base64_encode_urlsafe(string $str) :string{
         return rtrim(strtr(base64_encode($str), '+/', '-_'), '=');
     }
@@ -139,12 +160,27 @@ class str{
     static function base64_decode_urlsafe(string $str) :string{
         return base64_decode(strtr($str, '-_', '+/'));
     }
+
+
+    static function f(string $format, ...$replace){
+        return preg_replace_callback('/%(%|s|h|u|b|j)/', function($m) use(&$replace){
+            if    ($m[0] === '%n'){ return '%'; }
+            $v = array_shift($replace);
+            if    ($m[0] === '%s'){ return $v; }
+            elseif($m[0] === '%h'){ return htmlspecialchars($v, ENT_QUOTES, 'UTF-8', false); }
+            elseif($m[0] === '%u'){ return rawurlencode($v); }
+            elseif($m[0] === '%b'){ return base64_encode($v); }
+            elseif($m[0] === '%j'){ return json_encode($v, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PARTIAL_OUTPUT_ON_ERROR); }
+        }, $format);
+    }
 }
 
 
 
 class html{
-    
+    static function e(string $str) :string{
+        return htmlspecialchars($str, ENT_QUOTES, 'UTF-8', false);
+    }
 }
 
 
@@ -297,6 +333,7 @@ class mail{
 }
 
 
+
 class file{
     static function edit(string $file, callable $fn, ...$args){
         $fp = fopen($file, 'cb+');
@@ -329,6 +366,99 @@ class file{
 
 
 class dir{
+    
+}
+
+
+
+class xml{
+    static function load(string $xml) :array{
+        $xml = trim($xml);
+        $xml = preg_replace("/&(?!([a-zA-Z0-9]{2,8};)|(#[0-9]{2,5};)|(#x[a-fA-F0-9]{2,4};))/", "&amp;" , $xml);
+        $SimpleXML = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOBLANKS|LIBXML_NOCDATA|LIBXML_NONET|LIBXML_COMPACT|LIBXML_PARSEHUGE);
+
+        return json_decode(json_encode([$SimpleXML->getName()=>$SimpleXML]), true);
+    }
+}
+
+
+
+class csv{
+    
+    
+}
+
+
+
+class zip{
+    
+}
+
+
+
+class time{
+    static function date(string $format = '[年]/[0月]/[0日] [0時]:[0分]', int $time = 0) :string{
+        if(!$time){
+            $time = time();
+        }
+
+        $week   = ['日','月','火','水','木','金','土'][date('w', $time)];
+        $from   = ['[年]','[月]','[0月]','[日]','[0日]','[時]','[0時]','[0分]','[0秒]','[曜日]'];
+        $to     = ['Y'   ,'n'   ,'m'    ,'j'   ,'d'    ,'G'   ,'H'    ,'i'    ,'s'    ,$week];
+        $format = str_replace($from, $to, $format);
+        $format = str_replace('[分]', ltrim(date('i',$time),"0"), $format);
+        $format = str_replace('[秒]', ltrim(date('s',$time),"0"), $format);
+
+        return date($format, $time);
+    }
+
+
+    static function past(int $time) :string{
+        $diff = time() - $time;
+
+        switch($diff){
+            case $diff < 1        : return '今';
+            case $diff < 60       : return $diff.'秒前';
+            case $diff < 3600     : return floor($diff/60).'分前';
+            case $diff < 86400    : return floor($diff/3600).'時間前';
+            case $diff < 2592000  : return floor($diff/86400).'日前';
+            case $diff < 31536000 : return floor($diff/2592000).'ヶ月前';
+            default               : return floor($diff/31536000).'年前';
+        }
+    }
+
+
+    static function calendar(int $year = null, int $month = null) :array{
+        $date = ($year and $month) ? new \DateTime("$year-$month") : new \DateTime('first day of');
+
+        $wday = $date->format('w');
+        $days = $date->format('t');
+        $week = 0;
+
+        for($i = $wday; $i > 0; $i--){
+            $return[$week][] = '';
+        }
+
+        for($i = 1; $i <= $days; $i++){
+            if($wday > 6){
+                $wday = 0;
+                $week++;
+            }
+            $wday++;
+            $return[$week][] = $i;
+        }
+
+        for($i = $wday; $i <= 6; $i++){
+            $return[$week][] = '';
+        }
+
+        return $return;
+    }
+}
+
+
+
+class crypt{
     
 }
 
@@ -396,37 +526,6 @@ class util{
             pclose($clip);
         }
     }
-}
-
-
-
-class xml{
-    static function toArray(string $xml) :array{
-        $xml = trim($xml);
-        $xml = preg_replace("/&(?!([a-zA-Z0-9]{2,8};)|(#[0-9]{2,5};)|(#x[a-fA-F0-9]{2,4};))/", "&amp;" , $xml);
-        $SimpleXML = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOBLANKS|LIBXML_NOCDATA|LIBXML_NONET|LIBXML_COMPACT|LIBXML_PARSEHUGE);
-
-        return json_decode(json_encode([$SimpleXML->getName()=>$SimpleXML]), true);
-    }
-}
-
-
-
-class csv{
-    
-    
-}
-
-
-
-class zip{
-    
-}
-
-
-
-class crypt{
-    
 }
 
 
