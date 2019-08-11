@@ -98,6 +98,24 @@ class response{
     }
 
 
+    function download(string $file, string $name, int $timeout = 60*60*6) :void{
+        ini_set('max_execution_time', $timeout);
+
+        $size = preg_match('/^data:.*,/', $file, $m) ? (strlen($file) - strlen($m[0])) : filesize($file);
+        $name = str_replace(['"',"'","\r","\n"], '', $name);
+        $utf8 = rawurlencode($name);
+
+        header("Content-Type: application/force-download");
+        header("Content-Length: $size");
+        header("Content-Disposition: attachment; filename='$name'; filename*=UTF-8''$utf8");
+
+        while(ob_get_level()){
+            ob_end_clean();
+        }
+        readfile($file);
+    }
+
+
     static function basic(callable $fn, string $realm = 'member only'){
         if(isset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])){
             if($fn($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) === true){
@@ -124,11 +142,6 @@ class http{
         self::$header = $http_response_header;
 
         return $return;
-    }
-
-
-    static function get_multi(){
-        
     }
 
 
@@ -187,12 +200,17 @@ class http{
     }
 
 
+    static function get_multi(){
+        
+    }
+
+
     private static function context(string $method, array $request_header, string $content = null){
         $header = '';
         foreach($request_header as $k => $v){
             $k = str_replace([':', "\r", "\n"], '', $k);
             $v = str_replace(["\r", "\n"], '', $v);
-            $header .= sprintf('%s: %s%s', $k, $v "\r\n");
+            $header .= sprintf('%s: %s%s', $k, $v, "\r\n");
         }
 
         $http['method']  = $method;
@@ -262,7 +280,7 @@ class fs{
 
         if(is_string($contents) or is_int($contents)){
             ftruncate($fp, 0);
-        	rewind($fp);
+            rewind($fp);
             fwrite($fp, $contents);
             flock($fp, LOCK_UN);
             fclose($fp);
