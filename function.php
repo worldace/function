@@ -323,8 +323,35 @@ class php{
         fputs($process, base64_encode(serialize($arg)));
         pclose($process);
     }
+
+
+    static function function_toString($fn){
+        $ref = (is_string($fn) and strpos($fn, '::')) ? new \ReflectionMethod($fn) : new \ReflectionFunction($fn);
+
+        $return = implode('', array_slice(file($ref->getFileName()), $ref->getStartLine()-1, $ref->getEndLine()-$ref->getStartLine()+1));
+        $return = preg_replace("/^.*(function[\s|\(])/i", '$1', $return);
+        $return = preg_replace("/}.*$/", "}", $return);
+
+        return $return;
+    }
+
+
+    static function class_toString($class){
+        $ref = new \ReflectionClass($class);
+
+        $return = implode('', array_slice(file($ref->getFileName()), $ref->getStartLine()-1, $ref->getEndLine()-$ref->getStartLine()+1));
+        $return = preg_replace("/^.*(class[\s|\(|\{])/i", '$1', $return);
+        $return = preg_replace("/}.*$/", "}", $return);
+
+        return $return;
+    }
 }
 
+
+
+class crypt{
+    
+}
 
 
 class db{
