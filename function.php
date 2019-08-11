@@ -137,6 +137,18 @@ class str{
 
 
 
+class html{
+    
+}
+
+
+
+class url{
+    
+}
+
+
+
 class http{
     public static $header;
 
@@ -228,6 +240,12 @@ class http{
         return stream_context_create(['http'=>$http]);
     }
 }
+
+
+class ftp{
+    
+}
+
 
 
 class mail{
@@ -386,9 +404,36 @@ class util{
 
 
 
+class xml{
+    static function toArray(string $xml) :array{
+        $xml = trim($xml);
+        $xml = preg_replace("/&(?!([a-zA-Z0-9]{2,8};)|(#[0-9]{2,5};)|(#x[a-fA-F0-9]{2,4};))/", "&amp;" , $xml);
+        $SimpleXML = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOBLANKS|LIBXML_NOCDATA|LIBXML_NONET|LIBXML_COMPACT|LIBXML_PARSEHUGE);
+
+        return json_decode(json_encode([$SimpleXML->getName()=>$SimpleXML]), true);
+    }
+}
+
+
+
+class csv{
+    
+    
+}
+
+
+
+class zip{
+    
+}
+
+
+
 class crypt{
     
 }
+
+
 
 
 class db{
