@@ -131,8 +131,14 @@ class response{
 
 
 class str{
-    
-    
+    static function base64_encode_urlsafe(string $str) :string{
+        return rtrim(strtr(base64_encode($str), '+/', '-_'), '=');
+    }
+
+
+    static function base64_decode_urlsafe(string $str) :string{
+        return base64_decode(strtr($str, '-_', '+/'));
+    }
 }
 
 
@@ -383,16 +389,6 @@ class php{
 
 
 class util{
-    static function base64_encode_urlsafe(string $str) :string{
-        return rtrim(strtr(base64_encode($str), '+/', '-_'), '=');
-    }
-
-
-    static function base64_decode_urlsafe(string $str) :string{
-        return base64_decode(strtr($str, '-_', '+/'));
-    }
-
-
     static function clip(string $str){
         if(preg_match('/WIN/', PHP_OS)){
             $clip = popen('clip', 'w');
