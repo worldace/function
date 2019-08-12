@@ -1,7 +1,6 @@
 <?php
 /*
 csv
-mail
 url::full
 */
 
@@ -415,6 +414,10 @@ class ftp{
 
 
 class mail{
+    private $to     = '';
+    private $from   = '';
+    private $title  = '';
+    private $body   = '';
     private $name   = '';
     private $file   = [];
     private $header = ['MIME-Version: 1.0', 'Content-Transfer-Encoding: base64'];
@@ -443,12 +446,14 @@ class mail{
     function cc(string $cc){
         $cc = str_replace(["\r","\n"," ",","], '',  $cc);
         $this->header[] = "Cc: $cc";
+        return $this;
     }
 
 
     function bcc(string $bcc){
         $bcc = str_replace(["\r","\n"," ",","], '',  $bcc);
         $this->header[] = "Bcc: $bcc";
+        return $this;
     }
 
 
