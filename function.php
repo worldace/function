@@ -101,7 +101,7 @@ class response{
     function download(string $file, string $name, int $timeout = 60*60*6) :void{
         ini_set('max_execution_time', $timeout);
 
-        $size = preg_match('/^data:.*,/', $file, $m) ? (strlen($file) - strlen($m[0])) : filesize($file);
+        $size = preg_match('/^data:.*?,/', $file, $m) ? (strlen($file) - strlen($m[0])) : filesize($file);
         $name = str_replace(['"',"'","\r","\n"], '', $name);
         $utf8 = rawurlencode($name);
 
@@ -186,7 +186,16 @@ class html{
 
 
 class url{
-    
+    static function home(string $url) :string{
+        $part = explode('/', $url);
+        return sprintf('%s//%s/', $part[0], $part[2]);
+    }
+
+
+    static function top(string $url) :string{
+        $url = preg_replace('/\?.*/', '', $url);
+        return (substr_count($url, '/') === 2) ? $url.'/' : dirname($url.'a').'/';
+    }
 }
 
 
@@ -366,7 +375,21 @@ class file{
 
 
 class dir{
-    
+    static function make(string $dir, string $permission = '707') :bool{
+        $mask = umask();
+        umask(0);
+        $return = mkdir($dir, octdec($permission), true);
+        umask($mask);
+        return $return;
+    }
+
+
+    static function delete(string $dir) :bool{
+        foreach(array_diff(scandir($dir), ['.','..']) as $file){
+            is_dir("$dir/$file") ? self::delete("$dir/$file") : unlink("$dir/$file");
+        }
+        return rmdir($dir);
+    }
 }
 
 
@@ -471,8 +494,8 @@ class random{
 
 
     static function str(int $length) :string{
-        $chars  = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $max    =  strlen($chars) - 1;
+        $chars  = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $max    = strlen($chars) - 1;
         $return = '';
 
         for($i = 0;  $i < $length;  $i++){
@@ -499,7 +522,7 @@ class random{
     }
 
 
-    static function decrypt(string $str, string $password){
+    static function decrypt(string $str, string $password) :string{
         $iv = substr($str, 0, 32);
         return openssl_decrypt(substr($str, 32), 'aes-128-cbc', $password, 0, hex2bin($iv));
     }
@@ -519,7 +542,6 @@ class random{
             return $i <= 100000;
         }
     }
-
 }
 
 
@@ -573,6 +595,27 @@ class php{
         $return = preg_replace("/}.*$/", "}", $return);
 
         return $return;
+    }
+
+
+    function benchmark(callable $fn, ...$args){
+        $start = microtime(true);
+        $end   = $start + 1;
+
+        if($args){
+            for($count = -1;  microtime(true) <= $end;  $count++){
+                $fn(...$args);
+            }
+        }
+        else{
+            for($count = -1;  microtime(true) <= $end;  $count++){
+                $fn();
+            }
+        }
+
+        $finish = microtime(true);
+
+        return ($count > 0) ? number_format($count) : number_format(1/($finish-$start), 3);
     }
 }
 
@@ -719,10 +762,10 @@ class db{
     }
 
 
-    function transaction(callable $func, ...$args){
+    function transaction(callable $fn, ...$args){
         try{
             $this->pdo->beginTransaction();
-            $result = $func($this, ...$args);
+            $result = $fn($this, ...$args);
             $this->pdo->commit();
             return $result;
         }
