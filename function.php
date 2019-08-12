@@ -152,7 +152,7 @@ class str{
     }
 
 
-    static function split_one(string $str) :array{
+    static function split_all(string $str) :array{
         return preg_split('//u', $str, 0, PREG_SPLIT_NO_EMPTY);
     }
 
@@ -520,7 +520,7 @@ class dir{
 
 
 class xml{
-    static function load(string $xml) :array{
+    static function read(string $xml) :array{
         $xml = trim($xml);
         $xml = preg_replace("/&(?!([a-zA-Z0-9]{2,8};)|(#[0-9]{2,5};)|(#x[a-fA-F0-9]{2,4};))/", "&amp;" , $xml);
         $SimpleXML = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOBLANKS|LIBXML_NOCDATA|LIBXML_NONET|LIBXML_COMPACT|LIBXML_PARSEHUGE);
@@ -539,7 +539,22 @@ class csv{
 
 
 class archive{
-    
+    static function zip(string $file, $dir){
+        $zip = new \ZipArchive(); // http://php.net/ziparchive
+        $zip->open($file, ZipArchive::CREATE);
+
+        if(is_string($dir)){
+            foreach(file::list_all($dir) as $k => $v){
+                ($k[-1] === '/') ? $zip->addEmptyDir($k) : $zip->addFile($v, $k);
+            }
+        }
+        else{
+            foreach($dir as $k => $v){
+                (is_resource($v)) ? $zip->addFromString($k, stream_get_contents($v)) : $zip->addFile($v, $k);
+            }
+        }
+        $zip->close();
+    }
 }
 
 
