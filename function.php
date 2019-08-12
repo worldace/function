@@ -370,6 +370,65 @@ class file{
             return false;
         }
     }
+
+
+    static function permission(string $file, string $permission = null) :string{
+        if(!preg_match('/^0/', $permission) and $permission >= 100 and $permission <= 777){
+            chmod($file, octdec($permission));
+        }
+        return decoct(fileperms($file) & 0777);
+    }
+
+
+    static function list(string $dir, bool $recursive = true, string $base = '') :array{
+       if($base === ''){ //初回
+            $dir = realpath($dir);
+            if(preg_match('/^WIN/', PHP_OS)){
+                $dir = str_replace('\\', '/', $dir);
+            }
+            $base = $dir;
+        }
+
+        foreach(array_diff(scandir($dir), ['.','..']) as $file){
+            $path     = "$dir/$file";
+            $relative = substr($path, strlen($base)+1);
+            if(is_dir($path) and $recursive){
+                $return = array_merge($return, self::list($path, true, $base));
+            }
+            else{
+                $return[$relative] = $path;
+            }
+        }
+
+        return $return ?? [];
+    }
+
+
+    static function list_all(string $dir, bool $recursive = true, string $base = '') :array{
+       if($base === ''){ //初回
+            $dir = realpath($dir);
+            if(preg_match('/^WIN/', PHP_OS)){
+                $dir = str_replace('\\', '/', $dir);
+            }
+            $base = $dir;
+        }
+
+        foreach(array_diff(scandir($dir), ['.','..']) as $file){
+            $path     = "$dir/$file";
+            $relative = substr($path, strlen($base)+1);
+            if(is_dir($path)){
+                $return[$relative.'/'] = $path.'/';
+                if($recursive){
+                    $return = array_merge($return, self::list_all($path, true, $base));
+                }
+            }
+            else{
+                $return[$relative] = $path;
+            }
+        }
+
+        return $return ?? [];
+    }
 }
 
 
@@ -390,6 +449,36 @@ class dir{
         }
         return rmdir($dir);
     }
+
+
+    static function permission(string $dir, string $permission = null) :string{
+        return file::permission($dir, $permission);
+    }
+
+
+    static function list(string $dir, bool $recursive = true, string $base = '') :array{
+       if($base === ''){ //初回
+            $dir = realpath($dir);
+            if(preg_match('/^WIN/', PHP_OS)){
+                $dir = str_replace('\\', '/', $dir);
+            }
+            $base = $dir;
+        }
+
+        foreach(array_diff(scandir($dir), ['.','..']) as $file){
+            $path     = "$dir/$file";
+            $relative = substr($path, strlen($base)+1);
+            if(is_dir($path)){
+                $return[$relative.'/'] = $path.'/';
+                if($recursive){
+                    $return = array_merge($return, self::list($path, true, $base));
+                }
+            }
+        }
+
+        return $return ?? [];
+    }
+
 }
 
 
@@ -617,11 +706,8 @@ class php{
 
         return ($count > 0) ? number_format($count) : number_format(1/($finish-$start), 3);
     }
-}
 
 
-
-class util{
     static function clip(string $str){
         if(preg_match('/WIN/', PHP_OS)){
             $clip = popen('clip', 'w');
