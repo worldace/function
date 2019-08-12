@@ -555,6 +555,53 @@ class archive{
         }
         $zip->close();
     }
+
+
+    static function zip_add(string $file, array $filelist){
+        $zip = new \ZipArchive();
+        $zip->open($file);
+
+        foreach($filelist as $k => $v){
+            is_resource($v) ? $zip->addFromString($k, stream_get_contents($v)) : $zip->addFile($v, $k);
+        }
+
+        $zip->close();
+    }
+
+
+    static function unzip(string $file, string $target = ""){
+        $zip = new \ZipArchive();
+        $zip->open($file);
+
+        $target  = ($target) ? realpath($target) : realpath(dirname($file));
+        $target .= DIRECTORY_SEPARATOR;
+
+        for($i = 0;  $i < $zip->numFiles;  $i++){
+            $name = $zip->getNameIndex($i, ZipArchive::FL_ENC_RAW);
+
+            //ファイル名のエンコードについて
+            $encode = mb_detect_encoding($name, ['utf-8', 'sjis-win', 'eucjp']);
+            if($encode !== 'UTF-8'){
+                $name = mb_convert_encoding($name, 'utf-8', $encode);
+            }
+
+            //解凍先ディレクトリがないなら作る
+            $dir = ($name[-1] === '/') ? $target.$name : $target.dirname($name);
+            if(!is_dir($dir)){
+                mkdir($dir, 0755, true);
+            }
+
+            if($name[-1] === '/'){
+                continue;
+            }
+            if(file_put_contents($target.$name, $zip->getStream($zip->getNameIndex($i)), LOCK_EX) !== false){ // $zip->getFromIndex($i) という方法もあるけど
+                $return[] = $target.$name;
+            }
+        }
+
+        $zip->close();
+        return $return ?? [];
+    }
 }
 
 
