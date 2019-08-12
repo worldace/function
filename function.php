@@ -25,20 +25,30 @@ class request{
         $name = strtoupper($name);
         $name = str_replace('-', '_', $name);
         $name = sprintf('HTTP_%s', $name);
-        return self::input(INPUT_SERVER, $name);
+        return filter_input(INPUT_SERVER, $name);
     }
 
 
     static function method(){
-        return self::input(INPUT_SERVER, 'REQUEST_METHOD');
+        return filter_input(INPUT_SERVER, 'REQUEST_METHOD');
+    }
+
+
+    static function is_get() :bool{
+        return filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET';
+    }
+
+
+    static function is_post() :bool{
+        return filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST';
     }
 
 
     static function url(){
         $http = filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? 'https' : 'http';
-        $host = self::input(INPUT_SERVER, 'HTTP_HOST');
-        $port = self::input(INPUT_SERVER, 'SERVER_PORT');
-        $path = self::input(INPUT_SERVER, 'REQUEST_URI');
+        $host = filter_input(INPUT_SERVER, 'HTTP_HOST');
+        $port = filter_input(INPUT_SERVER, 'SERVER_PORT');
+        $path = filter_input(INPUT_SERVER, 'REQUEST_URI');
 
         $port = (($http === 'http' && $port == 80) or ($http === 'https' && $port == 443)) ? '' : sprintf(':%s', $port);
 
@@ -405,7 +415,98 @@ class ftp{
 
 
 class mail{
-    function mime_type(string $path) :string{ // http://www.iana.org/assignments/media-types/media-types.xhtml
+    private $name   = '';
+    private $file   = [];
+    private $header = ['MIME-Version: 1.0', 'Content-Transfer-Encoding: base64'];
+
+
+    function __construct(string $to, string $from, string $title, string $body){
+        $this->to    = str_replace(["\r","\n"," ",","], '', $to);
+        $this->from  = str_replace(["\r","\n"," ",","], '', $from);
+        $this->title = str_replace(["\r","\n"] , '', $title);
+        $this->body  = $body;
+    }
+
+
+    function from(string $name){
+        $this->name = str_replace(["\r","\n",","], '', $name);
+        return $this;
+    }
+
+
+    function file(string $name, $value){
+        $this->file[$name] = $value;
+        return $this;
+    }
+
+
+    function cc(string $cc){
+        $cc = str_replace(["\r","\n"," ",","], '',  $cc);
+        $this->header[] = "Cc: $cc";
+    }
+
+
+    function bcc(string $bcc){
+        $bcc = str_replace(["\r","\n"," ",","], '',  $bcc);
+        $this->header[] = "Bcc: $bcc";
+    }
+
+
+    function send(){
+        $title  = mb_encode_mimeheader($this->title, 'utf-8');
+        $body   = ($this->file) ? $this->build_multipart() : $this->build_body();
+        $header = $this->build_header();
+        return mail($this->to, $title, $body, $header);
+    }
+
+
+    private function build_body(){
+        $this->header[] = 'Content-Type: text/plain; charset=utf-8';
+        return chunk_split(base64_encode($this->body));
+    }
+
+
+    private function build_multipart(){
+        $_ = sprintf('__%s__', uniqid());
+        $n = "\r\n";
+
+        $this->header[] = sprintf('Content-Type: multipart/mixed; boundary="%s"', $_);
+
+        $body  = sprintf('--%s%s', $_, $n);
+        $body .= sprintf('Content-Transfer-Encoding: base64%s', $n);
+        $body .= sprintf('Content-Type: text/plain; charset="utf-8"%s%s', $n, $n);
+        $body .= chunk_split(base64_encode($this->body)) . $n;
+
+        foreach($this->file as $k => $v){
+            $v = is_resource($v) ? stream_get_contents($v) : file_get_contents($v);
+            if($v === false){
+                continue;
+            }
+            $body .= sprintf('--%s%s', $_, $n);
+            $body .= sprintf('Content-Type: %s%s', self::mime_type($k), $n);
+            $body .= sprintf('Content-Transfer-Encoding: base64%s', $n);
+            $body .= sprintf('Content-Disposition: attachment; filename="%s"%s%s', mb_encode_mimeheader($k,'utf-8'), $n, $n);
+            $body .= chunk_split(base64_encode($v)) . $n;
+        }
+
+        $body .= sprintf('--%s--%s', $_, $n);
+        return $body;
+    }
+
+
+    private function build_header(){
+        if(strlen($this->name)){
+            $this->header[] = sprintf('From: %s <%s>', mb_encode_mimeheader($this->name,'utf-8'), $this->from);
+        }
+        else{
+            $this->header[] = "From: $this->from";
+        }
+
+        return implode("\r\n", $this->header) . "\r\n";
+    }
+
+
+    static function mime_type(string $file) :string{ // http://www.iana.org/assignments/media-types/media-types.xhtml
         static $mime = [
             'jpg'  => 'image/jpeg',
             'jpeg' => 'image/jpeg',
@@ -440,8 +541,7 @@ class mail{
             'mp4'  => 'video/mp4',
         ];
 
-        $extention = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-
+        $extention = strtolower(pathinfo($file, PATHINFO_EXTENSION));
         return $mime[$extention] ?? 'application/octet-stream';
     }
 }
