@@ -1,4 +1,9 @@
 <?php
+/*
+csv
+mail
+url::full
+*/
 
 class request{
     static function get(string $name){
@@ -13,26 +18,6 @@ class request{
 
     static function cookie(string $name){
         return self::input(INPUT_COOKIE, $name);
-    }
-
-
-    static function file(string $name) :array{ // ['name'=>,'type'=>,'tmp_name'=>,'error'=>,'size'=>]
-        $return = [];
-        $files  = $_FILES[$name];
-
-        if(!is_array($files['error'])){
-            return ($files['error'] === UPLOAD_ERR_NO_FILE) ? $return : $files;
-        }
-
-        for($i = 0; $i < count($files['error']); $i++){
-            if($files['error'][$i] === UPLOAD_ERR_NO_FILE){
-                continue;
-            }
-            foreach(array_keys($files) as $key){
-                $return[$i][$key] = $files[$key][$i];
-            }
-        }
-        return $return;
     }
 
 
@@ -58,6 +43,62 @@ class request{
         $port = (($http === 'http' && $port == 80) or ($http === 'https' && $port == 443)) ? '' : sprintf(':%s', $port);
 
         return sprintf('%s://%s%s%s', $http, $host, $port, $path);
+    }
+
+
+    static function file(string $name) :array{ // ['name'=>,'type'=>,'tmp_name'=>,'error'=>,'size'=>]
+        $return = [];
+        $files  = $_FILES[$name];
+
+        if(!is_array($files['error'])){
+            return ($files['error'] === UPLOAD_ERR_NO_FILE) ? $return : $files;
+        }
+
+        for($i = 0; $i < count($files['error']); $i++){
+            if($files['error'][$i] === UPLOAD_ERR_NO_FILE){
+                continue;
+            }
+            foreach(array_keys($files) as $key){
+                $return[$i][$key] = $files[$key][$i];
+            }
+        }
+        return $return;
+    }
+
+
+    static function upload(string $dir, array $whitelist = ['jpg','jpeg','png','gif']){
+        $files = self::file();
+        if(!$files){
+            return;
+        }
+
+        if(isset($files['name'])){ //single
+            return self::upload_move($dir, $files, $whitelist);
+        }
+        else{
+             foreach($files as $v){
+                 $result = self::upload_move($dir, $v, $whitelist);
+                 if($result){
+                     $return[] = $result;
+                 }
+             }
+             return $return ?? null;
+        }
+    }
+
+
+    private static function upload_move(string $dir, array $files, array $whitelist){
+        $extention = pathinfo($files['tmp_name'], PATHINFO_EXTENSION); //拡張子なしは空文字列
+        $extention = strtolower($extention);
+
+        if($files['error'] !== UPLOAD_ERR_OK || !in_array($extention, $whitelist, true)){
+            return;
+        }
+    
+        $savepath = $dir. DIRECTORY_SEPARATOR . uniqid(bin2hex(random_bytes(2))) . $extention;
+        if(move_uploaded_file($files['tmp_name'], $savepath)){
+            return $savepath;
+        }
     }
 
 
@@ -329,8 +370,36 @@ class http{
 }
 
 
+
 class ftp{
-    
+    private $ftp;
+
+    function __construct($host, $id, $password){
+        $this->ftp = ftp_ssl_connect($host);
+        ftp_login($this->ftp, $id, $password);
+        ftp_pasv($this->ftp, true);
+    }
+
+    function __destruct(){
+        ftp_close($this->ftp);
+    }
+
+    function upload($from, $to){
+        ftp_put($this->ftp, $to, $from, FTP_BINARY);
+    }
+
+    function mirror($from, $to){
+        foreach(ftp_nlist($this->ftp, $to) as $v){
+            $server_files []= basename($v);
+        }
+
+        foreach(glob("$from/*") as $v){ //ローカルにあってサーバにないファイルだけアップ。フォルダ非対応
+            $v = basename($v);
+            if(!in_array($v, $server_files) and is_file("$from/$v")){
+                $this->upload("$from/$v", "$to/$v");
+            }
+        }
+    }
 }
 
 
@@ -520,7 +589,7 @@ class dir{
 
 
 class xml{
-    static function read(string $xml) :array{
+    static function parse(string $xml) :array{
         $xml = trim($xml);
         $xml = preg_replace("/&(?!([a-zA-Z0-9]{2,8};)|(#[0-9]{2,5};)|(#x[a-fA-F0-9]{2,4};))/", "&amp;" , $xml);
         $SimpleXML = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOBLANKS|LIBXML_NOCDATA|LIBXML_NONET|LIBXML_COMPACT|LIBXML_PARSEHUGE);
@@ -670,7 +739,10 @@ class time{
 
 class random{
     static function id(){
-        
+        [$micro, $sec] = explode(' ', microtime());
+        $micro = substr($micro, 2, 6);
+        $rand  = mt_rand(1000, 5202); //5202より大きいと12桁になる
+        return self::base_encode("$rand$micro$sec");
     }
 
 
@@ -728,6 +800,34 @@ class random{
             $i = mt_rand(1, round(100/$chance*100000));
             return $i <= 100000;
         }
+    }
+
+
+    static function base_encode($value, int $base = 62) :string{
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $str = '';
+
+        do{
+            $mem   = bcmod($value, $base);
+            $str   = $chars[$mem] . $str;
+            $value = bcdiv(bcsub($value, $mem), $base);
+        } while(bccomp($value,0) > 0);
+
+        return $str;
+    }
+
+
+    static function base_decode(string $str, int $base = 62) :string{
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $arr   = array_flip(str_split($chars));
+        $len   = strlen($str);
+        $val   = '0';
+
+        for($i = 0;  $i < $len;  $i++){
+            $val = bcadd($val, bcmul($arr[$str[$i]], bcpow($base, $len-$i-1)));
+        }
+
+        return $val;
     }
 }
 
