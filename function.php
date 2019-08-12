@@ -98,7 +98,7 @@ class response{
     }
 
 
-    function download(string $file, string $name, int $timeout = 60*60*6) :void{
+    static function download(string $file, string $name, int $timeout = 60*60*6) :void{
         ini_set('max_execution_time', $timeout);
 
         $size = preg_match('/^data:.*?,/', $file, $m) ? (strlen($file) - strlen($m[0])) : filesize($file);
@@ -125,6 +125,11 @@ class response{
         header('HTTP/1.0 401 Unauthorized');
         header("WWW-Authenticate: Basic realm='$realm'");
         return false;
+    }
+
+
+    static function nocache(){
+        header('Cache-Control: no-store');
     }
 }
 
@@ -533,7 +538,7 @@ class csv{
 
 
 
-class zip{
+class archive{
     
 }
 
