@@ -271,8 +271,39 @@ class http{
     }
 
 
-    static function get_multi(){
-        
+    static function get_multi(array $url, int $parallel = 5, array $option = []) :array{
+        $option += [ // http://php.net/manual/ja/function.curl-setopt.php
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_SSL_VERIFYPEER => false,
+        ];
+
+        $mh = curl_multi_init();
+        curl_multi_setopt($mh, CURLMOPT_PIPELINING, 1); // http://php.net/manual/ja/function.curl-multi-setopt.php
+        curl_multi_setopt($mh, CURLMOPT_MAX_TOTAL_CONNECTIONS, $parallel);
+        curl_multi_setopt($mh, CURLMOPT_MAX_HOST_CONNECTIONS, $parallel);
+
+        foreach($url as $k => $v){
+            $ch[$k] = curl_init($v);
+            curl_setopt_array($ch[$k], $option);
+            curl_multi_add_handle($mh, $ch[$k]);
+        }
+
+        do {
+            curl_multi_exec($mh, $running);
+            curl_multi_select($mh);
+        } while ($running > 0);
+
+        foreach($ch as $k => $v){
+            //$info = curl_getinfo($ch[$key]); // http://php.net/manual/ja/function.curl-getinfo.php
+            $return[$url[$k]] = curl_multi_getcontent($v);
+            curl_multi_remove_handle($mh, $v);
+        }
+
+        curl_multi_close($mh);
+        return $return ?? [];
     }
 
 
