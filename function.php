@@ -186,33 +186,33 @@ class response{
 
 
 class str{
-    static function match(string $str, string $needle) :bool{
+    static function match(?string $str, string $needle) :bool{
         return strpos($str, $needle) !== false;
     }
 
 
-    static function replace_once(string $str, string $needle, string $replace) :string{
+    static function replace_once(?string $str, string $needle, string $replace) :string{
         $pos = strpos($str, $needle);
         return ($pos === false) ? $str : substr_replace($str, $replace, $pos, strlen($needle));
     }
 
 
-    static function remove_bom(string $str) :string{
+    static function remove_bom(?string $str) :string{
         return ltrim($str, "\xEF\xBB\xBF");
     }
 
 
-    static function split_all(string $str) :array{
+    static function split_all(?string $str) :array{
         return preg_split('//u', $str, 0, PREG_SPLIT_NO_EMPTY);
     }
 
 
-    static function base64_encode_urlsafe(string $str) :string{
+    static function base64_encode_urlsafe(?string $str) :string{
         return rtrim(strtr(base64_encode($str), '+/', '-_'), '=');
     }
 
 
-    static function base64_decode_urlsafe(string $str) :string{
+    static function base64_decode_urlsafe(?string $str) :string{
         return base64_decode(strtr($str, '-_', '+/'));
     }
 
@@ -233,7 +233,7 @@ class str{
 
 
 class html{
-    static function e(string $str) :string{
+    static function e(?string $str) :string{
         return htmlspecialchars($str, ENT_QUOTES, 'UTF-8', false);
     }
 }
@@ -1018,12 +1018,17 @@ class php{
     }
 
 
-    static function clip(string $str){
-        if(preg_match('/WIN/', PHP_OS)){
+    static function clipboard(string $str){
+        if(self::is_windows()){
             $clip = popen('clip', 'w');
             fputs($clip, $str);
             pclose($clip);
         }
+    }
+
+
+    static function is_windows() :bool{
+        return preg_match('/^WIN/', PHP_OS);
     }
 }
 
