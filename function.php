@@ -148,7 +148,7 @@ class response{
     }
 
 
-    static function download(string $file, string $name, int $timeout = 60*60*6) :void{
+    static function download(string $name, string $file, int $timeout = 60*60*6) :void{
         ini_set('max_execution_time', $timeout);
 
         $size = preg_match('/^data:.*?,/', $file, $m) ? (strlen($file) - strlen($m[0])) : filesize($file);
@@ -781,6 +781,13 @@ class archive{
 
 
 class time{
+    static function micro() :string{
+        [$micro, $sec] = explode(' ', microtime());
+        $micro = substr($micro, 2, 6);
+        return $sec . $micro;
+    }
+
+
     static function date(string $format = '[年]/[0月]/[0日] [0時]:[0分]', int $time = 0) :string{
         if(!$time){
             $time = time();
@@ -1031,8 +1038,8 @@ class db{
 
     function __construct(string $file, string $table){
         $this->pdo = new \PDO("sqlite:$file", null, null, [
-            \PDO::ATTR_ERRMODE=> \PDO::ERRMODE_EXCEPTION,
-            \PDO::ATTR_DEFAULT_FETCH_MODE=> \PDO::FETCH_ASSOC,
+            PDO::ATTR_ERRMODE=> PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE=> PDO::FETCH_ASSOC,
         ]);
         $this->table($table);
     }
@@ -1139,7 +1146,7 @@ class db{
         }
 
         if($this->table_class){
-            $stmt->setFetchMode(\PDO::FETCH_CLASS, $this->table_class);
+            $stmt->setFetchMode(PDO::FETCH_CLASS, $this->table_class);
         }
         return $stmt;
     }
