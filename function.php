@@ -302,7 +302,7 @@ class http{
                     }
                     $content .= sprintf('--%s%s', $_, $n);
                     $content .= sprintf('Content-Disposition: form-data; name="%s"; filename="%s"%s', $name, $name2, $n);
-                    $content .= sprintf('Content-Type: %s%s%s', mail::mime_type($name2), $n, $n);
+                    $content .= sprintf('Content-Type: %s%s%s', file::mime_type($name2), $n, $n);
                     $content .= sprintf('%s%s', $value2, $n);
                 }
             }
@@ -488,7 +488,7 @@ class mail{
                 continue;
             }
             $body .= sprintf('--%s%s', $_, $n);
-            $body .= sprintf('Content-Type: %s%s', self::mime_type($k), $n);
+            $body .= sprintf('Content-Type: %s%s', file::mime_type($k), $n);
             $body .= sprintf('Content-Transfer-Encoding: base64%s', $n);
             $body .= sprintf('Content-Disposition: attachment; filename="%s"%s%s', mb_encode_mimeheader($k,'utf-8'), $n, $n);
             $body .= chunk_split(base64_encode($v)) . $n;
@@ -508,46 +508,6 @@ class mail{
         }
 
         return implode("\r\n", $this->header) . "\r\n";
-    }
-
-
-    static function mime_type(string $file) :string{ // http://www.iana.org/assignments/media-types/media-types.xhtml
-        static $mime = [
-            'jpg'  => 'image/jpeg',
-            'jpeg' => 'image/jpeg',
-            'png'  => 'image/png',
-            'gif'  => 'image/gif',
-            'bmp'  => 'image/bmp',
-            'svg'  => 'image/svg+xml',
-            'ico'  => 'image/x-icon',
-            'txt'  => 'text/plain',
-            'htm'  => 'text/html',
-            'html' => 'text/html',
-            'css'  => 'text/css',
-            'xml'  => 'text/xml',
-            'csv'  => 'text/csv',
-            'tsv'  => 'text/tab-separated-values',
-            'js'   => 'application/javascript',
-            'json' => 'application/json',
-            'doc'  => 'application/msword',
-            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'xls'  => 'application/vnd.ms-excel',
-            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'ppt'  => 'application/vnd.ms-powerpoint',
-            'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-            'pdf'  => 'application/pdf',
-            'swf'  => 'application/x-shockwave-flash',
-            'zip'  => 'application/zip',
-            'lzh'  => 'application/x-lzh',
-            'mp3'  => 'audio/mpeg',
-            'wav'  => 'audio/x-wav',
-            'wmv'  => 'video/x-ms-wmv',
-            '3g2'  => 'video/3gpp2',
-            'mp4'  => 'video/mp4',
-        ];
-
-        $extention = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-        return $mime[$extention] ?? 'application/octet-stream';
     }
 }
 
@@ -638,6 +598,46 @@ class file{
         }
 
         return $return ?? [];
+    }
+
+
+    static function mime_type(string $file) :string{ // http://www.iana.org/assignments/media-types/media-types.xhtml
+        static $mime = [
+            'jpg'  => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png'  => 'image/png',
+            'gif'  => 'image/gif',
+            'bmp'  => 'image/bmp',
+            'svg'  => 'image/svg+xml',
+            'ico'  => 'image/x-icon',
+            'txt'  => 'text/plain',
+            'htm'  => 'text/html',
+            'html' => 'text/html',
+            'css'  => 'text/css',
+            'xml'  => 'text/xml',
+            'csv'  => 'text/csv',
+            'tsv'  => 'text/tab-separated-values',
+            'js'   => 'application/javascript',
+            'json' => 'application/json',
+            'doc'  => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xls'  => 'application/vnd.ms-excel',
+            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'ppt'  => 'application/vnd.ms-powerpoint',
+            'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'pdf'  => 'application/pdf',
+            'swf'  => 'application/x-shockwave-flash',
+            'zip'  => 'application/zip',
+            'lzh'  => 'application/x-lzh',
+            'mp3'  => 'audio/mpeg',
+            'wav'  => 'audio/x-wav',
+            'wmv'  => 'video/x-ms-wmv',
+            '3g2'  => 'video/3gpp2',
+            'mp4'  => 'video/mp4',
+        ];
+
+        $extention = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        return $mime[$extention] ?? 'application/octet-stream';
     }
 }
 
