@@ -1,8 +1,5 @@
 <?php
-/*
-csv
-url::full
-*/
+
 
 class request{
     static function get(string $name){
@@ -245,6 +242,11 @@ class url{
     static function top(string $url) :string{
         $url = preg_replace('/\?.*/', '', $url);
         return (substr_count($url, '/') === 2) ? $url.'/' : dirname($url.'a').'/';
+    }
+
+
+    static function full(string $path, string $base_url) :string{
+        
     }
 }
 
@@ -766,7 +768,7 @@ class csv{
             $newline = [];
             foreach($line as $v){
                 $v = preg_replace("/\r\n|\n|\r/", $option['br'], $v);
-                if($option['enclose'] === true or (strlen($v) and !is_numeric($v))){
+                if($option['enclose'] or (strlen($v) and !is_numeric($v))){
                     $v = str_replace($option['escape'], $option['escape'].$option['escape'], $v);
                     $v = $option['escape'] . $v . $option['escape'];
                 }
