@@ -176,6 +176,11 @@ class response{
 
 
 class str{
+    static function file(?string $str){
+        return 'data:,' . $str;
+    }
+
+
     static function match(?string $str, string $needle) :bool{
         return strpos($str, $needle) !== false;
     }
@@ -702,14 +707,113 @@ class xml{
 
 
 class csv{
-    
-    
+    static function parse(string $str, array $option = []) :array{
+        return iterator_to_array(self::it('data:,'.$str, $option));
+    }
+
+
+    static function it(string $file, array $option = []) :\Generator{
+        $option += [
+            'input'     => null,
+            'output'    => null,
+            'delimiter' => null,
+            'escape'    => '"',
+            'skip'      => 0,
+        ];
+
+        $fp = fopen($file, 'rb');
+        $sample = fread($fp, 1024);
+        rewind($fp);
+
+        if(preg_match("/^\xEF\xBB\xBF/", $sample)){ //BOM検知
+            $option['input'] = 'utf-8';
+            fseek($fp, 3);
+        }
+        if(!$option['input'] and $option['output']){ //入力文字コード検知
+            $option['input'] = mb_detect_encoding($sample, ['UTF-8', 'SJIS-WIN', 'EUCJP-WIN']);
+        }
+        if(!$option['delimiter']){ //区切り検知
+            $option['delimiter'] = self::detect_delimiter($sample);
+        }
+
+        while(($csv = self::get_line($fp, $option['delimiter'], $option['escape'])) !== false){
+            if($option['skip'] > 0){
+                $option['skip']--;
+                continue;
+            }
+            if($csv === ['']){
+                $csv = [];
+            }
+            if($option['output']){
+                mb_convert_variables($option['output'], $option['input'], $csv);
+            }
+            yield $csv;
+        }
+        fclose($fp);
+    }
+
+
+    static function create(iterable $csv, array $option = []) :string{
+        $option += [
+            'br'        => "\n",
+            'enclose'   => true,
+            'delimiter' => ',',
+            'escape'    => '"',
+        ];
+
+        $return = '';
+        foreach($csv as $line){
+            $newline = [];
+            foreach($line as $v){
+                $v = preg_replace("/\r\n|\n|\r/", $option['br'], $v);
+                if($option['enclose'] === true or (strlen($v) and !is_numeric($v))){
+                    $v = str_replace($option['escape'], $option['escape'].$option['escape'], $v);
+                    $v = $option['escape'] . $v . $option['escape'];
+                }
+                $newline[] = $v;
+            }
+            $return .= implode($option['delimiter'], $newline) . "\r\n";
+        }
+
+        return $return;
+    }
+
+
+    private static function get_line($fp, $d = ',', $e = '"'){
+        $d    = preg_quote($d);
+        $e    = preg_quote($e);
+        $line = '';
+
+        while($fp and !feof($fp)){
+            $line .= fgets($fp);
+            if(preg_match_all("/$e/", $line) % 2 === 0){
+                break;
+            }
+        }
+
+        $count  = preg_match_all(sprintf('/(%s[^%s]*(?:%s%s[^%s]*)*%s|[^%s]*)%s/', $e,$e,$e,$e,$e,$e,$d,$d), preg_replace('/(?:\\r\\n|[\\r\\n])?$/', $d, rtrim($line)), $match);
+        $return = $match[1];
+
+        for($i = 0;  $i < $count;  $i++){
+            $return[$i] = preg_replace(sprintf('/^%s(.*)%s$/s', $e,$e), '$1', $return[$i]);
+            $return[$i] = str_replace("$e$e", $e, $return[$i]);
+        }
+
+        return empty($line) ? false : $return;
+    }
+
+
+    private static function detect_delimiter(string $sample){
+        $count_c = substr_count($sample, ',');
+        $count_t = substr_count($sample, "\t");
+        return ($count_c >= $count_t) ? ',' : "\t";
+    }
 }
 
 
 
-class archive{
-    static function zip(string $file, $dir){
+class zip{
+    static function create(string $file, $dir){
         $zip = new \ZipArchive(); // http://php.net/ziparchive
         $zip->open($file, ZipArchive::CREATE);
 
@@ -727,7 +831,7 @@ class archive{
     }
 
 
-    static function zip_add(string $file, array $filelist){
+    static function add(string $file, array $filelist){
         $zip = new \ZipArchive();
         $zip->open($file);
 
@@ -942,6 +1046,19 @@ class random{
 
 
 class php{
+    static function go(string $file, $arg = null, ...$files) :void{
+        array_unshift($files, $file);
+
+        foreach($files as $_v){
+            $arg = (function() use($arg, $_v){
+                return require($_v);
+            })();
+        }
+
+        exit;
+    }
+
+
     static function autoload(string $dir) :void{
         spl_autoload_register(function($class) use($dir){
             $path = strtolower($class);
