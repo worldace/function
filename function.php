@@ -56,17 +56,13 @@ class request{
 
 
     static function file(string $name) :array{ // ['name'=>,'type'=>,'tmp_name'=>,'error'=>,'size'=>]
-        $return = [];
-        $files  = $_FILES[$name];
+        $files = $_FILES[$name] ?? [];
 
-        if(!is_array($files['error'])){
-            return ($files['error'] === UPLOAD_ERR_NO_FILE) ? $return : $files;
+        if(!is_array($files['name'])){
+            return $files;
         }
 
-        for($i = 0; $i < count($files['error']); $i++){
-            if($files['error'][$i] === UPLOAD_ERR_NO_FILE){
-                continue;
-            }
+        for($i = 0; $i < count($files['name']); $i++){
             foreach(array_keys($files) as $key){
                 $return[$i][$key] = $files[$key][$i];
             }
@@ -75,28 +71,24 @@ class request{
     }
 
 
-    static function upload(string $dir, array $whitelist = ['jpg','jpeg','png','gif']){
-        $files = self::file();
-        if(!$files){
-            return;
-        }
+    static function upload(string $name, string $dir, array $whitelist = ['jpg','jpeg','png','gif']) :array{
+        $files = self::file($name);
 
-        if(isset($files['name'])){ //single
-            return self::upload_move($dir, $files, $whitelist);
+        if(!$files){
+        }
+        else if(isset($files['name'])){ //single
+            $files['upload'] = self::upload_move($files, $dir, $whitelist);
         }
         else{
-             foreach($files as $v){
-                 $result = self::upload_move($dir, $v, $whitelist);
-                 if($result){
-                     $return[] = $result;
-                 }
+             foreach($files as $k => $v){
+                 $files[$k]['upload'] = self::upload_move($v, $dir, $whitelist);
              }
-             return $return ?? null;
         }
+        return $files;
     }
 
 
-    private static function upload_move(string $dir, array $files, array $whitelist){
+    private static function upload_move(array $files, string $dir, array $whitelist){
         $extention = pathinfo($files['tmp_name'], PATHINFO_EXTENSION); //拡張子なしは空文字列
         $extention = strtolower($extention);
 
