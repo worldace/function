@@ -833,13 +833,11 @@ class zip{
     }
 
 
-    static function add(string $file, array $filelist){
+    static function add(string $file, string $path, string $add){
         $zip = new \ZipArchive();
         $zip->open($file);
 
-        foreach($filelist as $k => $v){
-            is_resource($v) ? $zip->addFromString($k, stream_get_contents($v)) : $zip->addFile($v, $k);
-        }
+        is_resource($add) ? $zip->addFromString($path, stream_get_contents($add)) : $zip->addFile($add, $path);
 
         $zip->close();
     }
