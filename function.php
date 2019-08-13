@@ -74,12 +74,10 @@ class request{
     static function upload(string $name, string $dir, array $whitelist = ['jpg','jpeg','png','gif']) :array{
         $files = self::file($name);
 
-        if(!$files){
-        }
-        else if(isset($files['name'])){ //single
+        if(isset($files['name'])){ //single
             $files['upload'] = self::upload_move($files, $dir, $whitelist);
         }
-        else{
+        else if($files){
              foreach($files as $k => $v){
                  $files[$k]['upload'] = self::upload_move($v, $dir, $whitelist);
              }
@@ -436,15 +434,21 @@ class mail{
 
 
     function cc(string $cc){
-        $cc = str_replace(["\r","\n"," ",","], '',  $cc);
+        $cc = str_replace(["\r","\n"," ",","], '', $cc);
         $this->header[] = "Cc: $cc";
         return $this;
     }
 
 
     function bcc(string $bcc){
-        $bcc = str_replace(["\r","\n"," ",","], '',  $bcc);
+        $bcc = str_replace(["\r","\n"," ",","], '', $bcc);
         $this->header[] = "Bcc: $bcc";
+        return $this;
+    }
+
+
+    function header(string $header){
+        $this->header[] = str_replace(["\r","\n"], '', $header);
         return $this;
     }
 
