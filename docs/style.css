@@ -12,12 +12,13 @@ html{
 body{
     background-color: #eeeefa;
 }
-#main{
+article{
     border: solid 1px #3399ff;
     border-radius: 8px 8px 0 0;
-    width: 900px;
+    width: 920px;
     margin: 4rem auto;
 }
+
 header{
     border: solid 1px #3399ff;
     border-radius: 6px 6px 0 0;
@@ -38,18 +39,17 @@ h1{
 nav{
     height: 24px;
 }
-article{
+#contents{
     background-color: #fff;
-    padding: 1.5rem 1.5rem 3rem 1.5rem;
+    padding: 2rem 2rem 3rem 2rem;
 }
-
 
 
 /* ------------------------------ */
 /* ブロック                       */
 /* ------------------------------ */
 p{
-    line-height: 1.6;
+    line-height: 1.8;
 }
 h2{
     margin: 3.2rem 0;
@@ -70,7 +70,7 @@ ul{
 }
 li{
     font-size: 0.95rem;
-    line-height: 1.6;
+    line-height: 1.8;
 }
 
 /* tableブロック --------------- */
@@ -109,13 +109,16 @@ table.function th:first-of-type{
 .require td:first-of-type{
     background-color: #ffeeee;
     text-align: center;
+    padding: 0;
 }
 .option td:first-of-type{
     background-color: #eeffee;
     text-align: center;
+    padding: 0;
 }
 .return td:first-of-type{
     text-align: center;
+    padding: 0;
 }
 
 
@@ -216,8 +219,8 @@ small{
     font-style: normal;
 }
 var{
-    background-color: lightblue;
-    color: #0000ff;
+    background-color: #eee;
+    color: #000;
     padding: 0 3px;
     border-radius: 3px;
     margin-left: 0.3rem;

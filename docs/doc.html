@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
 <title>docクラス</title>
 <link href="style.css" rel="stylesheet">
 <script src="script.js"></script>
@@ -9,13 +10,13 @@
 
 <body>
 
-<div id="main">
+<article>
 <header>
 <h1>docクラス</h1>
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
 
-<article>
+<div id="contents">
 
 <p>PHPのDOMを使いやすくするクラス。HTMLの出力用に</p>
 <h2>new</h2>
@@ -31,7 +32,7 @@ docオブジェクト
 </td></tr>
 </table>
 
-<code class="php" data-title="解説"><!--
+<code class="php"><!--
 $doc = new doc('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>');
 --></code>
 
@@ -46,7 +47,7 @@ $doc = new doc('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><titl
 このオブジェクトは、文字列として評価されると自動的に文字列に変換されます。</p>
 
 <code class="php" data-title="HTMLの出力"><!--
-$doc = new Doc();
+$doc = new doc();
 print $doc; //HTMLが表示される
 
 $str = "$doc"; //文字列としてコピーされる
@@ -132,16 +133,16 @@ $doc->body->appendChild($div);
 <h2>外部ファイルのインポート</h2>
 
 
-<p>外部ファイルを読み込むには、もう一つDocオブジェクトを作成して、そこからインポートします。<br>
-<var>$doc(別Docの要素 or 別Doc)</var>でインポートできます。戻り値はインポートされた要素です</p>
+<p>外部ファイルを読み込むには、もう一つdocオブジェクトを作成して、そこからインポートします。<br>
+<var>$doc(別docの要素 or 別doc)</var>でインポートできます。戻り値はインポートされた要素です</p>
 
 
 <code class="php" data-title="外部ファイルを読み込む1"><!--
 $doc = new doc();
-//外部ファイル化されたフッタを読み込む
-$ex  = new doc('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body><footer id="footer"></footer></body></html>');
+//外部ファイル化したフッタを読み込む
+$exdoc = new doc('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body><footer id="footer"></footer></body></html>');
 
-$footer = $doc($ex->footer); //要素を1つインポート
+$footer = $doc($exdoc->footer); //要素を1つインポート
 $doc->body->appendChild($footer);
 
 
@@ -149,10 +150,10 @@ $doc->body->appendChild($footer);
 <p>上記は、次のように省略して書くこともできます。</p>
 <code class="php" data-title="外部ファイルを読み込む2"><!--
 $doc = new doc();
-//外部ファイル化されたフッタを読み込む
-$ex  = new doc('<footer id="footer"></footer>');
+//外部ファイル化したフッタを読み込む
+$exdoc = new doc('<footer id="footer"></footer>');
 
-$footer = $doc($ex); //全体をインポート
+$footer = $doc($exdoc); //全体をインポート
 $doc->body->appendChild($footer);
 
 
@@ -178,7 +179,7 @@ print $doc; //完成
 
 <code class="php" data-title="テーブルを作ってみよう"><!--
 //電話機のボタン配列。これをtableタグにする
-$button = [[1,2,3],[4,5,6],[7,8,9],['*',0,'#']];
+$button = [[1,2,3], [4,5,6], [7,8,9], ['*',0,'#']];
 
 //テンプレート側で空のtableを用意しておく
 $doc = new doc('<table id="phone-button"></table>');
@@ -241,8 +242,8 @@ $el->parentNode->insertBefore($new_el, $el);
 $el->parentNode->insertBefore($new_el, $el->nextSibling);
 --></code>
 
-</article>
 </div>
+</article>
 
 </body>
 </html>
