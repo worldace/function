@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>docクラス</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<div id="main">
+<header>
+<h1>docクラス</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+
+<article>
+
+<p>PHPのDOMを使いやすくするクラス。HTMLの出力用に</p>
+<h2>new</h2>
+<p>docオブジェクトを作成する</p>
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="option"><td>1</td><td>
+HTML文字列<br>
+省略時は内蔵テンプレートが使用されます。下記サンプルと同じHTMLです
+</td></tr>
+<tr class="return"><td>戻</td><td>
+docオブジェクト
+</td></tr>
+</table>
+
+<code class="php" data-title="解説"><!--
+$doc = new doc('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>');
+--></code>
+
+<ul>
+<li>HTMLは、全体を1つのタグで囲っておく必要があります</li>
+<li>ベースとなるHTMLには<var>&lt;!DOCTYPE&gt;</var>を忘れずに記述してください</li>
+</ul>
+
+<h2>HTMLの出力</h2>
+
+<p>docオブジェクトは<var>print</var>するだけでHTMLを表示できます。<br>
+このオブジェクトは、文字列として評価されると自動的に文字列に変換されます。</p>
+
+<code class="php" data-title="HTMLの出力"><!--
+$doc = new Doc();
+print $doc; //HTMLが表示される
+
+$str = "$doc"; //文字列としてコピーされる
+--></code>
+
+
+<h2>要素の選択</h2>
+
+<h3>ID名から選択</h3>
+
+<p>docオブジェクトでは、ID名から要素を選択するのが基本となります。<var>$doc-&gt;ID名</var><br>
+
+<b>操作したいタグには、あらかじめID属性を付けておくのがポイントです。</b></p>
+
+<code class="php" data-title="id選択"><!--
+$doc = new doc('<div id="example"><div>');
+$doc->exapmle->textContent = '本文';
+--></code>
+
+
+<p>ID名に「ハイフン」を含む場合は「アンダーバー」に置き換えてもアクセスできます</p>
+
+<code class="php" data-title="ハイフンを含むid選択"><!--
+$doc = new doc('<div id="ex-ample"><div>'); //id名にハイフンを含む
+$div = $doc->ex_apmle; //ハイフンをアンダーバーに置き換え
+--></code>
+
+
+</article>
+</div>
+
+</body>
+</html>
