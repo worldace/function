@@ -5,15 +5,14 @@
 function highlight(){
     var el = document.querySelectorAll("code");
     for(var i = 0; i < el.length; i++){
-        var content = el[i].innerHTML;
-        var start   = content.indexOf("<!--");
-        var end     = content.lastIndexOf("-->");
+        var start = el[i].innerHTML.indexOf("<!--");
+        var end   = el[i].innerHTML.lastIndexOf("-->");
 
         if(start === -1 || end === -1){
             continue;
         }
 
-        var sourse = content.substring(start+4, end).trim();
+        var sourse = el[i].innerHTML.substring(start+4, end).trim();
         sourse = sourse.replace(/＜ーー/g, "<--");
         sourse = sourse.replace(/ーー＞/g, "-->");
         sourse = sourse.replace(/</g, "&lt;");
@@ -25,4 +24,3 @@ function highlight(){
 }
 
 document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', highlight) : highlight();
-
