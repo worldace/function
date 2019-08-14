@@ -15,10 +15,8 @@ function highlight(){
         var sourse = el[i].innerHTML.substring(start+4, end).trim();
         sourse = sourse.replace(/＜ーー/g, "<--");
         sourse = sourse.replace(/ーー＞/g, "-->");
-        sourse = sourse.replace(/</g, "&lt;");
-        sourse = sourse.replace(/>/g, "&gt;");
 
-        el[i].innerHTML = sourse;
+        el[i].textContent = sourse;
         hljs.highlightBlock(el[i]);
     }
 }
