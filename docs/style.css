@@ -100,20 +100,23 @@ code{
     color: #222;
     line-height: 1.4;
     background-color: #fcfcfc;
-    padding: 2rem 1rem 1rem 1rem;
+    padding: 1rem 1rem 1rem 1rem;
     border: solid 1px #ccc;
     border-radius: 3px;
     margin: 1.5rem auto;
     word-wrap: normal;
     overflow: auto;
-    position: relative;
     width: 100%;
     min-height: 3rem;
     display: block;
     font-size: 0.9rem;
     white-space: pre;
 }
-code::before{
+code[data-title]{
+    position: relative;
+    padding-top: 2rem;
+}
+[data-title]::before{
     content: attr(data-title);
     color: #333;
     font-size: 0.85rem;
