@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>request::header()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>request::header()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>HTTPヘッダの値を取得する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+取得したいHTTPヘッダの名前。大文字小文字は問いません。
+</td></tr>
+<tr class="return"><td>戻</td><td>
+HTTPヘッダの値。存在しない場合はnull
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+print request::header('exapmle');
+--></code>
+
+
+</div>
+</article>
+
+</body>
+</html>

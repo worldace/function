@@ -124,6 +124,10 @@ table.function th:first-of-type{
     text-align: center;
     padding: 0;
 }
+.noarg td:first-of-type{
+    text-align: center;
+    padding: 0;
+}
 .return td:first-of-type{
     text-align: center;
     padding: 0;

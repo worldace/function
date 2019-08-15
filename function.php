@@ -87,14 +87,15 @@ class request{
         $extention = pathinfo($files['tmp_name'], PATHINFO_EXTENSION); //拡張子なしは空文字列
         $extention = strtolower($extention);
 
-        if($files['error'] !== UPLOAD_ERR_OK || !in_array($extention, $whitelist, true)){
+        if($files['error'] === UPLOAD_ERR_NO_FILE){
             return;
+        }
+        if($files['error'] !== UPLOAD_ERR_OK || !in_array($extention, $whitelist, true)){
+            return false;
         }
     
         $savepath = $dir. DIRECTORY_SEPARATOR . uniqid(bin2hex(random_bytes(2))) . $extention;
-        if(move_uploaded_file($files['tmp_name'], $savepath)){
-            return $savepath;
-        }
+        return (move_uploaded_file($files['tmp_name'], $savepath)) ? $savepath : false;
     }
 
 

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>request::upload()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>request::upload()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>フォームからアップロードされたファイルを受信する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+フォームのname名
+</td></tr>
+<tr class="require"><td>2</td><td>
+ファイルを保存するディレクトリ
+</td></tr>
+<tr class="option"><td>3</td><td>
+アップロードを受け付けるファイルの拡張子を配列に。小文字でピリオドは不要。<br>
+省略時は['png','jpg','jpeg','gif']
+</td></tr>
+<tr class="return"><td>戻</td><td>
+アップロードの結果が入ってる連想配列(後述)
+</td></tr>
+</table>
+
+<code class="html" data-title="フォームの記述例"><!--
+<form action="upload.php" method="POST" enctype="multipart/form-data">
+<input type="file" name="example" accept=".jpg,.jpeg">
+<input type="submit">
+</form>
+--></code>
+
+<code class="php" data-title="使用例"><!--
+$result = request::upload('example', './upload', ['jpg','jpeg']);
+
+if($result['upload']){
+    //アップロードに成功
+}
+--></code>
+
+<table>
+<caption>アップロード結果の連想配列</caption>
+<tr><th>名前</th><th>値</th></tr>
+<tr><td><b>upload</b></td><td>アップロードされたファイルのパス。ファイル名は自動的に決定します。<br>
+ファイルがアップされなかったら<var>null</var>に、アップに失敗した場合は<var>false</var>になります</td></tr>
+<tr><td>name</td><td>元のファイル名</td></tr>
+<tr><td>tmp_name</td><td>一時保存の場所</td></tr>
+<tr><td>size</td><td>ファイルサイズ(バイト)</td></tr>
+<tr><td>type</td><td>ファイルのMIMEタイプ</td></tr>
+<tr><td>error</td><td><a href="https://www.php.net/manual/ja/features.file-upload.errors.php" target="_blank">エラーコード</a></td></tr>
+</table>
+
+<p><var>upload</var>キーは当関数のオリジナルです。他は <a href="https://www.php.net/manual/ja/features.file-upload.post-method.php" target="_blank">$_FILES</a> と同じです</p>
+
+<h2>複数アップロード時</h2>
+<p>複数のファイルをアップロードするタイプの場合は、結果の連想配列が入った<b>配列</b>が戻り値となります</p>
+</div>
+</article>
+
+</body>
+</html>
