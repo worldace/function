@@ -21,7 +21,7 @@
 割り切った仕様のため、主キーの名前をidに限定しています。</p>
 
 <h2>new</h2>
-<p>dbオブジェクトを作成します</p>
+<p>dbオブジェクトを作成する</p>
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
@@ -47,7 +47,7 @@ $db = new db('./example.db', 'fruit'); //パスとテーブル名を渡す
 
 <h2>table</h2>
 
-<p>現在のテーブルを変更します。</p>
+<p>現在のテーブルを変更する。</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
@@ -62,7 +62,7 @@ $db->table('fruit');
 
 
 <h2>table_create</h2>
-<p>テーブルを作成します。</p>
+<p>テーブルを作成する。</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
@@ -133,7 +133,7 @@ $db->table_keys();
 
 <h2>insert</h2>
 
-<p>レコードを1件追加します</p>
+<p>レコードを1件追加する</p>
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
@@ -150,7 +150,7 @@ $db->insert(['name'=>'バナナ', 'price'=>100]);
 
 <h2>update</h2>
 
-<p>レコードを1件更新します</p>
+<p>レコードを1件更新する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
@@ -167,7 +167,7 @@ $db->update(5, ['price'=>150]);
 
 <h2>delete</h2>
 
-<p>レコードを1件削除します</p>
+<p>レコードを1件削除する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
@@ -182,7 +182,7 @@ $db->delete(5);
 
 
 <h2>select</h2>
-<p>データを取得します。引数により3パターンあります。</p>
+<p>データを取得する。引数により3パターンあります。</p>
 
 <code class="php" data-title="1セル取得"><!--
 $result = $db->select(4, 'price'); //引数が「id番号」と「列名」だと1セル取得
@@ -213,7 +213,7 @@ foreach($result as $fruit){
 
 <h2>search</h2>
 
-<p>文字列検索をします。</p>
+<p>文字列検索をする。</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
@@ -247,7 +247,7 @@ foreach($result as $fruit){
 
 <h2>query</h2>
 
-<p>任意のSQL文を実行します。プレースホルダにも対応</p>
+<p>任意のSQL文を実行する。プレースホルダにも対応</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
@@ -299,7 +299,7 @@ $db->query('select * from fruit where name = :name', ['name'=>'みかん']); //[
 print $db->count();
 --></code>
 <h2>transaction</h2>
-<p>トランザクション処理を実行します。</p>
+<p>トランザクション処理を実行する。</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
@@ -314,7 +314,7 @@ print $db->count();
 「コールバック関数の戻り値」がそのまま返ります
 </td></tr>
 </table>
-<code class="php" data-title="トランザクション"><!--
+<code class="php" data-title="transaction"><!--
 $db->transaction(function($db){
     //ここにトランザクションが必要な処理を記述する
     //失敗したら例外を投げてください
