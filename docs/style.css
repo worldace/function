@@ -186,13 +186,11 @@ code[data-title]::before{
     color: #008000; /* 緑 */
 }
 
-/* table-of-contentsブロック --------------------*/
+/* table-of-contentsブロック ------------ */
 #table-of-contents{
     display: inline-block;
 	border: solid 1px #bbb;
 	background-color: #f9f9f9;
-	font-size: 16px;
-	letter-spacing: 0;
 	border-radius: 3px;
     min-width: 15rem;
     position: relative;

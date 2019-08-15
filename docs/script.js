@@ -29,7 +29,7 @@ function table_of_contents(){
     ol.id  = 'table-of-contents';
 
     for(var i = 0; i < list.length; i++){
-        var id = 'contents-id-' + i;
+        var id = 'table-of-contents-' + i;
         list[i].id = id;
         ol.insertAdjacentHTML('beforeend', '<li><a href="#' + id + '">' + list[i].textContent + '</a></li>');
     }
