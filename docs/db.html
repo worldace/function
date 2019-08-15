@@ -331,7 +331,7 @@ $db->transaction(function($db){
 <p>当クラスでの取得データは連想配列となりますが、指定クラスのオブジェクトにすることもできます。</p>
 
 <p>テーブル名を指定する所を、クラス名にすると実現できます。<br>
-テーブル名と同名のクラスが存在し、クラス名を<b>フルパス</b>で渡すのが条件です。</p>
+テーブル名と<b>同名のクラスが存在</b>し、クラス名を<b>フルパス</b>で渡すのが条件です。</p>
 <code class="php" data-title="データをオブジェクトで取得する"><!--
 class fruit{
    //あらかじめfruitクラスを用意しておく
@@ -364,6 +364,11 @@ foreach($db->select(0,10) as $fruit){
 
 </div>
 </article>
+
+
+<script>
+create_table_of_contents()
+</script>
 
 </body>
 </html>

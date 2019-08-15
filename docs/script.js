@@ -21,4 +21,32 @@ function highlight(){
     }
 }
 
+
+function create_table_of_contents(){
+    var list = document.querySelectorAll("#contents > h2"); //目次にする要素一覧
+
+    var toc = document.createElement('nav')
+    var ol  = document.createElement('ol');
+
+    toc.id  = 'table-of-contents';
+    toc.appendChild(ol);
+
+    for(var i = 0; i < list.length; i++){
+        var name = list[i].textContent;
+        var id   = 'contents-id-' + i;
+        var li   = document.createElement("li");
+        var a    = document.createElement("a");
+
+        list[i].id = id;
+        a.href = '#' + id;
+        a.textContent = name;
+        li.appendChild(a);
+        ol.appendChild(li);
+    }
+
+    var where = document.querySelector("#contents > h2:first-of-type"); //設置場所
+    where.parentNode.insertBefore(toc, where);
+}
+
+
 document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', highlight) : highlight();

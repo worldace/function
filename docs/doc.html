@@ -19,6 +19,7 @@
 <div id="contents">
 
 <p>PHPのDOMを使いやすくするクラス。HTMLの出力用に</p>
+
 <h2>new</h2>
 <p>docオブジェクトを作成する</p>
 <table class="function">
@@ -115,7 +116,7 @@ $doc->title->textContent = 'タイトル';
 
 <h2>要素を1つ作成する</h2>
 <p>要素を1つ作成するには、次のように行います。<br>
-<var>$doc(&apos;&lt;タグ名&gt;&apos;, &apos;本文&apos;, [&apos;属性名&apos;=&gt;&apos;属性値&apos;])</var>。戻り値は作成された要素です</p>
+<var>$doc(&lt;タグ名&gt;, 本文, [属性名=&gt;属性値])</var>。戻り値は作成された要素です</p>
 <code class="php" data-title="要素を1つ作成する"><!--
 // <div class="example">本文</div> を作成する
 
@@ -244,6 +245,11 @@ $el->parentNode->insertBefore($new_el, $el->nextSibling);
 
 </div>
 </article>
+
+
+<script>
+create_table_of_contents()
+</script>
 
 </body>
 </html>
