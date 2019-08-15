@@ -23,19 +23,17 @@ function highlight(){
 
 
 function table_of_contents(){
-    var list = document.querySelectorAll("#contents > h2"); //目次にする要素一覧
-    var ol   = document.createElement('ol');
-
+    var el = document.querySelectorAll("h2");
+    var ol = document.createElement('ol');
     ol.id  = 'table-of-contents';
 
-    for(var i = 0; i < list.length; i++){
+    for(var i = 0; i < el.length; i++){
         var id = 'table-of-contents-' + i;
-        list[i].id = id;
-        ol.insertAdjacentHTML('beforeend', '<li><a href="#' + id + '">' + list[i].textContent + '</a></li>');
+        el[i].id = id;
+        ol.insertAdjacentHTML('beforeend', '<li><a href="#' + id + '">' + el[i].textContent + '</a></li>');
     }
 
-    var where = document.querySelector("#contents > h2:first-of-type"); //設置場所
-    where.parentNode.insertBefore(ol, where);
+    el[0].parentNode.insertBefore(ol, el[0]);
 }
 
 

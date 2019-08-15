@@ -209,7 +209,7 @@ code[data-title]::before{
     transform: translateX(-50%);
 }
 #table-of-contents > li{
-	line-height: 1.6;
+	line-height: 1.45;
 }
 
 
