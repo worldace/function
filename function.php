@@ -52,7 +52,7 @@ class request{
     }
 
 
-    static function file(string $name) :array{ // ['name'=>,'type'=>,'tmp_name'=>,'error'=>,'size'=>]
+    static function files(string $name) :array{ // ['name'=>,'type'=>,'tmp_name'=>,'error'=>,'size'=>]
         $files = $_FILES[$name] ?? [];
 
         if(!is_array($files['name'])){
@@ -69,7 +69,7 @@ class request{
 
 
     static function upload(string $name, string $dir, array $whitelist = ['jpg','jpeg','png','gif']) :array{
-        $files = self::file($name);
+        $files = self::files($name);
 
         if(isset($files['name'])){ //single
             $files['upload'] = self::upload_move($files, $dir, $whitelist);
@@ -299,7 +299,7 @@ class http{
                     }
                     $content .= sprintf('--%s%s', $_, $n);
                     $content .= sprintf('Content-Disposition: form-data; name="%s"; filename="%s"%s', $name, $name2, $n);
-                    $content .= sprintf('Content-Type: %s%s%s', file::mime_type($name2), $n, $n);
+                    $content .= sprintf('Content-Type: %s%s%s', file::mime($name2), $n, $n);
                     $content .= sprintf('%s%s', $value2, $n);
                 }
             }
@@ -491,7 +491,7 @@ class mail{
                 continue;
             }
             $body .= sprintf('--%s%s', $_, $n);
-            $body .= sprintf('Content-Type: %s%s', file::mime_type($k), $n);
+            $body .= sprintf('Content-Type: %s%s', file::mime($k), $n);
             $body .= sprintf('Content-Transfer-Encoding: base64%s', $n);
             $body .= sprintf('Content-Disposition: attachment; filename="%s"%s%s', mb_encode_mimeheader($k,'utf-8'), $n, $n);
             $body .= chunk_split(base64_encode($v)) . $n;
@@ -604,7 +604,7 @@ class file{
     }
 
 
-    static function mime_type(string $file) :string{ // http://www.iana.org/assignments/media-types/media-types.xhtml
+    static function mime(string $file) :string{ // http://www.iana.org/assignments/media-types/media-types.xhtml
         static $mime = [
             'jpg'  => 'image/jpeg',
             'jpeg' => 'image/jpeg',
@@ -710,11 +710,11 @@ class xml{
 
 class csv{
     static function parse(string $str, array $option = []) :array{
-        return iterator_to_array(self::it('data:,'.$str, $option));
+        return iterator_to_array(self::file('data:,'.$str, $option));
     }
 
 
-    static function it(string $file, array $option = []) :\Generator{
+    static function file(string $file, array $option = []) :\Generator{
         $option += [
             'input'     => null,
             'output'    => null,
