@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>ソースコード</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>ソースコード</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<code class="php"></code>
+
+
+</div>
+</article>
+
+<script>
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "https://raw.githubusercontent.com/worldace/function/master/function.php");
+xhr.addEventListener("load", function(){
+    var code = document.querySelector("code");
+    code.textContent = xhr.responseText;
+    hljs.highlightBlock(code);
+});
+xhr.send();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>dbクラス</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>dbクラス</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>データベースのSQLiteにアクセスするクラス。PDOを使います。<br>
+割り切った仕様のため、主キーの名前をidに限定しています。</p>
+
+<h2>new</h2>
+<p>dbオブジェクトを作成します</p>
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+dbファイルのパス
+</td></tr>
+<tr class="require"><td>2</td><td>
+テーブル名
+</td></tr>
+<tr class="return"><td>戻</td><td>
+dbオブジェクト
+</td></tr>
+</table>
+
+
+<code class="php"><!--
+$db = new db('./example.db', 'fruit'); //パスとテーブル名を渡す
+--></code>
+<ul>
+<li>ファイルが存在しない時は、自動的に作成されます</li>
+
+</ul>
+
+
+<h2>table</h2>
+
+<p>現在のテーブルを変更します。</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+テーブル名
+</td></tr>
+</table>
+
+<code class="php"><!--
+$db->table('fruit');
+--></code>
+
+
+<h2>table_create</h2>
+<p>テーブルを作成します。</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+作成するテーブルの情報。連想配列で<var>[列名=&gt;型 制約]</var>という形式
+</td></tr>
+</table>
+
+<code class="php" data-title="テーブル作成"><!--
+$db->table_create([
+    'id'    => 'integer primary key autoincrement', //当クラスの仕様上、この列が必須
+    'name'  => 'text(10) not null',
+    'price' => 'integer default 100',
+];
+--></code>
+
+<h3>SQLiteで設定できる型</h3>
+<table>
+<tr><th>型</th><th>説明</th></tr>
+<tr><td>text</td><td>文字列</td></tr>
+<tr><td>integer</td><td>整数</td></tr>
+<tr><td>real</td><td>小数点</td></tr>
+<tr><td>numeric </td><td>数字</td></tr>
+<tr><td>none</td><td>何も変換しない</td></tr>
+
+</table>
+
+<h3>SQLiteで設定できる制約</h3>
+
+
+<table>
+<tr><th>制約</th><th>説明</th></tr>
+<tr><td>primary key</td><td>主キーにする</td></tr>
+<tr><td>autoincrement </td><td>自動採番する</td></tr>
+<tr><td>not null</td><td>値がない場合は、エラーになる</td></tr>
+<tr><td>default 値</td><td>値がない場合は、指定した値になる</td></tr>
+<tr><td>unique</td><td>値が重複した場合は、エラーになる</td></tr>
+<tr><td>check(式)</td><td>値が式の条件を満たさない場合は、エラーになる</td></tr>
+</table>
+
+<code class="php" data-title="check(式)の例"><!--
+//priceが「100以上1000以下」でないとエラーにする
+'price'=>'integer check(price >= 100 and price <= 1000)'
+
+//式で使える主要な記号はPHPと同じです
+< > <= >= == != and or not
+
+
+--></code>
+
+<h2>table_keys</h2>
+<p>現在のテーブルの列名一覧を取得する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="option"><td>-</td><td>
+引数はありません
+</td></tr>
+<tr class="return"><td>戻</td><td>
+配列
+</td></tr>
+</table>
+
+<code class="php" data-title="列名一覧を取得"><!--
+$db->table_keys();
+--></code>
+
+
+<h2>insert</h2>
+
+<p>レコードを1件追加します</p>
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+追加するデータ。連想配列で<var>[列名=&gt;値]</var>という形式
+</td></tr>
+<tr class="return"><td>戻</td><td>
+追加されたid番号
+</td></tr>
+</table>
+
+<code class="php" data-title="レコードを1件追加"><!--
+$db->insert(['name'=>'バナナ', 'price'=>100]); 
+--></code>
+
+<h2>update</h2>
+
+<p>レコードを1件更新します</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+更新するid番号
+</td></tr><tr class="require"><td>2</td><td>
+更新するデータ。連想配列で<var>[列名=&gt;値]</var>という形式
+</td></tr>
+</table>
+
+<code class="php" data-title="レコードを1件更新"><!--
+$db->update(5, ['price'=>150]); 
+--></code>
+
+<h2>delete</h2>
+
+<p>レコードを1件削除します</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+削除するid番号
+</td></tr>
+</table>
+
+<code class="php" data-title="レコードを1件削除"><!--
+$db->delete(5);
+--></code>
+
+
+<h2>select</h2>
+<p>データを取得します。引数により3パターンあります。</p>
+
+<code class="php" data-title="1セル取得"><!--
+$result = $db->select(4, 'price'); //引数が「id番号」と「列名」だと1セル取得
+
+print $result; //戻り値は該当セルの値
+--></code>
+
+<code class="php" data-title="1行取得"><!--
+$result = $db->select(4); //引数が「id番号」のみだと1行取得
+
+//戻り値は連想配列
+print $result['name'];
+print $result['price'];
+--></code>
+
+<code class="php" data-title="複数行取得"><!--
+$result = $db->select(0, 10); //引数が「開始位置」と「取得件数」だと複数行取得。開始位置は0から
+
+//戻り値は「配列＋連想配列」の2重配列
+foreach($result as $fruit){
+    print $fruit['name'];
+    print $fruit['price'];
+}
+--></code>
+
+
+<p>複数行取得では、idの大きい順から選択されます。逆順にしたい場合は第3引数にtrueを渡してください</p>
+
+<h2>search</h2>
+
+<p>文字列検索をします。</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+検索ワード。空白で区切るとOR検索
+</td></tr>
+<tr class="require"><td>2</td><td>
+検索対象の列名。列が複数ある場合は配列に入れる
+</td></tr>
+<tr class="require"><td>3</td><td>
+開始位置。0から。idの大きい順に検索されます
+</td></tr>
+<tr class="require"><td>4</td><td>
+取得件数
+</td></tr>
+
+<tr class="return"><td>戻</td><td>
+配列＋連想配列の2重配列
+</td></tr>
+</table>
+
+<code class="php" data-title="文字列検索"><!--
+$result = $db->search('バナナ', 'name', 0, 10);
+
+foreach($result as $fruit){
+    print $fruit['name'];
+    print $fruit['price'];
+}
+--></code>
+
+
+<h2>query</h2>
+
+<p>任意のSQL文を実行します。プレースホルダにも対応</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+SQL文
+</td></tr>
+<tr class="option"><td>2</td><td>
+プレースホルダに対応する配列
+</td></tr>
+<tr class="return"><td>戻</td><td>
+PDOStatementオブジェクト
+</td></tr>
+</table>
+
+<code class="php" data-title="SQLを実行する"><!--
+$result = $db->query('select * from fruit');
+
+foreach($result as $fruit){
+    print $fruit['name'];
+    print $fruit['price'];
+}
+--></code>
+
+<code class="php" data-title="プレースホルダ付きのSQLを実行する"><!--
+//プレースホルダに「?」を使う
+$db->query('select * from fruit where name = ?', ['みかん']);
+
+//プレースホルダに「:」を使う
+$db->query('select * from fruit where name = :name', ['name'=>'みかん']); //[':name'=>'みかん']でも可
+
+
+--></code>
+
+<h2>count</h2>
+
+<p>現在のテーブルの全レコード数を取得する。</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="option"><td>-</td><td>
+引数はありません
+</td></tr>
+<tr class="return"><td>戻</td><td>
+全レコード数
+</td></tr>
+</table>
+
+<code class="php"><!--
+print $db->count();
+--></code>
+<h2>transaction</h2>
+<p>トランザクション処理を実行します。</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+コールバック関数。トランザクションが必要な処理を記述する<br>
+失敗したら関数内で例外を投げてください。ロールバックされます
+</td></tr>
+<tr class="option"><td>2</td><td>
+コールバック関数に渡したい引数。続けて第3引数以降にも渡せます。
+</td></tr>
+<tr class="return"><td>戻</td><td>
+「コールバック関数の戻り値」がそのまま返ります
+</td></tr>
+</table>
+<code class="php" data-title="トランザクション"><!--
+$db->transaction(function($db){
+    //ここにトランザクションが必要な処理を記述する
+    //失敗したら例外を投げてください
+});
+
+
+--></code>
+
+<p>コールバック関数にはdbオブジェクトが渡されます。<br>
+コールバック関数に追加の引数を渡したい場合は、transaction()の第二引数以降に渡してください。</p>
+
+<p>参考情報：<a href="https://www.php.net/manual/ja/language.types.callable.php" target="_blank">PHP callable</a></p>
+<h2>データをオブジェクトで取得する</h2>
+<p>当クラスでの取得データは連想配列となりますが、指定クラスのオブジェクトにすることもできます。</p>
+
+<p>テーブル名を指定する所を、クラス名にすると実現できます。<br>
+テーブル名と同名のクラスが存在し、クラス名を<b>フルパス</b>で渡すのが条件です。</p>
+<code class="php" data-title="データをオブジェクトで取得する"><!--
+class fruit{
+   //あらかじめfruitクラスを用意しておく
+}
+
+$db = new db('./example.db', '\\fruit'); //クラス名をフルパスで渡す
+
+foreach($db->select(0,10) as $fruit){
+    print $fruit->name;
+    print $fruit->price;
+}
+--></code>
+
+
+<p>テーブルに関するデータと操作を1つのクラスにまとめることができます。</p>
+<h2>備考</h2>
+<h3>セキュリティ情報</h3>
+<ul>
+<li>テーブル名と列名はノーチェックなので、気を付けてご利用ください</li>
+<li>DBファイルはネットから見えない所に配置しておきましょう</li>
+
+</ul>
+
+<h3>参考リンク</h3>
+<ul>
+<li><a href="https://www.dbonline.jp/sqlite/" target="_blank">SQLite入門</a></li>
+<li><a href="https://qiita.com/mpyw/items/b00b72c5c95aac573b71" target="_blank">PHPでデータベースに接続するときのまとめ</a></li>
+
+</ul>
+
+</div>
+</article>
+
+</body>
+</html>

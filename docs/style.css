@@ -52,14 +52,14 @@ p{
     line-height: 1.8;
 }
 h2{
-    margin: 3.2rem 0;
+    margin: 4rem 0 3rem 0;
     border-bottom: solid 1px #ccc;
     font-size: 1.4rem;
     font-family: "Noto Sans CJK JP", meiryo, sans-serif;
 	border-bottom: solid 1px #3399ff;
 }
 h3{
-    margin: 2.6rem 0;
+    margin: 2rem 0;
     font-size: 1.2rem;
     font-family: "Noto Sans CJK JP", meiryo, sans-serif;
 }
@@ -141,7 +141,7 @@ code{
 }
 code[data-title]{
     position: relative;
-    padding-top: 2.3rem;
+    padding-top: 2.5rem;
 }
 code[data-title]::before{
     content: attr(data-title);
@@ -152,7 +152,7 @@ code[data-title]::before{
     font-style: normal;
     line-height: 1;
     background-color: #e9e9e9;
-    padding: 0.3rem 0.8rem;
+    padding: 0.4rem 0.8rem;
     border-right: solid 1px #ccc;
     border-bottom: solid 1px #ccc;
     border-radius: 0 0 3px 0;
