@@ -17,27 +17,25 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>過去の時間との差を言葉に変換する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
-</td></tr>
-<tr class="option"><td>2</td><td>
-
+過去の時間。UNIX秒
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+次のいずれかの文字列<br>
+「今」「～秒前」「～分前」「～時間前」「～日前」「～ヶ月前」「～年前」
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+print time::past(1423120123); // 4年前
 --></code>
 
-
+<p class="info-blue">未来の時間が与えられた場合は「今」が返ります</p>
 </div>
 </article>
 

@@ -211,8 +211,10 @@ class str{
 
 
     static function f(string $format, ...$replace){
-        return preg_replace_callback('/%(%|s|h|u|b|j)/', function($m) use(&$replace){
-            if    ($m[0] === '%n'){ return '%'; }
+        return preg_replace_callback('/%(%|n|r|s|h|u|b|j)/', function($m) use(&$replace){
+            if    ($m[0] === '%%'){ return '%'; }
+            elseif($m[0] === '%n'){ return "\n"; }
+            elseif($m[0] === '%r'){ return "\r"; }
             $v = array_shift($replace);
             if    ($m[0] === '%s'){ return $v; }
             elseif($m[0] === '%h'){ return htmlspecialchars($v, ENT_QUOTES, 'UTF-8', false); }

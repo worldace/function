@@ -17,24 +17,21 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>文字列からUTF-8のBOMを削除する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
-</td></tr>
-<tr class="option"><td>2</td><td>
-
+BOMを除去したい文字列
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+BOMが除去された文字列
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+$str = str::remove_bom('utf-8 string');
 --></code>
 
 

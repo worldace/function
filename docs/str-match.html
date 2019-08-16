@@ -17,24 +17,26 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>文字列中に指定文字が含まれるか検索する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+検索対象文字列
 </td></tr>
-<tr class="option"><td>2</td><td>
-
+<tr class="require"><td>2</td><td>
+検索ワード
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+マッチした場合はtrue、マッチしなかった場合はfalseが返ります
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+if(str::match('example string', 'str')){
+    //マッチした
+}
 --></code>
 
 

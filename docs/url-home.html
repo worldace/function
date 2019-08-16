@@ -17,27 +17,26 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>URL文字列からパス部以降を除外したURLを返す</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
-</td></tr>
-<tr class="option"><td>2</td><td>
-
+URL文字列<br>
+<var>http://</var>か<var>https://</var>か<var>//</var>で始まる文字列
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+変換されたURL。最後は必ず<var>/</var>になります
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+print url::home('http://example.com/test/sample.html'); // http://example.com/
+print url::home('http://example.com'); // http://example.com/
 --></code>
 
-
+<p class="info-blue">この関数は機械的に処理するため、URLが妥当かどうかまでは判断しません。</p>
 </div>
 </article>
 

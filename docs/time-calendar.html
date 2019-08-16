@@ -17,23 +17,34 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>月のカレンダー用の配列を取得する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
-<tr class="require"><td>1</td><td>
-
+<tr class="option"><td>1</td><td>
+年。省略時は今年
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+月。省略時は今月
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+2次元の配列。週毎に7つの日が入っています。<br>
+週の始まりは日曜日で、存在しない日は空文字列になっています
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
+//今月のカレンダーをHTMLで作る
+
+foreach(time::calendar() as $week){
+    $tr .= "<tr>";
+    foreach($week as $day){
+        $tr .= "<td>$day</td>";
+    }
+    $tr .= "</tr>";
+}
+print "<table>$tr</table>";
 
 --></code>
 

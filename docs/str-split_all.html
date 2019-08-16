@@ -17,24 +17,23 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>文字列を一文字ずつに分解する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
-</td></tr>
-<tr class="option"><td>2</td><td>
-
+分解したい文字列。UTF-8限定
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+配列
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
+$words = str::split_all('あいうえお');
 
+print $words[3]; //え
 --></code>
 
 

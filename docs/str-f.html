@@ -17,25 +17,39 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>フォーマットに基づき文字列を変換する。<a href="https://www.php.net/sprintf" target="_blank">sprintf()</a>に似た関数です</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+フォーマット文字列
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+置換する値。第3引数以降にも渡せます
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+変換後の文字列
 </td></tr>
 </table>
-
-
 <code class="php" data-title="使用例"><!--
+print str::f('<a href="%h">%h</a>%n', $url, $title);
 
+print str::f('http://%s/?key=%u&name=%u', $host, $key, $name);
 --></code>
+
+<table>
+<caption>変換ルール</caption>
+<tr><th>記号</th><th>説明</th></tr>
+<tr><td>%s</td><td>任意の文字列</td></tr>
+<tr><td>%h</td><td>HTMLエスケープ</td></tr>
+<tr><td>%u</td><td>URLエンコード</td></tr>
+<tr><td>%b</td><td>Base64エンコード</td></tr>
+<tr><td>%j</td><td>JSONエンコード</td></tr>
+<tr><td>%n</td><td>\nに変換。これは引数不要です</td></tr>
+<tr><td>%r</td><td>\rに変換。これは引数不要です</td></tr>
+<tr><td>%%</td><td>%に変換。%のエスケープ。これは引数不要です</td></tr>
+</table>
+
 
 
 </div>
