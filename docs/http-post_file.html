@@ -17,26 +17,40 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>HTTP POSTでファイルを送信する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+送信先URL
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+送信するデータがあれば連想配列で。後述</var>
+</td></tr>
+<tr class="option"><td>3</td><td>
+送信するリクエストヘッダがあれば連想配列で。<var>[名前=&gt;値]</var>
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+受信した本文。失敗した場合は false が返ります
 </td></tr>
 </table>
 
 
-<code class="php" data-title="使用例"><!--
+<code class="php" data-title="第2引数 送信データの例"><!--
+//ファイルを1つ送信する [フォームのname名 => [ファイル名=>ファイルパス]]
+$data = ["file" => ["test.jpg" => "../test1.jpg"]];
 
+//ファイルを複数送信する
+$data = ["file[]" => ["test1.jpg" => "../test1.jpg", "test2.jpg" => "../test2.jpg"]];
+
+//ファイルを1つ＋フォーム値を1つ送信する
+$data = ["file" => ["test.jpg" => "../test1.jpg"], "password" => "example"];
+
+//送信
+http::post_file($url, $data);
 --></code>
 
+<p class="info-blue">この関数を実行すると、レスポンスヘッダが配列として<var>http::$header</var>にセットされます</p>
 
 </div>
 </article>

@@ -1064,8 +1064,7 @@ class php{
 
     static function autoload(string $dir) :void{
         spl_autoload_register(function($class) use($dir){
-            $path = strtolower($class);
-            $path = str_replace('\\', '/', $path);
+            $path = str_replace('\\', '/', $class);
             $file = sprintf('%s/%s.php', $dir, $path);
 
             if(file_exists($file)){

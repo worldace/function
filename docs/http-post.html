@@ -17,26 +17,30 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>HTTP POSTを送信する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+送信先URL
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+送信するデータがあれば連想配列で。<var>[キー=&gt;値]</var>
+</td></tr>
+<tr class="option"><td>3</td><td>
+送信するリクエストヘッダがあれば連想配列で。<var>[名前=&gt;値]</var>
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+受信した本文。失敗した場合は false が返ります
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+http::post('http://example.com/test.php', ['name1'=>'value1', 'name2'=>'value2']); //POST送信
 --></code>
 
+<p class="info-blue">この関数を実行すると、レスポンスヘッダが配列として<var>http::$header</var>にセットされます</p>
 
 </div>
 </article>

@@ -17,26 +17,44 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>HTTP GETを並列に送信する。cURLを利用します</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+送信先URLを配列で
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+並列数。省略時は5
+</td></tr>
+<tr class="option"><td>3</td><td>
+<a href="https://www.php.net/curl_setopt" target="_blank">cURLオプション</a>があれば連想配列で。全URL共通になります<br>
+例: [CURLOPT_TIMEOUT =&gt; 10]
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+連想配列。キーがURL、値が受信した本文
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
+$result = http::get_multi(['http://example.com/', 'http://example.org/']);
 
+print $result['http://example.com/'];
+print $result['http://example.org/'];
 --></code>
 
+
+<table>
+<caption>cURLオプションの初期設定値</caption>
+<tr><th>キー</th><th>値</th></tr>
+<tr><td>CURLOPT_RETURNTRANSFER</td><td>true</td></tr>
+<tr><td>CURLOPT_SSL_VERIFYPEER</td><td>false</td></tr>
+<tr><td>CURLOPT_FOLLOWLOCATION</td><td>true</td></tr>
+<tr><td>CURLOPT_MAXREDIRS</td><td>10</td></tr>
+<tr><td>CURLOPT_TIMEOUT</td><td>10</td></tr>
+
+</table>
 
 </div>
 </article>

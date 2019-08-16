@@ -17,27 +17,41 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>PHPファイルを順番に実行し、全て実行したら終了する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+最初に実行するPHPファイル
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+最初に実行するPHPファイルに渡す引数があれば。<br>
+PHPファイル側では<var>$arg</var>で内容が取得できます。
+</td></tr>
+<tr class="option"><td>3</td><td>
+2番目に実行するPHPファイル。第4引数以降にも続けて書けます
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+なし
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+//簡易ルーター
+switch(request::get('action')){
+    case ''                : php::go('./action/index.php');
+    case 'video'           : php::go('./action/video.php');
+    case 'video-post'      : php::go('./action/video-post.php');
+    case 'video-post-form' : php::go('./action/video-post-form.php');
+    default                : php::go('./action/index.php');
+}
 --></code>
 
+<p class="info-blue">実行するPHPファイルで<var>return 値</var>とすると、次のPHPファイルに値を渡せます。<br>
+次のPHPファイルでは<var>$arg</var>で値を取得できます。</p>
 
+<p class="info-blue">ファイル毎にスコープが作成され実行されるので、他のファイルの変数は見ることができません</p>
 </div>
 </article>
 

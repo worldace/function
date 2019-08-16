@@ -18,11 +18,11 @@ ftpクラス
 request::get
 request::post
 request::cookie
-request::header
+request::url
 request::method
 request::is_get
 request::is_post
-request::url
+request::header
 request::upload
 response::redirect
 response::text
@@ -34,8 +34,8 @@ response::nocache
 str::file
 str::match
 str::replace_once
-str::remove_bom
 str::split_all
+str::remove_bom
 str::f
 str::base64_encode_urlsafe
 str::base64_decode_urlsafe
@@ -44,6 +44,10 @@ str::base_decode
 html::e
 url::home
 url::top
+http::get
+http::get_multi
+http::post
+http::post_file
 
 time::micro
 time::date
@@ -59,14 +63,14 @@ random::crypt
 random::decrypt
 
 file::edit
-file::permission
 file::list
 file::list_all
+file::permission
 file::mime
 dir::make
 dir::delete
-dir::permission
 dir::list
+dir::permission
 xml::parse
 csv::parse
 csv::file
@@ -75,13 +79,9 @@ zip::create
 zip::add
 zip::unzip
 
-http::get
-http::get_multi
-http::post
-http::post_file
 php::go
-php::autoload
 php::async
+php::autoload
 php::function_toString
 php::class_toString
 php::benchmark

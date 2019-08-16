@@ -17,27 +17,38 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>PHPファイルを非同期で実行する<br>
+時間が掛かる処理を分離したい時に有効です</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+非同期で実行するPHPファイル
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+PHPファイルに渡す引数があれば。ファイル側では変数<var>$arg</var>で取得できます<br>
+シリアライズ化できる形式なら、何でも渡せます
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+なし
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
+php::async('./example.php', ['data']);
+--></code>
+
+<code class="php" data-title="ファイル側"><!--
+<?php
+if(PHP_SAPI !== 'cli'){ //シェル経由以外は終了する
+    exit;
+}
+$arg; // ['data']
 
 --></code>
 
-
+<p class="info-blue">非同期PHPはシェル経由で実行されます。結果を受け取る仕組みはありません</p>
 </div>
 </article>
 
