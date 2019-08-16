@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title></title>
+<title>response::basic()</title>
 <link href="style.css" rel="stylesheet">
 <script src="script.js"></script>
 </head>
@@ -12,32 +12,45 @@
 
 <article>
 <header>
-<h1></h1>
+<h1>response::basic()</h1>
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
 <div id="contents">
 
-<p></p>
+<p>ベーシック認証を行う</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+IDとパスワードを認証する関数
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+Realm名を英語で。省略時は"members only"
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+ログインに成功した場合は、ユーザが入力したIDが返ります。失敗時はfalseが返ります
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
+//認証関数は各自用意する
+function password_check($id, $password){
+    //ユーザが入力したIDとパスワードが自動的にセットされます
+    //IDとパスワードが正しければtrueを返し、間違っていればfalseを返してください
+}
 
+$user_id = response::basic('password_check');
+
+if($user_id){
+    //ログイン成功時の処理
+}
+else{
+    //ログイン失敗時はエラーページを出力してください。(ヘッダは送信済みです)
+}
 --></code>
 
-
+<p class="info-yellow">ベーシック認証はパスワードを平文で送るので、セキュリティのため<var>https</var>をご利用ください</p>
 </div>
 </article>
 

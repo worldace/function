@@ -53,7 +53,7 @@ if($result['upload']){
 
 <table>
 <caption>アップロード結果の連想配列</caption>
-<tr><th>名前</th><th>値</th></tr>
+<tr><th>キー</th><th>値</th></tr>
 <tr><td><b>upload</b></td><td>アップロードされたファイルのパス。ファイル名は自動的に決定します。<br>
 ファイルがアップされなかったら<var>null</var>に、アップに失敗した場合は<var>false</var>になります</td></tr>
 <tr><td>name</td><td>元のファイル名</td></tr>
@@ -63,10 +63,10 @@ if($result['upload']){
 <tr><td>error</td><td><a href="https://www.php.net/manual/ja/features.file-upload.errors.php" target="_blank">エラーコード</a></td></tr>
 </table>
 
-<p><var>upload</var>キーは当関数のオリジナルです。他は <a href="https://www.php.net/manual/ja/features.file-upload.post-method.php" target="_blank">$_FILES</a> と同じです</p>
+<p><var>upload</var>キー以外は <a href="https://www.php.net/manual/ja/features.file-upload.post-method.php" target="_blank">$_FILES</a> と同じです</p>
 
 <h2>複数アップロード時</h2>
-<p>複数のファイルをアップロードするタイプの場合は、結果の連想配列が入った<b>配列</b>が戻り値となります</p>
+<p>1つのnameで複数のファイルをアップロードするタイプの場合は、結果の連想配列が要素の<b>配列</b>が戻り値となります</p>
 </div>
 </article>
 

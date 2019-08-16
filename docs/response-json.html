@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title></title>
+<title>response::json()</title>
 <link href="style.css" rel="stylesheet">
 <script src="script.js"></script>
 </head>
@@ -12,31 +12,44 @@
 
 <article>
 <header>
-<h1></h1>
+<h1>response::json()</h1>
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
 <div id="contents">
 
-<p></p>
+<p>JSONを出力して、PHPを終了する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+JSONに変換するデータ。配列や連想配列など
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+アクセスを許可するオリジン(プロトコル＋ホスト名＋ポート番号)。複数ある場合には配列に入れる。<br>
+オリジンは<var>http://www.example.com</var>のように指定する。最後のスラッシュは不要。<br>
+省略時は全オリジンを許可します
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+なし
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
+//JavaScript側
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "http://www.example.com/test.php");
+xhr.onload = function(){
+    console.dir(JSON.parse(xhr.responseText)); //JSONを受け取る
+};
+xhr.send();
 
+//PHP側
+<?php
+response::json([1,2,3,4,5]); //JSONを出力する
 --></code>
 
+<p>上記例ではブラウザからCookieが送られてきません。Cookieを送信するようにするには、 JavaScript側では送信前に<var>xhr.withCredentials = true;</var>を追加し、PHP側では第2引数のオリジンを指定します </p>
 
 </div>
 </article>

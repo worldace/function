@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title></title>
+<title>response::download()</title>
 <link href="style.css" rel="stylesheet">
 <script src="script.js"></script>
 </head>
@@ -12,32 +12,36 @@
 
 <article>
 <header>
-<h1></h1>
+<h1>response::download()</h1>
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
 <div id="contents">
 
-<p></p>
+<p>ブラウザにファイルをダウンロードさせる</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+ブラウザに表示するファイル名。日本語可
 </td></tr>
-<tr class="option"><td>2</td><td>
-
+<tr class="require"><td>2</td><td>
+ダウンロードさせるファイルのパス。
+</td></tr>
+<tr class="option"><td>3</td><td>
+制限時間(秒)。省略時は6時間
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+なし
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+response::download('example.jpg', '../img/example.jpg');
 --></code>
 
-
+<p class="info-blue">ダウンロードが完了するまでPHPは実行状態になります。<br>
+PHPが実行できる時間は初期設定で30秒に制限されているので、場合により制限時間を延ばしてください</p>
 </div>
 </article>
 

@@ -154,7 +154,7 @@ class response{
     }
 
 
-    static function basic(callable $fn, string $realm = 'member only'){
+    static function basic(callable $fn, string $realm = 'members only'){
         if(isset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])){
             if($fn($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) === true){
                 return $_SERVER['PHP_AUTH_USER'];
