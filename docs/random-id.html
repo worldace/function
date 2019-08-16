@@ -17,24 +17,29 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>ローカルに一意なID文字列を作成する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
-<tr class="require"><td>1</td><td>
-
-</td></tr>
-<tr class="option"><td>2</td><td>
-
+<tr class="noarg"><td>-</td><td>
+引数はありません
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+ID文字列。<br>
+11文字の英数字(0-9A-Za-z)で構成され、先頭が常にアルファベットです
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
+print random::id(); // Cr2E0Pkq0UF
+print random::id(); // u74v42cqfuG
+--></code>
 
+<p class="info-blue">時計と乱数を組み合わせたIDです。100万分の1秒毎×確率1/4200 で一意です</p>
+
+<code class="php" data-title="IDから発行時間を逆算できます"><!--
+$time = substr(str::base_decode($id), -10); //UNIX秒
 --></code>
 
 

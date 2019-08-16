@@ -210,6 +210,34 @@ class str{
     }
 
 
+    static function base_encode($value, int $base = 62) :string{
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $str = '';
+
+        do{
+            $mem   = bcmod($value, $base);
+            $str   = $chars[$mem] . $str;
+            $value = bcdiv(bcsub($value, $mem), $base);
+        } while(bccomp($value,0) > 0);
+
+        return $str;
+    }
+
+
+    static function base_decode(string $str, int $base = 62) :string{
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $arr   = array_flip(str_split($chars));
+        $len   = strlen($str);
+        $val   = '0';
+
+        for($i = 0;  $i < $len;  $i++){
+            $val = bcadd($val, bcmul($arr[$str[$i]], bcpow($base, $len-$i-1)));
+        }
+
+        return $val;
+    }
+
+
     static function f(string $format, ...$replace){
         return preg_replace_callback('/%(%|n|r|s|h|u|b|j)/', function($m) use(&$replace){
             if    ($m[0] === '%%'){ return '%'; }
@@ -957,7 +985,7 @@ class random{
         [$micro, $sec] = explode(' ', microtime());
         $micro = substr($micro, 2, 6);
         $rand  = mt_rand(1000, 5202); //5202より大きいと12桁になる
-        return self::base_encode("$rand$micro$sec");
+        return str::base_encode("$rand$micro$sec");
     }
 
 
@@ -1015,34 +1043,6 @@ class random{
             $i = mt_rand(1, round(100/$chance*100000));
             return $i <= 100000;
         }
-    }
-
-
-    static function base_encode($value, int $base = 62) :string{
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $str = '';
-
-        do{
-            $mem   = bcmod($value, $base);
-            $str   = $chars[$mem] . $str;
-            $value = bcdiv(bcsub($value, $mem), $base);
-        } while(bccomp($value,0) > 0);
-
-        return $str;
-    }
-
-
-    static function base_decode(string $str, int $base = 62) :string{
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $arr   = array_flip(str_split($chars));
-        $len   = strlen($str);
-        $val   = '0';
-
-        for($i = 0;  $i < $len;  $i++){
-            $val = bcadd($val, bcmul($arr[$str[$i]], bcpow($base, $len-$i-1)));
-        }
-
-        return $val;
     }
 }
 

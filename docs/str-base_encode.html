@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>str::base_encode()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>str::base_encode()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>整数をn進数の文字列に変換する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+変換したい整数。0以上<br>
+大きな数字の場合は文字列で渡してください
+</td></tr>
+<tr class="option"><td>2</td><td>
+進数を2～62の数字で。省略時は62
+</td></tr>
+<tr class="return"><td>戻</td><td>
+変換された文字列
+</td></tr>
+</table>
+
+
+
+<code class="php" data-title="使用例"><!--
+print str::base_encode(10, 2);   // 10を2進数に変換する → "1010"
+print str::base_encode(255, 16); // 255を16進数に変換する → "ff"
+--></code>
+
+<p class="info-blue">変換した文字列を元の数字に戻すには <a href="str-base_decode.html">str::base_decode()</a> をご利用ください</p>
+
+<p class="info-blue">
+変換ルールは <var>0-9a-zA-Z</var> の62文字です。2進数なら最初の2文字<var>01</var>を使い、16進数なら最初の16文字<var>0-9a-f</var>を使い、62進数なら全文字を使って変換します</p>
+
+</div>
+</article>
+
+</body>
+</html>

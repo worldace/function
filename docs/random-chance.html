@@ -17,26 +17,29 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>確率に基づいて抽選を行う</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
-</td></tr>
-<tr class="option"><td>2</td><td>
-
+当たりの確率を0%～100%までの数字で<br>
+可読性のために、確率には<var>%</var>を付けることができます。
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+当たれば<var>true</var>、外れると<var>false</var>が返ります
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+for($i = 0; $i < 1000; $i++){
+    if(random::chance("0.1%")){
+        print "$i 当たり\n"; //期待値的に1回は当たる
+    }
+}
 --></code>
 
+<p class="info-blue">確率を100%以上にすると常に当たり、0%以下にすると常に外れになります</p>
 
 </div>
 </article>

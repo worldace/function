@@ -17,26 +17,25 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>グローバルに一意なID文字列を作成する。UUIDv4</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
-<tr class="require"><td>1</td><td>
-
-</td></tr>
-<tr class="option"><td>2</td><td>
-
+<tr class="option"><td>1</td><td>
+trueでハイフンを付ける<br>
+省略時はハイフンが付きません
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+ID文字列。<br>
+32文字の英数字で構成されます
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+print random::uuid();     // b42cf439584d4fc796d65ea01df693b7
+print random::uuid(true); // fc4707c4-bf6f-4221-9acb-d9a1b66070e0
 --></code>
-
 
 </div>
 </article>
