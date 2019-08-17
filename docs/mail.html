@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>mailクラス</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>mailクラス</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>メールを送信するクラス</p>
+
+
+<h2>new</h2>
+
+mailオブジェクトを作成する。送信はまだ行われません。
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+送信先のメールアドレス
+</td></tr>
+<tr class="require"><td>2</td><td>
+送信者のメールアドレス
+</td></tr>
+<tr class="require"><td>3</td><td>
+メールのタイトル
+</td></tr>
+<tr class="require"><td>4</td><td>
+メールの本文
+</td></tr>
+<tr class="return"><td>戻</td><td>
+mailオブジェクト
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+$mail = new mail('to@example.com', 'from@example.com', 'タイトル', '本文');
+--></code>
+
+
+<h2>send</h2>
+<p>メールを送信する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="noarg"><td>-</td><td>
+引数はありません
+</td></tr>
+<tr class="return"><td>戻</td><td>
+送信に成功すればtrue、失敗すればfalse
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+$mail->send();
+--></code>
+
+
+<h2>from</h2>
+
+<p>送信者の氏名を設定する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+送信者の氏名
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+$mail->from('送信者の氏名');
+--></code>
+
+<h2>file</h2>
+
+<p>添付ファイルを1つ追加する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+メールに表示するファイル名
+</td></tr>
+<tr class="require"><td>2</td><td>
+添付ファイルのパス
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+$mail->file('example.pdf', '../sample.pdf');
+--></code>
+
+
+<h2>cc</h2>
+<p>CCを1件追加する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+メールアドレス
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+$mail->cc('extra@example.com');
+--></code>
+
+<h2>bcc</h2>
+<p>BCCを1件追加する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+メールアドレス
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+$mail->bcc('extra@example.com');
+--></code>
+
+<h2>header</h2>
+<p>任意のメールヘッダを1つ追加する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+メールヘッダ文字列
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+$mail->header('Reply-To: reply@example.com');
+--></code>
+
+
+
+</div>
+</article>
+<script>
+table_of_contents();
+</script>
+
+</body>
+</html>

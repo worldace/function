@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>ftpクラス</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>ftpクラス</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>ftpでファイルの送受信を行うクラス</p>
+
+<h2>new</h2>
+<p>ftpサーバにログインする</p>
+
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+FTPサーバのホスト名
+</td></tr>
+<tr class="require"><td>2</td><td>
+ユーザID
+</td></tr>
+<tr class="require"><td>3</td><td>
+パスワード
+</td></tr>
+<tr class="option"><td>4</td><td>
+暗号化による接続を行う場合はtrue、行わない場合はfalse<br>
+省略時は暗号化接続です
+</td></tr>
+<tr class="return"><td>戻</td><td>
+ftpオブジェクト
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+$ftp = new ftp('ftp.example.com', 'id', 'password');
+--></code>
+
+<p class="info-blue">パッシブモード限定です</p>
+
+
+<h2>upload</h2>
+
+<p>ファイルを1件アップロードする</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+アップロード元ファイル
+</td></tr>
+<tr class="require"><td>2</td><td>
+アップロード先ファイル
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+$ftp->upload('from', 'to');
+--></code>
+
+
+</div>
+</article>
+<script>
+table_of_contents();
+</script>
+</body>
+</html>

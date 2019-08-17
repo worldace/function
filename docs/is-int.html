@@ -42,12 +42,14 @@ is::int(10);
 is::int(10.0);
 is::int('10');
 is::int(0):
-is::int(10, 1, 30);
+is::int(10, 1, 20);
+is::int('-10', -10);
 
 //false
 is::int(10.1);
 is::int(-1);
 is::int('10.0');
+is::int('10a');
 is::int(10, 1, 5);
 --></code>
 

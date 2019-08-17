@@ -411,8 +411,8 @@ class http{
 class ftp{
     private $ftp;
 
-    function __construct($host, $id, $password){
-        $this->ftp = ftp_ssl_connect($host);
+    function __construct(string $host, string $id, string $password, bool $is_ssl = true){
+        $this->ftp = ($is_ssl) ? ftp_ssl_connect($host) : ftp_connect($host);
         ftp_login($this->ftp, $id, $password);
         ftp_pasv($this->ftp, true);
     }
