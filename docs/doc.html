@@ -191,6 +191,7 @@ return $doc; // 最後に$docオブジェクトを返す
 
 <ul>
 <li>部品ファイルはローカルスコープで実行されます</li>
+<li>部品ファイルで何も返さないと、元のタグは消えます</li>
 <li>部品ファイルでは<var>$el</var>で元のタグにアクセスできます</li>
 <li>部品ファイルにデータを渡すには、属性経由をオススメします。<br>
 <var>&lt;doc-ul data=&quot;example&quot;&gt;&lt;/doc-ul&gt;</var>なら<var>$el-&gt;getAttribute(&apos;data&apos;);</var>で取得します</li>

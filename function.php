@@ -1421,7 +1421,13 @@ class doc{
 
     private function load_component($file, $el){
         $component = require($file);
-        return ($component instanceof self) ? $this->doc->importNode($component->doc->documentElement, true) : null;
+        if($component instanceof self){
+            $component->replace_component();
+            return $this->doc->importNode($component->doc->documentElement, true);
+        }
+        else{
+            return null;
+        }
     }
 }
 
