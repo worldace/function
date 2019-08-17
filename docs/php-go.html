@@ -49,7 +49,7 @@ switch(request::get('action')){
 --></code>
 
 <p class="info-blue">PHPファイルで<var>return 値</var>とすると、次のPHPファイルに<var>$arg</var>として渡せます。<br>
-何も返さなければ、以前に返したものが取得できます。</p>
+何も返さなければスルーされ、以前に返したものが取得できます。</p>
 
 <p class="info-blue">ファイル毎にスコープが作成され実行されるので、他のファイルの変数は見ることができません</p>
 </div>

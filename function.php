@@ -1339,9 +1339,6 @@ class doc{
             $this->doc->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
         }
 
-        if(self::$dir){
-            $this->replace_component();
-        }
         $this->set_id();
     }
 
@@ -1358,10 +1355,6 @@ class doc{
             $el = $this->doc->createElement($tagName, $text);
             foreach($attr as $k => $v){
                 $el->setAttribute($k, $v);
-            }
-
-            if(strpos($tagName, 'doc-') === 0 and self::$dir){
-                $el = $this->load_component(self::$dir.'/'.$tagName.'.php', $el);
             }
             return $el;
         }
@@ -1387,6 +1380,10 @@ class doc{
 
     function __toString(){
         $this->doc->formatOutput = true;
+
+        if(self::$dir){
+            $this->replace_component();
+        }
 
         if($this->doc->type === 'html'){
             return $this->doc->saveXML($this->doc->doctype) . "\n" . $this->doc->saveHTML($this->doc->documentElement);
