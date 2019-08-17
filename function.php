@@ -421,7 +421,7 @@ class ftp{
         ftp_close($this->ftp);
     }
 
-    function upload($from, $to){
+    function upload($from, string $to){
         ftp_put($this->ftp, $to, $from, FTP_BINARY);
     }
 
@@ -1312,6 +1312,7 @@ class db{
 
 class doc{
     public $doc;
+    public static $dir;
 
     function __construct($html = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
         $html = trim($html);
@@ -1338,14 +1339,10 @@ class doc{
             $this->doc->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
         }
 
-        foreach((new \DOMXPath($this->doc))->query('//*[@id]') as $v){
-            $id = $v->getAttribute('id');
-            $this->$id = $v;
-            if(preg_match('/-/', $id)){
-                $id = str_replace('-', '_', $id);
-                $this->$id = $v;
-            }
+        if(self::$dir){
+            $this->replace_component();
         }
+        $this->set_id();
     }
 
 
@@ -1362,6 +1359,10 @@ class doc{
             foreach($attr as $k => $v){
                 $el->setAttribute($k, $v);
             }
+
+            if(strpos($tagName, 'doc-') === 0 and self::$dir){
+                $el = $this->load_component(self::$dir.'/'.$tagName.'.php', $el);
+            }
             return $el;
         }
         else if($selector[0] === '.'){
@@ -1375,7 +1376,7 @@ class doc{
         else if($selector[0] === '#'){
             return $this->doc->getElementById(substr($selector, 1));
         }
-        else if($selector[0] === '*'){
+        else if($selector === '*'){
             return (new \DOMXPath($this->doc))->query('//*');
         }
         else{
@@ -1396,6 +1397,34 @@ class doc{
         else{
             return $this->doc->saveHTML($this->doc->documentElement);
         }
+    }
+
+
+    private function set_id(){
+        foreach((new \DOMXPath($this->doc))->query('//*[@id]') as $v){
+            $id = $v->getAttribute('id');
+            $this->$id = $v;
+            if(preg_match('/-/', $id)){
+                $id = str_replace('-', '_', $id);
+                $this->$id = $v;
+            }
+        }
+    }
+
+
+    private function replace_component(){
+        foreach($this('*') as $el){
+            if(strpos($el->tagName, 'doc-') === 0){
+                $component = $this->load_component(self::$dir.'/'.$el->tagName.'.php', $el);
+                ($component) ? $el->parentNode->replaceChild($component, $el) : $el->parentNode->removeChild($el);
+            }
+        }
+    }
+
+
+    private function load_component($file, $el){
+        $component = require($file);
+        return ($component instanceof self) ? $this->doc->importNode($component->doc->documentElement, true) : null;
     }
 }
 
