@@ -17,26 +17,30 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>指定ディレクトリ以下に存在する、全てのファイルのパスを取得する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+検索対象のディレクトリ
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+サブディレクトリも検索するならtrue(初期値)、しないならfalse
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+連想配列。キーは検索対象ディレクトリからの相対パス、値は絶対パス
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+foreach(file::list("./img/") as $v){
+    print basename($v) . "\n"; //ファイル名を表示
+}
 --></code>
 
+<p class="info-blue">検索結果にディレクトリも必要な場合は <a href="file-list_all.html">file::list_all()</a> をご利用ください</p>
+<p class="info-blue">Windowsでもディレクトリの区切りは<var>/</var>になります</div>
 
 </div>
 </article>

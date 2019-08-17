@@ -17,24 +17,25 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>ファイルのパーミッションを取得または設定する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+ファイルパス
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+パーミッション値。"644"のような10進数の数字<br>
+省略時はパーミッションを取得します
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+パーミッション。10進数の数字
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+print file::permission('./example.txt'); // 644
 --></code>
 
 

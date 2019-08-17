@@ -17,24 +17,22 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>ファイルのMIMEタイプを取得する。拡張子から判断します</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
-</td></tr>
-<tr class="option"><td>2</td><td>
-
+ファイルパス
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+MIMEタイプ<br>
+不明の場合は<var>application/octet-stream</var>
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+print file::mime('example.txt'); // text/plain
 --></code>
 
 

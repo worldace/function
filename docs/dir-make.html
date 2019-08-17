@@ -17,26 +17,27 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>ディレクトリを作成する。深いディレクトリも一気に作成できます</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+作成するディレクトリのパス
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+設定するパーミッションがあれば、10進数で指定する。省略時は"707"
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+成功すればtrue、失敗すればfalseが返ります
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+dir::make('./img/');
 --></code>
 
+<p class="info-blue">既にディレクトリが存在する場合は成功とみなされます</p>
 
 </div>
 </article>

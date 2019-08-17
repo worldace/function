@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>ソースコード</title>
+  <link href="programming.css" rel="stylesheet">
+</head>
+<body>
+<header>
+<h1>ソースコード</h1>
+</header>
+
+
+
+<article>
+<h1>ソースコード</h1>
+
+<p>Status: 開発中</p>
+
+<pre>
+
+</pre>
+</article>
+
+
+
+
+<footer>
+<nav><a href="./">ホームに戻る</a></nav>
+</footer>
+
+
+<script src="programming.js"></script>
+<script>
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "https://raw.githubusercontent.com/worldace/netvideo/master/netvideo/0.1.0/function.php");
+xhr.addEventListener("load", function(){
+    var pre = document.querySelector("pre");
+    pre.textContent = xhr.responseText;
+    hljs.highlightBlock(pre);
+});
+xhr.send();
+</script>
+</body></html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>部品クラス</title>
+  <link href="programming.css" rel="stylesheet">
+</head>
+<body>
+
+
+<header>
+<h1>部品クラス</h1>
+
+<nav>
+<h2>目次</h2>
+<ol>
+  <li><a href="#はじめに">はじめに</a></li>
+  <li><a href="#部品ファイル概要">部品ファイル概要</a></li>
+  <li><a href="#部品ファイル詳細">部品ファイル詳細</a></li>
+  <li><a href="#部品ファイルサンプル">部品ファイルサンプル</a></li>
+  <li><a href="#部品コードにPHPを書く">部品コードにPHPを書く</a></li>
+  <li><a href="#部品ディレクトリの設定">部品ディレクトリの設定</a></li>
+  <li><a href="#自動挿入と手動挿入">自動挿入と手動挿入</a></li>
+  <li><a href="#部品関数の実行">部品関数の実行</a></li>
+  <li><a href="#まとめ">まとめ</a></li>
+  <li><a href="#JavaScriptにデータを渡す">JavaScriptにデータを渡す</a></li>
+  <li><a href="#よくありそうな質問">よくありそうな質問</a></li>
+</ol>
+</nav>
+</header>
+
+
+<article id="はじめに">
+<h1>はじめに</h1>
+
+<p>部品クラスは、HTML・CSS・JavaScript・PHPの4コードを1ファイルにまとめて部品化するクラスです<br>
+テンプレートがHTML互換なのが特徴です。</p>
+</article>
+
+
+
+<article id="部品ファイル概要">
+<h1>部品ファイル概要</h1>
+
+<p>部品クラスを利用するには、まずはじめに部品ファイルを作成する必要があります</p>
+<ul>
+<li><var>部品名.html</var>がファイル名となります</li>
+<li>部品名には命名規則があり、PHPの変数の命名規則と同じです <small>※</small></li>
+<li>部品ファイルを配置する場所は <a href="#部品ディレクトリの設定">部品ディレクトリ</a> と呼びます</li>
+</ul>
+
+
+<p>部品ファイルが増えた時は、ディレクトリに分けて整理することもできます。<br>
+配置が "サブディレクトリ/ファイル.html" の時、部品名は "サブディレクトリ_ファイル" となります</p>
+
+<p><small>※部品名におけるアンダーバーはディレクトリの区切りとして使用されます</small></p>
+</article>
+
+
+
+<article id="部品ファイル詳細">
+<h1>部品ファイル詳細</h1>
+<p>部品ファイルは普通のHTMLのように記述します。まずは&lt;html&gt;&lt;head&gt;&lt;body&gt;を記述しましょう</p>
+
+<ul>
+<li>部品関数は部品ファイルから&lt;style&gt;&lt;link&gt;&lt;script&gt;の3つのタグを検索します<ul>
+<li>&lt;style&gt;と&lt;link&gt;は、head内に記述してください</li>
+<li>&lt;script&gt;は、head内に記述されている時は&#60;/title&#62;直後に挿入します。それ以外は&#60;/body&#62;直前に挿入します</li></ul></li>
+<li>外部CSS/JSファイルにも対応しています<ul>
+<li>外部ファイルは重複チェックを行い全部品を通じて1回だけ挿入します</li>
+<li>相対パスで指定した場合はファイルを単純に展開します</li>
+</ul></li>
+</ul>
+
+
+<p>部品ファイルの独特な点は、HTMLに<b>部品コード</b>を記述することです。<var>&lt;script type=&quot;部品&quot;&gt;&lt;/script&gt;</var>をbody内に書きます</p>
+
+<pre><cite>部品コードの記述例</cite><!--
+<script type="部品">
+<p>こんにちは世界</p>
+</script>
+--></pre>
+
+<p>部品関数を実行すると、この部品コードの内容が戻り値になります</p>
+</article>
+
+
+
+<article id="部品ファイルサンプル">
+<h1>部品ファイルサンプル</h1>
+
+<p>部品ファイルの一例を挙げると以下のようになります。HTML＋CSS＋JavaScriptの例です。<br>
+見慣れた普通のHTMLだと思います。もちろん標準とは互換性があるのでブラウザでプレビューできます</p>
+
+
+<pre><cite>部品ファイルの記述例</cite><!--
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>sample</title>
+<style>
+.sample-h1{
+    color: red;
+}
+.sample-p1{
+    color: blue;
+}
+</style>
+&lt;/head>
+<body>
+
+<h1 class="sample-h1">ヒント</h1>
+<p class="sample-p1">ここのタグはブラウザ表示用のダミーです</p>
+<p class="sample-p2">部品関数からは無視されます</p>
+
+<script type="部品">
+<h1 class="sample-h1">ヒント</h1>
+<p class="sample-p1">ここのタグは部品関数の戻り値となります</p>
+<p class="sample-p2">ブラウザやDOMからは無視されます</p>
+</script>
+
+<script>
+(function(){
+    var h1 = document.querySelector(".sample-h1");
+    alert(h1.textContent);
+})();
+</script>
+
+</body>
+</html>
+--></pre>
+
+
+
+<ul>
+  <li>部品コードはブラウザに表示されないので、表示用にダミータグを用意すると動作確認に便利でしょう</li>
+  <li>JavaScriptでは名前空間対策として、即時関数などを利用するとよいでしょう</li>
+  <li>CSSでは名前空間対策として、idとclass名の先頭に部品名を付けることをオススメします<br>
+  部品名＝ファイルパスなので一意な名前を確保できます。次に説明する部品定数で簡単に指定できます</li>
+  <li>部品ファイル内全域で<b>部品定数</b><var>__部品__</var>が使えます。この文字列は現在の部品名に置換されます</li>
+</ul>
+</article>
+
+
+
+<article id="部品コードにPHPを書く">
+<h1>部品コードにPHPを書く</h1>
+
+<p>部品コードにはPHPの関数を書くこともできます</p>
+
+
+<pre><cite>部品コードにPHPを書く</cite><!--
+<script type="部品">
+function($A, $B){ //必ずfunctionから始めてください。名前が無い無名関数です
+    return "<h1>$A</h1><p>$B</p>";
+}
+</script>
+--></pre>
+<p>部品関数を実行すると、この無名関数がPHPとして実行され、その戻り値が返ります<br>
+変数をエスケープするなどのセキュリティ対策は各自行ってください</p>
+<pre><cite>部品関数の実行</cite><!--
+$C = 部品("部品名", $A, $B); //部品関数に引数を渡せるようになる。$Cには"<h1>$A</h1><p>$B</p>"が入る
+--></pre>
+
+
+<p>以上で部品ファイルの作り方の紹介は終わりです。次からは部品ファイルの利用の説明になります</p>
+</article>
+
+
+<article id="部品ディレクトリの設定">
+<h1>部品ディレクトリの設定</h1>
+<p>部品を利用する前に、次のような変数に部品ディレクトリ(<a href="#部品ファイル概要">部品ファイル</a>が置いてある場所)を指定してください</p>
+<pre><cite>部品ディレクトリの設定</cite><!--
+$_ENV['部品.ディレクトリ'] = '部品ディレクトリのパス';
+--></pre>
+</article>
+
+
+
+<article id="自動挿入と手動挿入">
+<h1>自動挿入と手動挿入</h1>
+
+<p>CSSとJavaScriptを自動的に挿入したいなら、HTML出力をキャプチャする必要があります<br>
+<b>HTMLを出力する以前</b>に<var>部品::開始()</var>を実行してください。出力時にCSSとJavaScriptを自動挿入します</p>
+
+<p>手動で挿入を行いたい場合は<var>部品::開始()</var>は不要になります。<br>
+その代わりとして、HTMLが全て完成したら<var>部品::挿入()</var>に渡して下さい。CSSとJavaScriptを挿入して返します</p>
+
+</article>
+
+
+
+
+
+<article id="部品関数の実行">
+<h1>部品関数の実行</h1>
+
+<p>部品名を指定して部品関数を実行すると、対応する部品ファイルが読み込まれHTML文字列が返ってきます。<br>
+そして、CSSは<b>&#60;/title&#62;直後</b>に1回だけ挿入され、JavaScriptは<b>&#60;/title&#62;直後</b>か<b>&#60;/body&#62;直前</b>に1回だけ挿入されます</p>
+<pre><cite>部品関数の実行</cite><!--
+$HTML文字列 = 部品("部品名");
+
+//ショートコード(PHP5.4から標準で使用可)
+<?= 部品("部品名") ?>
+--></pre>
+
+<p>部品ファイルの読み込み失敗など部品関数でエラーが発生した時は、空文字列が返り、警告<var>E_USER_WARNING</var>が発生します</p>
+
+
+</article>
+
+
+
+
+<article id="まとめ">
+<h1>まとめ</h1>
+
+<ol>
+  <li>部品ファイルを作成する</li>
+  <li>部品ディレクトリの設定を行う</li>
+  <li>部品::開始()を行う</li>
+  <li>部品関数を実行するとHTMLタグが返ってきて、CSSとJavaScriptは終了時に自動挿入される</li>
+</ol>
+
+<pre><cite>実行例</cite><!--
+<?php
+$_ENV['部品.ディレクトリ'] = '../部品/';
+部品::開始();
+?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>タイトル</title>
+&lt;/head>
+<body>
+<?= 部品('部品名') ?>
+</body>
+</html>
+--></pre>
+
+</article>
+
+
+
+<article id="JavaScriptにデータを渡す">
+<h1>JavaScriptにデータを渡す</h1>
+
+<p>部品コード(PHP側)からJavaScriptにデータを渡したい時は、次のようにすると簡単にできます。</p>
+
+<ol>
+  <li><a href="#部品コードにPHPを書く">部品コードの関数内</a>で<var>部品::fromparts(渡したいデータ)</var>を実行するとPHPのデータをJavaScriptに渡せます。<br>
+  文字列・数値・真偽値・配列・連想配列を渡すことができます。複数データがある時は連想配列を使いましょう</li>
+  <li>JavaScript側では<var>fromparts.部品名</var>で利用できます。<small>frompartsはグローバル変数です</small></li>
+</ol>
+
+<p><small>プレビュー時にはfrompartsが存在しないため、プレビュー時に「fromparts.部品名」にアクセスするとエラーになります<br>
+プレビュー時にも動くように、frompartsが存在しない時は初期値を入れてあげるとよいでしょう</small></p>
+<pre><cite>プレビューを考慮したfromparts受け取り</cite><!--
+var fromparts = fromparts || {"部品名": 初期値データ};
+--></pre>
+</article>
+
+
+
+<article id="よくありそうな質問">
+<h1>よくありそうな質問</h1>
+
+<dl>
+<dt>部品の中に部品を挿入できますか？</dt>
+  <dd>はい</dd>
+<dt>部品コードにはタグを含まない単なる文字列を入れても大丈夫ですか？</dt>
+  <dd>はい</dd>
+<dt>部品ファイルには部品コードを必ず記述しないといけませんか？</dt>
+  <dd>いいえ、任意です<br>CSSやJavaScriptの記述も任意です</dd>
+<dt>挿入の順番は？</dt>
+  <dd>CSS＞fromparts(js)＞JavaScript<br>実行開始順、出現順通りに挿入されます</dd>
+<dt>挿入されるCSSやJavaScriptを取得したい</dt>
+  <dd><var>部品::タグ取得()</var>で可能です<br>
+  戻り値は連想配列で「'css', 'jsinhead', 'jsinbody', 'fromparts'」の4つのキーが存在し、それぞれHTML文字列です</dd>
+<dt>部品のデータを初期化したり、出力キャプチャを中止したい</dt>
+  <dd><var>部品::終了()</var>でデータが初期化され、出力キャプチャも中止されます<br>戻り値で出力内容を取得できます</dd>
+<dt>CSSを動的に出力したい</dt>
+  <dd>style属性で行います<br>部品コードを関数化し、引数によりstyle属性の内容を調整する形です。&lt;tag style=&quot;...&quot;&gt;</dd>
+<dt>部品ファイルの&lt;style&gt;や&lt;script&gt;の内容を動的に出力したい</dt>
+  <dd>できません<br>部品ファイルを複数用意し、部品関数の呼び出し側で分岐する形が限度です<br>部品コードを関数化し、そこで&lt;style&gt;や&lt;script&gt;タグを動的に返すことは可能です</dd>
+<dt>CSSのurl()で相対パスを使いたい</dt>
+  <dd>ローカルとホストの両方に対応するのは難しいです。URLを指定するか、DataURLの形にするかでしょう</dd>
+<dt>インラインコードをCSPに対応させたい</dt>
+  <dd><var>$_ENV['部品.nonce']</var>にnonce値(毎回ランダムな文字列)をセットすると、部品のscript,link,styleタグにnonce属性を付与します<br>
+(参考)次のようなヘッダを出力してください <var>header("Content-Security-Policy: script-src 'nonce-毎回ランダムな文字列'")</var>
+<dt>入れ子にした時のダミー表示について</dt>
+  <dd>iframeで部品ファイルを読み込む。
+iframeの部品ファイルが読み込まれたら(onload)、「iframe.contentWindow.document.documentElement」で内容が取得できる。Chromeでは起動オプション「--allow-file-access-from-files」が必要。(執筆途中)
+</dd>
+</dl>
+</article>
+
+
+<footer>
+<nav><a href="./">ホームに戻る</a></nav>
+</footer>
+
+<script src="programming.js"></script>
+
+
+</body></html>

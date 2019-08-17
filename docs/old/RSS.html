@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>RSSクラス</title>
+  <link href="programming.css" rel="stylesheet">
+</head>
+<body>
+
+<header>
+<h1>RSSクラス</h1>
+</header>
+
+
+
+<article id="基本的な使い方">
+<h1>基本的な使い方</h1>
+<p>RSSクラスを使うと、RSSの作成と出力を行うことができます</p>
+
+<pre><cite>基本的な使い方</cite><!--
+$rss = new RSS('RSSのタイトル', 'ホームページのURL');
+
+foreach($data as $v){
+    $rss('アイテムの名前', 'アイテムのURL');
+}
+
+print $rss;
+--></pre>
+</article>
+
+
+
+<article id="new">
+<h1>new RSS()</h1>
+<p>RSSオブジェクトを新規作成します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="array">第1引数</td>
+<td>RSSのタイトル</td>
+</tr>
+<tr>
+<td data-require="1" data-type="array">第2引数</td>
+<td>ホームぺージのURL</td>
+</tr>
+<tr>
+<td data-require="0" data-type="array">第3引数</td>
+<td>RSSの説明文</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="rss()">
+<h1>$rss()</h1>
+<p>RSSにアイテムを追加します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="array">第1引数</td>
+<td>アイテムの名前</td>
+</tr>
+<tr>
+<td data-require="1" data-type="array">第2引数</td>
+<td>アイテムのURL</td>
+</tr>
+<tr>
+<td data-require="0" data-type="array">第3引数</td>
+<td>アイテムの最終更新時間をUNIXタイムで</td>
+</tr>
+</table>
+
+<p><small>新しい順に追加するようにしましょう</small></p>
+</article>
+
+
+
+<article id="print">
+<h1>print $rss</h1>
+<p>RSSを出力します。HTTPヘッダも送信されます</p>
+</article>
+
+
+
+<footer>
+<nav><a href="./">ホームに戻る</a></nav>
+</footer>
+
+
+<script src="programming.js"></script>
+
+</body></html>

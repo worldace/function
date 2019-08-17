@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>文書クラス</title>
+  <link href="programming.css" rel="stylesheet">
+<style>
+.selection-function{
+    width: 95%;
+    margin-bottom: 50px;
+}
+
+.selection-function th:nth-child(1){
+    width: 23%;
+}
+.selection-function th:nth-child(2){
+}
+
+.selection-function td:nth-child(1){
+    text-align: left;
+    font-weight: bold;
+}
+.selection-function td:nth-child(2){
+    text-align: left;
+    line-height: 1.5;
+}
+</style>
+</head>
+<body>
+
+
+
+<header>
+
+<h1>文書クラス</h1>
+
+<nav>
+<h2>目次</h2>
+<ol class="index-menu">
+  <li><a href="#基本編">基本編</a></li>
+  <li><a href="#文書">new 文書</a></li>
+  <li><a href="#本文">本文</a></li>
+  <li><a href="#html">html</a></li>
+  <li><a href="#タグ名">タグ名</a></li>
+  <li><a href="#属性">属性</a></li>
+  <li><a href="#属性削除">属性削除</a></li>
+  <li><a href="#追加">追加</a></li>
+  <li><a href="#貼り付け">貼り付け</a></li>
+  <li><a href="#削除">削除</a></li>
+  <li><a href="#dom">dom</a></li>
+  <li><a href="#count">count</a></li>
+  <li><a href="#選択系">選択系</a></li>
+</ol>
+</nav>
+</header>
+
+
+
+<article id="基本編">
+<h1>基本編</h1>
+
+<p>文書クラスはDOMを利用してHTMLを操作することができるクラスです。PHP内蔵の<a href="https://php.net/dom" target="_blank">DOM</a>を利用しています</p>
+
+
+<p>最初に文書オブジェクトを作ったら、まずはHTMLを選択します。CSSセレクタを利用して選択します</p>
+<pre><cite>選択例</cite><!--
+$html = new 文書(); //文書オブジェクトを作る
+$html("CSSセレクタ"); //変数に()を付けて、第1引数にCSSセレクタを渡してください
+--></pre>
+
+<p>CSSセレクタの条件に一致したタグはすべて選択され $html に記憶されます。<br>
+次は、選択したタグに対して何か命令してみましょう</p>
+
+<pre><cite>例</cite><!--
+$html("title")->本文("こんにちは"); //<title>の本文に「こんにちは」がセットされる
+print $html("title")->本文(); //「こんにちは」が表示される
+--></pre>
+<p>$html() の戻り値は文書オブジェクトになります。<br>当マニュアルで関数の戻り値の記載がない場合は、全て文書オブジェクトが返ります</p>
+
+<p id="foreach">作用系の関数は<b>選択したもの全てに同じ作用</b>をします。取得系の関数は<b>最初の選択のみ取得</b>します。<br>
+1つ1つに個別処理したい時や、選択すべての値を取得したい時は foreach で $html を回してください</p>
+
+<pre><cite>foreach例</cite><!--
+$html = new 文書("<ul><li>1</li><li>2</li><li>3</li></ul>");
+
+foreach($html("li") as $li){
+    $li->本文(uniqid()); // <li>の本文に別々の文字がセットされる
+}
+--></pre>
+
+<p>現在選択中の要素数を調べるには count() が利用できます。PHPの標準関数です<br>選択した要素が存在するかの確認にも利用できるでしょう</p>
+<pre><cite>count()例</cite><!--
+$html = new 文書();
+count($html); //まだ何も選択していないので0
+count($html("title")); //1つの要素が選択されたので1
+$html->count(); //オブジェクト風に記述することもできます。結果は1
+--></pre>
+
+<p>HTML全体を表示したり保存するには次のようにします</p>
+
+<pre><cite>HTML全体を出力</cite><!--
+$html = new 文書();
+//HTML全体を表示する
+print $html;
+
+//HTML全体をファイルに保存する
+file_put_contents("test.html", $html);
+
+//HTML全体を文字列として変数に代入するには、型変換してください
+$str = "$html";       // ""で型変換が行われて、$strにはHTML全体の文字列が代入されます
+$str = (string)$html; // 明示的な型変換。上と同じ結果になります
+--></pre>
+<p>$htmlに入っているものはオブジェクトですが、$htmlが文字列として評価された時は文字列が返ります</p>
+
+
+<p>簡単なスクレイピングにも利用できます</p>
+
+<pre><cite>例</cite><!--
+$html = new 文書("http://www.php.net/");
+print $html(".footmenu > li:nth-child(3)")->本文(); //PHP公式サイトのフッターメニューの3番目は？
+--></pre>
+
+<p><small>CSSセレクタを見つけるには<a href="http://musou.s38.xrea.com/php/selector.php" target="_blank">CSSセレクタ発見器</a>をどうぞ</small></p>
+</article>
+
+
+
+<article id="文書">
+<h1>new 文書</h1>
+
+<p>文書オブジェクトを新規作成します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td>第1引数</td>
+<td class="left">テンプレートにする文字列、もしくはURL<br>省略時は内蔵テンプレートを使用(後述)<br>
+</td>
+</tr>
+</table>
+
+
+<p>戻り値は文書オブジェクトです</p>
+<pre><cite>使い方</cite><!--
+$html = new 文書();
+print $html; // 内蔵テンプレートが表示される
+--></pre>
+
+<pre><cite>内蔵テンプレート</cite><!--
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title></title>
+&lt;/head>
+<body></body>
+</html>
+--></pre>
+</article>
+
+
+
+<article id="本文">
+<h1>本文</h1>
+
+<p>現在選択しているタグの本文を取得または変更します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>第1引数</td>
+<td class="left">変更する本文。タグはエスケープされます<br>省略時は取得動作になります</td>
+</tr>
+</table>
+
+<p>取得時は、最初の選択タグだけが対象です。全て必要ならば <a href="#foreach">foreach</a> を利用ください</p>
+
+
+<pre><cite>基本的な使い方</cite><!--
+$html = new 文書("<p>こんにちは<span>世界</span></p>");
+
+//取得動作
+print $html("p")->本文(); //「こんにちは世界」が表示される。タグは含まれないが子孫の本文は含まれる
+
+//変更動作
+$html("p")->本文("こんにちは<br>世界"); //「<p>こんにちは&amp;lt;br&amp;gt;世界</p>」になる。タグはエスケープされる
+
+//削除動作
+$html("p")->本文(""); //「<p></p>」になる
+--></pre>
+</article>
+
+
+
+<article id="html">
+<h1>html</h1>
+<p>現在選択しているタグの内容を取得または変更します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>第1引数</td>
+<td class="left">変更する内容。タグが使えます<br>省略時は取得動作になります。自身のタグも取得したい時は true を指定します</td>
+</tr>
+</table>
+
+<p>取得時は、最初の選択タグだけが対象です。全て必要ならば <a href="#foreach">foreach</a> を利用ください</p>
+
+<pre><cite>使用例</cite><!--
+<?php
+$html = new 文書();
+//変更動作
+$html("body")->html("こんにちは<br>世界"); //「<body>こんにちは<br>世界</body>」になる
+
+//取得動作
+print $html("body")->html(); //「こんにちは<br>世界」が表示される
+
+//取得動作(自身のタグを含む)
+print $html("body")->html(true); //「<body>こんにちは<br>世界</body>」が表示される
+
+//削除動作
+$html("body")->html(""); //「<body></body>」になる
+--></pre>
+</article>
+
+
+
+<article id="タグ名">
+<h1>タグ名</h1>
+<p>現在選択しているタグのタグ名を返します。常に小文字です</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>なし</td>
+<td class="left">引数はありません</td>
+</tr>
+</table>
+
+<p>最初の選択タグだけが対象です。全て必要ならば <a href="#foreach">foreach</a> を利用ください</p>
+</article>
+
+
+
+<article id="属性">
+<h1>属性</h1>
+
+<p>現在選択しているタグの属性を取得/変更/追加します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>第1引数</td>
+<td class="left">属性名。「href」「class」「id」といった名前です<br>連想配列を渡すと複数変更動作になります<br>省略時は全取得動作になります</td>
+</tr>
+<tr>
+<td>第2引数</td>
+<td class="left">変更/追加する属性値。エスケープされます<br>省略時は取得動作になります</td>
+</tr>
+</table>
+
+<p>取得時は、最初の選択タグだけが対象です。全て必要ならば <a href="#foreach">foreach</a> を利用ください</p>
+
+
+<pre><cite>属性の動作は4パターン</cite><!--
+//1. 属性を1つ取得する
+$html("a")->属性("href"); // "http://example.com/" のような文字列が返ります
+
+//2. 属性を全て取得する
+$html("a")->属性(); // ["href"=>"http://example.com/", "target"=>"_blank"] のような配列が返ります
+
+//3. 属性を1つ変更する
+$html("a")->属性("href", "http://example.com/");
+
+//4. 属性を複数変更する
+$html("a")->属性(["href"=>"http://example.com/", "target"=>"_blank"]);
+--></pre>
+
+<p><small>属性値が存在しないタイプの場合は ["disable"=&gt;"disable"] のように属性名＝属性値としましょう</small></p>
+</article>
+
+
+
+<article id="属性削除">
+<h1>属性削除</h1>
+
+<p>現在選択しているタグの属性を削除します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>第1引数</td>
+<td class="left">属性名<br>省略時は全属性を削除します</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="追加">
+<h1>追加</h1>
+
+<p>現在選択中の場所にタグを追加します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td>第1引数</td>
+<td class="left">追加するHTML文字列、<a href="#dom">DOM要素</a>、<a href="#dom">DOM要素の入った配列</a>、<a href="#文書">文書オブジェクト</a></td>
+</tr>
+<tr>
+<td>第2引数</td>
+<td class="left">追加場所(必須)。"上", "下", "中上", "中下", "置換"のどれか1つ (後述)</td>
+</tr>
+</table>
+
+<pre><cite>使い方</cite><!--
+$html = new 文書();
+$html("body")->追加("<p>こんにちは世界</p>", "中上"); // <body>直下に「<p>こんにちは世界</p>」が追加される
+--></pre>
+
+
+<pre id="追加場所"><cite>追加場所の説明</cite><!--
+//選択したタグを基準とし、どこに追加するか？  "置換"を選んだときは「選択したタグ」を置換します
+
+<上></上>
+<選択したタグ>
+  <中上></中上>
+  <hr>
+  <中下></中下>
+</選択したタグ>
+<下></下>
+--></pre>
+
+<p><small>追加を実行すると、追加されたものが選択状態になります</small></p>
+</article>
+
+
+
+<article id="貼り付け">
+<h1>貼り付け</h1>
+
+<p>現在選択しているタグを文書に貼り付けます。<small><a href="#追加">追加()</a>とは文法が違うだけです</small></p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td>第1引数</td>
+<td class="left">CSSセレクタ。これで選択した場所に貼り付けます</td>
+</tr>
+<tr>
+<td>第2引数</td>
+<td class="left">貼り付け場所(必須)。"上", "下", "中上", "中下", "置換"のどれか1つ <small><a href="#追加場所">(参考)</a></small></td>
+</tr>
+</table>
+
+<pre><cite>説明</cite><!--
+//次の2つは同じ動作です
+$html("<p>こんにちは世界</p>")->貼り付け("body", "中上");
+$html("body")->追加("<p>こんにちは世界</p>", "中上");
+--></pre>
+<p><small>貼り付けを実行すると、貼り付けたものが選択状態になります</small></p>
+</article>
+
+
+
+<article id="削除">
+<h1>削除</h1>
+
+<p>現在選択しているタグを文書から削除します。子孫も全て消えます</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>なし</td>
+<td class="left">引数はありません</td>
+</tr>
+</table>
+
+<p><small>削除を実行すると、削除されたものが選択状態になります。<br>
+<a href="#貼り付け">貼り付け</a>に繋げれば、タグの移動ができます</small></p>
+</article>
+
+
+<article id="dom">
+<h1>dom</h1>
+
+<p>現在選択しているタグのDOM要素を取得、またはDOM要素を1つ新規作成します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td>第1引数</td>
+<td class="left">タグ名<br>省略時は取得動作になります</td>
+</tr>
+<tr>
+<td>第2引数</td>
+<td class="left">タグの属性があれば連想配列で ["id"=&gt;"sample", "disable"=&gt;"disable"]<br>もしくはタグの本文。エスケープされます</td>
+</tr>
+<tr>
+<td>第3引数</td>
+<td class="left">タグの本文。エスケープされます</td>
+</tr>
+</table>
+
+<p>戻り値は<a href="http://php.net/DOMElement" target="_blank">DOM要素</a>(DOMElementオブジェクト)です。<br>
+取得時は、最初の選択タグだけが対象です。全て必要ならば <a href="#foreach">foreach</a> を利用ください</p>
+
+
+<pre><cite>使い方</cite><!--
+//DOM取得
+$dom = $html("body")->dom();
+
+//DOM作成は4パターン
+$dom = $html->dom("a"); // <a></a>
+$dom = $html->dom("a", "test"); // <a>test</a>
+$dom = $html->dom("a", ["href"=>"http://example.com/"]); // <a href="http://example.com/"></a>
+$dom = $html->dom("a", ["href"=>"http://example.com/"], "test"); // <a href="http://example.com/">test</a>
+--></pre>
+</article>
+
+
+
+<article id="count">
+<h1>count</h1>
+
+<p>現在選択しているタグの個数を返します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>なし</td>
+<td class="left">引数はありません</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="選択系">
+<h1>選択系</h1>
+
+
+<table class="selection-function">
+<tr>
+<th>関数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>$変数名("セレクタ")</td>
+<td>文書全体から検索する</td>
+</tr>
+<tr>
+<td>検索("セレクタ")</td>
+<td>現在選択中の要素から子孫を検索する <small>(自分自身は検索対象外)</small></td>
+</tr>
+</table>
+
+
+
+<table class="selection-function">
+<tr>
+<th>関数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>$変数名("HTML文字列")</td>
+<td>任意のHTML文字列を選択する <small>(文字列の先頭は&lt;から始まる必要があります)</small><br>
+HTMLだけでなく、<a href="#dom">DOM要素</a>、<a href="#dom">DOM要素の入った配列</a>、<a href="#文書">文書オブジェクト</a>も受け付けます</td>
+</tr>
+</table>
+
+
+
+<table class="selection-function">
+<tr>
+<th>関数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>最初()</td>
+<td>現在選択中の要素群から、最初の要素を選択する。<small>省略形: $変数名[0]</small></td>
+</tr>
+<tr>
+<td>最後()</td>
+<td>現在選択中の要素群から、最後の要素を選択する。<small>省略形: $変数名[-1]</small></td>
+</tr>
+<tr>
+<td>n(x)</td>
+<td>現在選択中の要素群から、x番目の要素を選択する。<small>xは最初が0、最後が-1。省略形: $変数名[x]</small></td>
+</tr>
+<tr>
+<td>n(x, y)</td>
+<td>現在選択中の要素群から、x番目からy個の要素を選択する。<small>xは最初が0、最後が-1</small></td>
+</tr>
+</table>
+
+
+
+
+<table class="selection-function">
+<tr>
+<th>関数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>親()</td>
+<td>現在選択中要素の、1つ上の親を選択する<br><small>第1引数にセレクタを指定した時は、条件を満たす場合のみ選択します</small></td>
+</tr>
+<tr>
+<td>親全て()</td>
+<td>現在選択中要素の、親を全て選択する<br><small>第1引数にセレクタを指定した時は、条件を満たす親のみ選択します。1つ上の親が0番</small></td>
+</tr>
+<tr>
+<td>子()</td>
+<td>現在選択中要素の、最初の子を選択する<br><small>第1引数にセレクタを指定した時は、条件を満たす場合のみ選択します</small></td>
+</tr>
+<tr>
+<td>子全て()</td>
+<td>現在選択中要素の、子を全て選択する<br><small>第1引数にセレクタを指定した時は、条件を満たす子のみ選択します。最初の子が0番</small></td>
+</tr>
+<tr>
+<td>兄()</td>
+<td>現在選択中要素の、1つ上の兄を選択する<br><small>第1引数にセレクタを指定した時は、条件を満たす場合のみ選択します</small></td>
+</tr>
+<tr>
+<td>兄全て()</td>
+<td>現在選択中要素の、兄を全て選択する<br><small>第1引数にセレクタを指定した時は、条件を満たす兄のみ選択します。1つ上の兄が0番</small></td>
+</tr>
+<tr>
+<td>弟()</td>
+<td>現在選択中要素の、1つ下の弟を選択する<br><small>第1引数にセレクタを指定した時は、条件を満たす場合のみ選択します</small></td>
+</tr>
+<tr>
+<td>弟全て()</td>
+<td>現在選択中要素の、弟を全て選択する<br><small>第1引数にセレクタを指定した時は、条件を満たす弟のみ選択します。1つ下の弟が0番</small></td>
+</tr>
+<tr>
+<td>兄弟全て()</td>
+<td>現在選択中要素の、兄と弟を全て選択する。自分自身は選択対象外です<br>
+<small>第1引数にセレクタを指定した時は、条件を満たす兄と弟のみ選択します<br>兄→弟の順で、1つ上の兄が0番、1番下の弟が最後</small></td>
+</tr>
+</table>
+
+<table class="selection-function">
+<tr>
+<th>関数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>子持ち()</td>
+<td>現在選択中の要素群から、子要素を持つものを選択する<br>
+<small>第1引数にセレクタを指定した時は、条件を満たす場合のみ選択します。検索対象に孫は含まれます</small></td>
+</tr>
+</table>
+
+
+<table class="selection-function">
+<tr>
+<th>関数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>かつ("セレクタ")</td>
+<td>現在選択中の要素群(A)から、セレクタ(B)の条件を満たすものを選択する<br>AとBの両方にあるものが選択されます <small>(A and B)</small></td>
+</tr>
+<tr>
+<td>足す("セレクタ")</td>
+<td>現在選択中の要素群(A)に、セレクタの要素群(B)を足す<br>AとBのどちらかにあれば選択されます <small>(A or B)</small> </td>
+</tr>
+<tr>
+<td>引く("セレクタ")</td>
+<td>現在選択中の要素群(A)から、セレクタの要素群(B)を引く<br>AからBを引いたものが選択されます <small>(A not B)</small></small></td>
+</tr>
+</table>
+
+<table class="selection-function">
+<tr>
+<th>関数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>なら("セレクタ")</td>
+<td>現在選択中の要素(A)が、セレクタの条件を満たすならtrue、それ以外は false を返す<br>
+<small>Aが複数存在する時は、1つでも条件を満たせば true を返します</small></td>
+</tr>
+</table>
+
+
+
+
+<table class="selection-function">
+<tr>
+<th>関数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>逆順()</td>
+<td>現在選択中の要素群の並び順を逆にする</td>
+</tr>
+<tr>
+<td>前の選択()</td>
+<td>1つ前の選択に戻る <small>(「現在の選択」と「前の選択」を入れ替える動作になります)</small></td>
+</tr>
+</table>
+
+
+
+
+<table class="selection-function">
+<tr>
+<th>関数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>$変数名("*")</td>
+<td>全ての要素を選択する</td>
+</tr>
+<tr>
+<td>$変数名(":root")</td>
+<td>ルート要素を選択する <small>(HTMLなら&lt;html&gt;がルート要素です)</small></td>
+</tr>
+</table>
+
+
+
+<pre><cite>対応CSSセレクタ一覧</cite><!--
+. # > + ~ , *
+[A] [A=B] [A~=B] [A|=B]
+:first-child :last-child :nth-child(n) :nth-of-type(n)
+:not :root
+--></pre>
+</article>
+
+
+
+<footer>
+<nav><a href="./">ホームに戻る</a></nav>
+</footer>
+
+<script src="programming.js"></script>
+
+</body></html>

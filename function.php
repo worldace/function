@@ -1,4 +1,5 @@
 <?php
+// https://github.com/worldace/function
 
 
 class request{
@@ -560,7 +561,11 @@ class file{
         }
         $contents = $fn($contents, ...$args);
 
-        if(is_string($contents) or is_int($contents)){
+        if(is_array($contents)){
+            $contents = implode('', $contents);
+        }
+
+        if(is_string($contents)){
             ftruncate($fp, 0);
             rewind($fp);
             fwrite($fp, $contents);

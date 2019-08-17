@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>データベースクラス</title>
+  <link href="programming.css" rel="stylesheet">
+</head>
+<body>
+
+<header>
+<h1>データベースクラス</h1>
+
+<nav>
+<h2>目次</h2>
+<ol>
+  <li><a href="#はじめに">はじめに</a></li>
+  <li><a href="#接続設定">接続設定</a></li>
+  <li><a href="#テーブルクラス">テーブルクラス</a></li>
+  <li><a href="#データベース">データベース</a></li>
+  <li><a href="#テーブル">テーブル</a></li>
+  <li><a href="#取得">取得</a></li>
+  <li><a href="#列取得">列取得</a></li>
+  <li><a href="#行取得">行取得</a></li>
+  <li><a href="#セル取得">セル取得</a></li>
+  <li><a href="#検索">検索</a></li>
+  <li><a href="#件数">件数</a></li>
+  <li><a href="#追加">追加</a></li>
+  <li><a href="#更新">更新</a></li>
+  <li><a href="#削除">削除</a></li>
+  <li><a href="#実行">実行</a></li>
+  <li><a href="#where">where</a></li>
+  <li><a href="#テーブル作成">テーブル作成</a></li>
+  <li><a href="#インデックス作成">インデックス作成</a></li>
+  <li><a href="#トランザクション">トランザクション</a></li>
+  <li><a href="#切断">切断</a></li>
+  <li><a href="#PDO設定">PDO設定</a></li>
+  <li><a href="#ログ">ログ</a></li>
+</ol>
+</nav>
+</header>
+
+
+<article id="はじめに">
+<h1>はじめに</h1>
+<p>データベースクラスはデータベースを操作することができるクラスです。PHPエクステンションの<a href="http://php.net/pdo" target="_blank">PDO</a>を利用しています<br>
+SQLiteとMySQLに対応しています</p>
+
+<p>データベースクラスを利用する前に、<a href="#接続設定">接続設定</a>と<a href="#テーブルクラス">テーブルクラス設定</a>の2つの設定を行ってください</p>
+</article>
+
+
+<article id="接続設定">
+<h1>接続設定</h1>
+
+
+<p>SQLiteを利用する場合は、次のような変数に「sqlite:データベースファイルのパス」を記述してください</p>
+<pre><cite>SQLite用の設定</cite><!--
+$_ENV['データベース.接続.0'] = 'sqlite:データベースファイルのパス';
+--></pre>
+<p><small>ファイルが存在しなければ自動的に作成されます</small></p>
+
+
+<p>MySQLを利用する場合は「ホストアドレス」「データベース名」「ユーザー名」「パスワード」の4つを指定してください</p>
+<pre><cite>MySQL用の設定</cite><!--
+$_ENV['データベース.接続.0'] = 'mysql:host=ホストアドレス;dbname=データベース名;charset=utf8mb4';
+$_ENV['データベース.接続.1'] = 'ユーザー名';
+$_ENV['データベース.接続.2'] = 'パスワード';
+--></pre>
+
+<p><small>MySQLでは場合によりポート番号の指定も必要です。$_ENV['データベース.接続.0'] の最後に ';port=ポート番号' を加えてください<br>
+この接続設定の内容は<a href="http://php.net/pdo.construct" target="_blank">PDOのコンストラクタ</a>と同じです</small></p>
+</article>
+
+
+
+<article id="テーブルクラス">
+<h1>テーブルクラス</h1>
+
+<p>データベースクラスでは、<b>テーブル毎</b>に次のようなクラスが必要になるので、用意してください</p>
+<ul>
+  <li><var>□テーブル名</var>という名前の<b>クラス</b>を用意します。 <small>"テーブル名"の所は各テーブルの名前にしてください</small></li>
+  <li>そのクラスに<var>定義</var>という名前の<b>連想配列の定数</b>を用意し、「列名をキー」「型情報を値」としてください</li>
+  <li>連想配列の最初のキーが主キーとなります</li>
+  <li>型情報はMySQL互換で作成するのをオススメします。(MySQLの型情報はSQLiteと高い互換性があります)</li>
+  <li>作成したクラスは読み込むか、autoload等で自動的に読み込まれるようにしてください</li>
+</ul>
+
+<pre><cite>クラスのサンプル</cite><!--
+class □投稿動画{
+    const 定義 = [
+        "id"          => "integer primary key auto_increment",
+        "動画URL"     => "varchar(500) not null",
+        "横サイズ"    => "smallint unsigned not null",
+        "縦サイズ"    => "smallint unsigned not null",
+        "動画時間"    => "float unsigned not null",
+        "投稿時間"    => "integer unsigned not null",
+        "アクセス数"  => "integer unsigned default 0",
+        "コメント数"  => "integer unsigned default 0",
+        "ユーザID"    => "varchar(250) not null",
+        "状態"        => "varchar(30) default '公開'",
+        "タイトル"    => "varchar(250) not null",
+        "本文"        => "text",
+    ];
+}
+--></pre>
+<p><small>オートインクリメントは「auto_increment」「autoincremanet」のどちらでもOKです。<br>
+SQLiteでは型情報に 'int' を含めばint型に、
+'char' 'text' 'clob'を含めばtext型に、
+'double' 'float' 'real'を含めばreal型に、'blob'を含めばnone型に、それ以外はnumeric型になります</small></p>
+
+<p><small>テーブルクラスの修飾名(□)を変更したい場合は、<var>$_ENV['データベース.テーブルクラス名前空間']</var>で変更できます。<br>
+PHP標準の名前空間も使用できます。その場合は最後に\\が必要です</small></p>
+
+</article>
+
+
+
+<article id="データベース">
+<h1>データベース</h1>
+<p><a href="#接続設定">接続設定</a>と<a href="#テーブルクラス">テーブルクラス</a>の作成を済ませたら、データベース関数にテーブル名を渡すと接続できます</p>
+<pre><cite>データベース接続</cite><!--
+$db = データベース("テーブル名");
+--></pre>
+<p>この関数の戻り値は 新規のデータベースオブジェクト です。オブジェクトなので続けて実行できます。<br>
+テーブルが未作成なら <a href="#テーブル作成">テーブル作成</a> を実行してください</p>
+
+<h3>手動接続</h3>
+
+<p>データベースに手動で接続するには、<a href="#接続設定">接続設定</a>を配列にして第2引数に渡してください</p>
+
+<pre><cite>手動で接続</cite><!--
+//SQLiteに接続する
+$db = データベース("テーブル名", ["sqlite:./test.db"]);
+
+//MySQLに接続する
+$db = データベース("テーブル名", ["mysql:host=ホスト名;dbname=データベース名;charset=utf8mb4", "ユーザID", "パスワード"]);
+--></pre>
+
+
+</article>
+
+
+
+<article id="テーブル">
+<h1>テーブル</h1>
+
+<p>操作対象のテーブルを変更、または現在のテーブル名を取得します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="0" data-type="">第1引数</td>
+<td>変更するテーブル名<br>省略時は現在のテーブル名を取得する動作になります</td>
+</tr>
+</table>
+
+<p>引数を指定した場合の戻り値は、データベースオブジェクトです<br>
+引数を指定しなかった場合の戻り値は、現在のテーブル名です</p>
+
+</article>
+
+
+
+<article id="取得">
+<h1>取得</h1>
+<p>データベースから複数行取得します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="0" data-type="">第1引数</td>
+<td>取得を開始する位置を0から始まる数字で。省略時は0</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>取得する件数。省略時は31。<small>次ページの存在確認用に1件多くなってます</small><br>省略時の値は<var>$_ENV['データベース.取得件数']</var>で変更できます</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第3引数</td>
+<td>取得する順番を連想配列で。['ソート対象列'=&gt;'大きい順'<small>または</small>'小さい順']<br>
+省略時は ['id'=&gt;'大きい順']</td>
+</tr>
+</table>
+
+<p>検索結果は、配列＋連想配列(キーが列名)の形で返ります<br>
+存在しない位置などで、検索結果が0件の場合は空配列が返ります。</p>
+
+<p><small>データベースに接続できないなどの異常時は false が返ります</small></p>
+
+<pre><cite>取得例</cite><!--
+$結果 = データベース("テーブル名")->取得(); //idの大きい順に位置0から31件取得
+
+foreach($結果 as $行){
+    print $行['列1'];
+    print $行['列2'];
+}
+--></pre>
+
+
+</article>
+
+
+
+<article id="列取得">
+<h1>列取得</h1>
+<p>データベースから列名を指定して複数行取得します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>取得する列名<br>複数の列を取得したい時は、配列に入れてください</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>取得を開始する位置を0から始まる数字で。省略時は0</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第3引数</td>
+<td>取得する件数。省略時は31。<small>次ページの存在確認用に1件多くなってます</small><br>省略時の値は<var>$_ENV['データベース.取得件数']</var>で変更できます</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第4引数</td>
+<td>取得する順番を連想配列で。['ソート対象列'=&gt;'大きい順'<small>または</small>'小さい順']<br>
+省略時は ['id'=&gt;'大きい順']</td>
+</tr>
+</table>
+
+<p>列名の指定方法によって、戻り値の形が異なります。</p>
+
+<ul>
+  <li>文字列で指定した時は、配列が返ります</li>
+  <li>配列で指定した時は、配列＋連想配列(キーが列名)が返ります</li>
+</ul>
+
+
+<p>検索結果が0件の場合は、いずれも空配列が返ります。</p>
+
+<p><small>存在しない列名を指定した時や、データベースに接続できないなどの異常時は false が返ります</small></p>
+
+</article>
+
+
+
+<article id="行取得">
+<h1>行取得</h1>
+<p>データベースからidを指定して1行取得します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>取得するid</td>
+</tr>
+</table>
+
+<p>検索結果は、連想配列(キーが列名)の形で返ります<br>
+idが存在しなかった場合は空配列が返ります</p>
+
+<p><small>データベースに接続できないなどの異常時は false が返ります</small></p>
+
+</article>
+
+
+
+<article id="セル取得">
+<h1>セル取得</h1>
+<p>データベースからidと列名を指定して1セル取得します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>取得するid</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>取得する列名</td>
+</tr>
+</table>
+
+<p>戻り値は値です。<br>
+取得できなかった場合は false が返ります。<small>(idが存在しない、列が存在しない、エラーが発生した)</small></p>
+</article>
+
+
+
+<article id="検索">
+<h1>検索</h1>
+<p>データベースから文字列検索を行います。</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>検索ワード<br>
+文字列で渡した場合、空白で区切られていればAND検索を行います<br>配列で渡した場合は、各要素のAND検索を行います</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>検索対象の列名<br>複数ある時は配列に入れてください</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第3引数</td>
+<td>取得を開始する位置を0から始まる数字で。省略時は0</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第4引数</td>
+<td>取得する件数。省略時は31。<small>次ページの存在確認用に1件多くなってます</small><br>省略時の値は<var>$_ENV['データベース.取得件数']</var>で変更できます</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第5引数</td>
+<td>取得する順番を連想配列で。['ソート対象列'=&gt;'大きい順'<small>または</small>'小さい順']<br>
+省略時は ['id'=&gt;'大きい順']</td>
+</tr>
+</table>
+
+<p>検索結果は、配列＋連想配列(キーが列名)の形で返ります<br>
+検索がヒットしなかったり、存在しない位置などで検索結果が0件の場合は空配列が返ります。</p>
+
+<p><small>存在しない列名を指定した時や、データベースに接続できないなどの異常時は false が返ります</small></p>
+</article>
+
+
+
+<article id="件数">
+<h1>件数</h1>
+<p>データベースからテーブルの全行数を取得します<br>戻り値は件数です</p>
+<p><small>データベースに接続できないなどの異常時は false が返ります</small></p>
+
+</article>
+
+
+
+<article id="追加">
+<h1>追加</h1>
+
+<p>データベースに1行追加します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>追加するデータ<br>
+キーを列名とした連想配列か、<a href="#テーブルクラス">テーブルクラス</a>のオブジェクト</td>
+</tr>
+</table>
+
+<p>戻り値は追加された行の id値 です。失敗したらfalseが返ります</p>
+
+<pre><cite>追加の例</cite><!--
+$id = データベース('テーブル')->追加([
+    '列1' => '列1の値',
+    '列2' => '列2の値',
+]);
+--></pre>
+
+
+<p><small>追加する値に式を利用したい時は、式の文字列を配列に入れてください。 例:  '列名' =&gt; ['式の文字列']<br>
+この式にはプレースホルダが使用できません。外部からの入力は使用しないでください</small></p>
+</article>
+
+
+
+<article id="更新">
+<h1>更新</h1>
+
+<p>データベースを1行更新します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>更新するid</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>更新するデータ<br>
+キーを列名とした連想配列か、<a href="#テーブルクラス">テーブルクラス</a>のオブジェクト</td>
+</tr>
+</table>
+
+<p>更新に成功したらtrue、失敗したらfalseが返ります</p>
+
+<pre><cite>更新の例</cite><!--
+データベース('テーブル')->更新(5, [
+    'カウント' => ['カウント+1'], //式を利用し、id5のカウント列の数字を1増やす
+]);
+--></pre>
+
+
+<p><small>更新する値に式を利用したい時は、式の文字列を配列に入れてください。 例: '列名' =&gt; ['式の文字列']<br>
+この式にはプレースホルダが使用できません。外部からの入力は使用しないでください</small></p>
+
+</article>
+
+
+
+<article id="削除">
+<h1>削除</h1>
+
+<p>データベースから1行削除します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>削除するid</td>
+</tr>
+</table>
+
+<p>削除に成功したらtrue、失敗したらfalseが返ります</p>
+</article>
+
+
+<article id="実行">
+<h1>実行</h1>
+
+<p>SQL文を指定してデータベースを実行します。</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>SQL文</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>プレースホルダに割り当てる変数<br>順番に配列に入れてください。1つでも配列に入れます</td>
+</tr>
+</table>
+
+<p>戻り値は <a href="http://php.net/pdostatement" target="_blank">PDOStatementオブジェクト</a>です。このオブジェクトは foreach で回して結果を取得できます。<br>
+失敗したら false が返ります</p>
+
+<h3 id="プレースホルダ">プレースホルダ</h3>
+
+<p>SQL文に外部データを含む変数を埋め込むことはセキュリティ上厳禁です。必ず変数をプレースホルダ <b>?</b> に置き換えてください。</p>
+<pre><!--
+//×ダメな例 - SQL文の中に変数が埋め込まれている
+$SQL文 = "insert into テーブル名 (列1, 列2, 列3) values ($a, $b, $c)";
+$db->実行($SQL文);
+
+//○良い例 - 変数をプレースホルダに置き換えている
+$SQL文 = "insert into テーブル名 (列1, 列2, 列3) values (?, ?, ?)";
+$db->実行($SQL文, [$a, $b, $c]);
+--></pre>
+
+<p><small>順番タイプのプレースホルダのみ対応しています。名前タイプは非対応です</small></p>
+
+</article>
+
+
+
+<article id="where">
+<h1>where</h1>
+
+<p>where文を設定します。次回の処理において1回だけ有効です</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>where文</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>プレースホルダに割り当てる変数<br>順番に配列に入れてください。1つでも配列に入れます</td>
+</tr>
+</table>
+<p>戻り値は データベースオブジェクトです</p>
+
+
+<pre><cite>使用例</cite><!--
+データベース("商品")->where("価格 >= 1000 and 数量 <= 10")->取得();
+--></pre>
+
+<p>このwhere文はSQL文に直接組み込まれます。<br>
+where文に外部データを含む変数を埋め込むことはセキュリティ上厳禁です。必ず<a href="#プレースホルダ">プレースホルダ</a>に置き換えてください。</p>
+
+<p><small>このwhere文は取得・列取得・行取得・セル取得・件数・検索・更新・削除にのみ有効です。他の実行・追加などでは無視されます</small></p>
+
+</article>
+
+
+
+<article id="テーブル作成">
+<h1>テーブル作成</h1>
+<p><a href="#テーブルクラス">テーブルクラス</a>に基づいて、データベースにテーブルを1つ作成します。</p>
+<pre><cite>テーブル作成</cite><!--
+データベース("テーブル名")->テーブル作成();
+--></pre>
+
+<p>戻り値は成功すれば true、失敗すれば false が返ります</p>
+
+<p><small>既にテーブルが存在する時は、テーブルは作成されず何も起きません。(trueが返ります)</small></p>
+
+<h3>MySQLの追加定義</h3>
+
+<p>MySQLでテーブルを作成する時は、次のコードが自動的に追加されます</p>
+
+<pre><cite>MySQLの追加定義の初期値</cite><!--
+ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci
+--></pre>
+
+<p>この追加文を変更したい時は、テーブル作成前に<a href="#テーブルクラス">テーブルクラス</a>に次の定数を用意しておいてください</p>
+
+<pre><cite>追加定義を変更する</cite><!--
+class □テーブル名{
+    const 追加定義 = "ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci";
+}
+--></pre>
+</article>
+
+
+
+<article id="インデックス作成">
+<h1>インデックス作成</h1>
+<p>列名を指定して、その列のインデックスを作成します。<br>
+インデックスを作成するとその列を高速に検索できるようになります</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>列名</td>
+</tr>
+</table>
+<p>戻り値は成功すれば true が返ります。失敗すれば false が返ります</p>
+</article>
+
+
+
+<article id="トランザクション">
+<h1>トランザクション</h1>
+<p>トランザクションを実行します</p>
+
+<pre><cite>トランザクション</cite><!--
+$db->トランザクション開始();
+$db->トランザクション確定();
+$db->トランザクション元に戻す();
+--></pre>
+<p>戻り値はデータベースオブジェクトです</p>
+</article>
+
+
+
+<article id="切断">
+<h1>切断</h1>
+<p>データベースから切断します</p>
+<pre><cite>切断</cite><!--
+$db->切断();
+--></pre>
+<p><small>通常はスクリプト終了で自動的に切断されるので実行する必要はありません</small></p>
+</article>
+
+
+
+
+
+<article id="PDO設定">
+<h1>PDO設定</h1>
+
+<p>データベースクラスはPHPの<a href="http://php.net/pdo" target="_blank">PDO</a>を利用して、データベースに接続しています。初期設定値は次の通りです</p>
+
+<pre><cite>PDO設定の初期値</cite><!--
+PDO::ATTR_DEFAULT_FETCH_MODE       => PDO::FETCH_ASSOC,       //データ取得時は各行を連想配列で取得
+PDO::ATTR_ERRMODE                  => PDO::ERRMODE_WARNING,   //エラー時は警告を発生させる
+PDO::ATTR_EMULATE_PREPARES         => true,                   //準備文の処理はPHP側で行う(高速)
+PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,                   //持続的な接続を行う(高速)
+--></pre>
+
+<p>この初期設定を変更するには、次のように<a href="#接続設定">接続設定</a>の3に連想配列の形で指定してください</p>
+
+<pre><cite>PDO設定の変更例</cite><!--
+$_ENV['データベース.接続.3'] = [
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_CLASS,       //データ取得時は各行をオブジェクトで取得
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, //エラー時は例外を発生させる
+];
+--></pre>
+<p><small>PDO::ATTR_ERRMODEなどのキー名は引用符で囲まないでください</small></p>
+
+<h3>データをオブジェクトで取得する</h3>
+
+<p>PDO設定において<var>PDO::ATTR_DEFAULT_FETCH_MODE</var>に<var>PDO::FETCH_CLASS</var>を指定した時は、データ取得時において、
+各行のデータが <a href="#テーブルクラス">テーブルクラス</a> のオブジェクトにセットされるようになります。</p>
+
+<pre><cite>各行をオブジェクトで取得</cite><!--
+foreach(データベース("テーブル")->取得() as $行){
+    print $行->列1;
+    print $行->列2;
+}
+--></pre>
+<p><small>テーブルに関係する処理をテーブルクラスに記述していけば、コードが整理できるでしょう</small></p>
+
+</article>
+
+
+<article id="ログ">
+<h1>ログ</h1>
+<p></p>
+
+<p><var>$_ENV['データベース.ログ']</var>に関数を登録すると、発行されたSQL文のログを取ることができます。<br>
+登録した関数はSQLを発行する毎に実行され、第1引数にはSQL文、第2引数にはプレースホルダの値(配列)がセットされます</p>
+<pre><cite>ログ関数の登録例</cite><!--
+$_ENV['データベース.ログ'] = function($SQL文, $プレースホルダ){
+    print $SQL文;
+};
+--></pre>
+</article>
+
+
+
+<footer>
+<nav><a href="./">ホームに戻る</a></nav>
+</footer>
+
+<script src="programming.js"></script>
+
+</body></html>

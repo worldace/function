@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link href="programming.css" rel="stylesheet">
+</head>
+<body>
+
+<header>
+<h1></h1>
+</header>
+
+
+
+<article id="条件分岐編">
+<h1>条件分岐編</h1>
+<p>elseifは名前の通りelse-ifの糖衣構文です。つまりelseifはelseとifに置き換えることができます</p>
+<pre><cite>elseif置き換え</cite><!--
+if(A){
+    //処理A
+}
+elseif(B){
+    //処理B
+}
+
+//↑と↓は等価
+
+if(A){
+    //処理A
+}
+else{
+    if(B){
+        //処理B
+    }
+}
+--></pre>
+<p>条件分岐がifとelseだけで記述できるのが確認できるでしょう</p>
+
+<p>さらに、elseはifの条件を反転したものなので、ifに置き換えることができます</p>
+<pre><cite>else置き換え</cite><!--
+if(A){
+    //処理A
+}
+else{
+    //処理B
+}
+
+//↓置き換え
+
+if(A){
+    //処理A
+}
+if(!A){
+    //処理B
+}
+--></pre>
+
+
+
+<p>以上により、条件分岐はif文だけで記述できることになります</p>
+
+<p>そしてif文のブロック構文{}は、gotoを使って命令に変換することができます</p>
+<pre><cite>if文書き換え</cite><!--
+if(A){
+    //処理A
+}
+
+//↓置き換え
+
+if(!A) goto END;
+    //処理A
+END:
+--></pre>
+<p>制御構造はこれ以上分解できないので、以上をもって条件分岐はif-gotoだけで記述できるといえます</p>
+
+<p><small>条件分岐は他にもswitch文というものもありますが、if-elseif-else文で置き換えられることは明白なので省略します</small></p>
+</article>
+
+<article id="ループ編">
+<h1>ループ編</h1>
+
+<p>foreachはforの糖衣構文です。forで置き換えてみましょう</p>
+<pre><cite>foreach置き換え</cite><!--
+foreach($配列 as $v){
+    //処理
+}
+
+//↓置き換え
+
+for($i = 0; $i < count($配列); $i++){
+    $v = $配列[$i]; //現在の値
+    //処理
+}
+--></pre>
+
+<p>普通の配列は、キーが「0,1,2,3,・・・,キー総数-1」と並んでるので、上記のようにforで置き換えることができます</p>
+
+<ol>
+  <li>まず初めにキー番号($i)を0にセットする</li>
+  <li>現在のキー番号がキー総数より小さければ、ブロック内に入る</li>
+  <li>ブロック内で処理を行う</li>
+  <li>処理が終わったら、キー番号を1つ増やす</li>
+  <li>(2に戻る)</li>
+</ol>
+
+
+
+<pre><cite>foreach置き換え</cite><!--
+foreach($配列 as $k => $v){
+    //処理
+}
+
+//↓置き換え
+
+for(reset($配列); ($k=key($配列)) !== null; next($配列)){
+    $v = current($配列); //現在の値
+    //処理
+}
+--></pre>
+
+<ol>
+  <li>まず初めにreset()で配列ポインタを最初に戻す</li>
+  <li>key()で現在のキーを取得し、キーがnullでなければブロック内に入る</li>
+  <li>ブロック内で処理を行う</li>
+  <li>処理が終わったら、next()で配列ポインタを1つ進める</li>
+  <li>(2に戻る)</li>
+</ol>
+
+
+
+
+
+
+<p>そして、forはwhileの糖衣構文です。whileに置き換えてみましょう</p>
+
+<pre><cite>for置き換え</cite><!--
+for($i = 0; $i < 5; $i++){
+    //処理
+}
+
+//↑と↓は等価
+
+$i = 0;
+while($i < 5){
+    //処理
+    $i++;
+}
+--></pre>
+
+<p>whileは「条件が真のあいだ、次の処理を繰り返し実行する」という意味なので、if文に置き換えることができます</p>
+
+<pre><cite>while置き換え</cite><!--
+while(A){
+    //処理
+}
+
+//if文に置き換え
+
+START:
+if(A){
+    //処理
+    goto START;
+}
+--></pre>
+
+<p>さらにブロック構文{}はgotoに置き換えることができます</p>
+<pre><cite>完成</cite><!--
+START:
+if(!A) goto END;
+    //処理
+    goto START;
+END:
+--></pre>
+
+<p>上記の例だと「goto END」はbreak命令に相当し、「goto START」はcontinue命令に相当します。<br>
+以上により、ループも全てif-gotoだけで記述できることが確認できました</p>
+
+
+
+<footer>
+<nav><a href="./">ホームに戻る</a></nav>
+</footer>
+
+
+<script src="programming.js"></script>
+
+</body></html>

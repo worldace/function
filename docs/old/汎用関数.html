@@ -1,0 +1,3207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>汎用関数</title>
+  <link href="programming.css" rel="stylesheet">
+</head>
+<body>
+
+<header>
+<h1>汎用関数</h1>
+
+<nav>
+<h2>目次</h2>
+<ol>
+  <li><a href="#テキスト表示">テキスト表示</a></li>
+  <li><a href="#JSON表示">JSON表示</a></li>
+  <li><a href="#リダイレクト">リダイレクト</a></li>
+  <li><a href="#route">route</a></li>
+  <li><a href="#自動読み込み">自動読み込み</a></li>
+  <li><a href="#モジュール">モジュール</a></li>
+  <li><a href="#非同期処理">非同期処理</a></li>
+  <li><a href="#検査">検査</a></li>
+  <li><a href="#整形">整形</a></li>
+  <li><a href="#入力">入力</a></li>
+  <li><a href="#テンプレート">テンプレート</a></li>
+  <li><a href="#ダウンロード">ダウンロード</a></li>
+  <li><a href="#GET送信">GET送信</a></li>
+  <li><a href="#並列GET送信">並列GET送信</a></li>
+  <li><a href="#POST送信">POST送信</a></li>
+  <li><a href="#ファイル送信">ファイル送信</a></li>
+  <li><a href="#ファイル受信">ファイル受信</a></li>
+  <li><a href="#メール送信">メール送信</a></li>
+  <li><a href="#FTPアップロード">FTPアップロード</a></li>
+  <li><a href="#ホスト確認">ホスト確認</a></li>
+  <li><a href="#キャッシュ無効">キャッシュ無効</a></li>
+  <li><a href="#URL">URL</a></li>
+  <li><a href="#PATH_INFO分解">PATH_INFO分解</a></li>
+  <li><a href="#PATH_INFO設定">PATH_INFO設定</a></li>
+  <li><a href="#現在のURL">現在のURL</a></li>
+  <li><a href="#ホームURL">ホームURL</a></li>
+  <li><a href="#トップURL">トップURL</a></li>
+  <li><a href="#相対URLを絶対URLに変換">相対URLを絶対URLに変換</a></li>
+  <li><a href="#Windowsなら">Windowsなら</a></li>
+  <li><a href="#絶対パスなら">絶対パスなら</a></li>
+  <li><a href="#GETなら">GETなら</a></li>
+  <li><a href="#POSTなら">POSTなら</a></li>
+  <li><a href="#開発環境なら">開発環境なら</a></li>
+  <li><a href="#PHP≧">PHP≧</a></li>
+  <li><a href="#自然数なら">自然数なら</a></li>
+  <li><a href="#str_match">str_match</a></li>
+  <li><a href="#str_replace_once">str_replace_once</a></li>
+  <li><a href="#strf">strf</a></li>
+  <li><a href="#一文字分解">一文字分解</a></li>
+  <li><a href="#BOM削除">BOM削除</a></li>
+  <li><a href="#日付">日付</a></li>
+  <li><a href="#経過">経過</a></li>
+  <li><a href="#カレンダー配列">カレンダー配列</a></li>
+  <li><a href="#日本語設定">日本語設定</a></li>
+  <li><a href="#h">h</a></li>
+  <li><a href="#改行置換">改行置換</a></li>
+  <li><a href="#制御文字削除">制御文字削除</a></li>
+  <li><a href="#タグ">タグ</a></li>
+  <li><a href="#属性文字列">属性文字列</a></li>
+  <li><a href="#自動リンク">自動リンク</a></li>
+  <li><a href="#配列HTML">配列HTML</a></li>
+  <li><a href="#連想配列なら">連想配列なら</a></li>
+  <li><a href="#配列探索">配列探索</a></li>
+  <li><a href="#配列掃除">配列掃除</a></li>
+  <li><a href="#arrayf">arrayf</a></li>
+  <li><a href="#列ソート">列ソート</a></li>
+  <li><a href="#パーミッション">パーミッション</a></li>
+  <li><a href="#ファイル一覧">ファイル一覧</a></li>
+  <li><a href="#ディレクトリ一覧">ディレクトリ一覧</a></li>
+  <li><a href="#パス一覧">パス一覧</a></li>
+  <li><a href="#ファイル編集">ファイル編集</a></li>
+  <li><a href="#ディレクトリ作成">ディレクトリ作成</a></li>
+  <li><a href="#ディレクトリ削除">ディレクトリ削除</a></li>
+  <li><a href="#zip圧縮">zip圧縮</a></li>
+  <li><a href="#zip追加">zip追加</a></li>
+  <li><a href="#zip解凍">zip解凍</a></li>
+  <li><a href="#一時保存">一時保存</a></li>
+  <li><a href="#一時取得">一時取得</a></li>
+  <li><a href="#JSON保存">JSON保存</a></li>
+  <li><a href="#JSON取得">JSON取得</a></li>
+  <li><a href="#JSON追記">JSON追記</a></li>
+  <li><a href="#fromphp">fromphp</a></li>
+  <li><a href="#配列保存">配列保存</a></li>
+  <li><a href="#XML取得">XML取得</a></li>
+  <li><a href="#CSV取得">CSV取得</a></li>
+  <li><a href="#CSV作成">CSV作成</a></li>
+  <li><a href="#当たり">当たり</a></li>
+  <li><a href="#uuid">uuid</a></li>
+  <li><a href="#ID発行">ID発行</a></li>
+  <li><a href="#パスワード発行">パスワード発行</a></li>
+  <li><a href="#パスワード変換">パスワード変換</a></li>
+  <li><a href="#パスワード認証">パスワード認証</a></li>
+  <li><a href="#暗号化">暗号化</a></li>
+  <li><a href="#復号化">復号化</a></li>
+  <li><a href="#JWT発行">JWT発行</a></li>
+  <li><a href="#JWT分解">JWT分解</a></li>
+  <li><a href="#JWT認証">JWT認証</a></li>
+  <li><a href="#base64_encode_urlsafe">base64_encode_urlsafe</a></li>
+  <li><a href="#base64_decode_urlsafe">base64_decode_urlsafe</a></li>
+  <li><a href="#base_encode">base_encode</a></li>
+  <li><a href="#base_decode">base_decode</a></li>
+  <li><a href="#ベーシック認証">ベーシック認証</a></li>
+  <li><a href="#セッション削除">セッション削除</a></li>
+  <li><a href="#CSRFタグ">CSRFタグ</a></li>
+  <li><a href="#CSRF確認">CSRF確認</a></li>
+  <li><a href="#MIMEタイプ">MIMEタイプ</a></li>
+  <li><a href="#ベンチマーク">ベンチマーク</a></li>
+  <li><a href="#関数文字列化">関数文字列化</a></li>
+  <li><a href="#クラス文字列化">クラス文字列化</a></li>
+  <li><a href="#クリップボードにコピー">クリップボードにコピー</a></li>
+  <li><a href="#内部エラー">内部エラー</a></li>
+</ol>
+</nav>
+</header>
+
+
+
+<article id="テキスト表示">
+<h1>テキスト表示</h1>
+<p>文字列を出力して終了します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>文字列。タグ使用不可</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="JSON表示">
+<h1>JSON表示</h1>
+<p>JSONを出力して終了します。<br>
+$_GET['callback']に値がセットされている時はJSONPとして出力します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>JSONに変換するデータ。配列や連想配列など</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>アクセスを許可するオリジン(プロトコル＋ホスト名＋ポート番号)。省略時は全オリジン許可します<br>
+オリジンは文字列で http://www.example.jp のように指定します。<small>最後のスラッシュは不要</small><br>
+
+複数指定する場合は配列に入れてください</td>
+</tr>
+
+</table>
+<pre><cite>JSON入出力</cite><!--
+//JavaScript側
+var xhr = new XMLHttpRequest();
+xhr.open("GET" , "http://www.example.jp/test.php");
+xhr.addEventListener("load", function(){
+    var data = JSON.parse(xhr.responseText); //JSONを受け取ってデコード
+    console.log(data);
+});
+xhr.send();
+
+//PHP側
+<?php
+JSON表示([1,2,3,4,5]); //JSONを送信する
+--></pre>
+
+<small>標準ではブラウザからCookieが送られてきません。Cookieを受信するようにするには、
+JavaScript側では 「xhr.send();」以前に「xhr.withCredentials = true;」を追加し、PHP側では第2引数のオリジンを指定します</small>
+
+<pre><cite>JSONP入出力</cite><!--
+//JavaScript側
+function jsonpcallback(data){ //JSONPを受け取る関数
+    console.log(data); //デコード不要
+}
+
+var script = document.createElement('script');
+script.src = "http://www.example.jp/test.php?callback=jsonpcallback";
+document.body.appendChild(script).parentNode.removeChild(script);
+
+//PHP側
+<?php
+JSON表示([1,2,3,4,5]); //$_GET['callback']が存在するので、JSONPとして送信される
+--></pre>
+
+<p><small>転送量削減のために圧縮したい時は：ini_set('zlib.output_compression', 1);</small></p>
+</article>
+
+
+
+<article id="リダイレクト">
+<h1>リダイレクト</h1>
+<p>指定URLにリダイレクトして終了します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>リダイレクト先のURL</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="route">
+<h1>route</h1>
+<p>ファイルまたは関数を順番に実行し、全て実行したら終了します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>対応するリクエストメソッド<br>
+<var>GET</var>か<var>POST</var>か<var>ANY</var>(全て許可)。<small>大文字小文字は区別しません</small><br>
+指定したもの以外だと実行されません</td>
+</tr>
+<tr>
+<td data-require="1" data-type="array">第2引数</td>
+<td>実行するファイル/関数を順番に配列に入れてください<br><small>オブジェクトも指定できますが、そのクラスに<var>__invoke</var>メソッドが必要です</small></td>
+</tr>
+<tr>
+<td data-require="0" data-type="array">第3引数</td>
+<td>最初に実行するファイル/関数に渡したい引数<br>ファイルなら引数は<var>$arg</var>で取得できます</td>
+</tr>
+</table>
+<pre><cite>簡易ルーター</cite><!--
+switch($_GET['action']){
+    case ''                : route('GET', ['./action/index.php']);
+    case 'video'           : route('GET', ['./action/video.php']);
+    case 'video-post'      : route('POST',['./action/video-post.php']);
+    case 'video-post-form' : route('GET', ['./action/video-post-form.php']);
+    default                : route('ANY', ['./action/index.php']);
+}
+--></pre>
+<p><small>ファイル実行時は、ファイル毎に変数のスコープが独立しています。また、前回の戻り値が<var>$arg</var>で取得できます</small></p>
+
+</article>
+
+
+
+<article id="自動読み込み">
+<h1>自動読み込み</h1>
+<p>クラスファイルを自動的に読み込めるようにします</p>
+
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="0" data-type="string">第1引数</td>
+<td>クラスファイルが置いてあるディレクトリのパス<br>省略時はfunction.phpのディレクトリ</td>
+</tr>
+</table>
+
+<p>クラス名の<var>\</var>は<var>/</var>に変換されます。クラスファイルをディレクトリに分別できます</p>
+</article>
+
+
+
+<article id="モジュール">
+<h1>モジュール</h1>
+<p>モジュール化したPHPファイルを実行します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>PHPファイルのパス</td>
+</tr>
+</table>
+
+<p>戻り値はPHPファイルの戻り値がそのまま返ります。<br>
+ファイルの読み込みに失敗した時はエラーで停止します。</p>
+
+<pre><cite>モジュールファイルの記述例</cite><!--
+//無名クラスを返す
+return new class{ ... };
+
+//無名関数を返す
+return function(){ ... };
+
+//連想配列を返す
+return [ ... ];
+--></pre>
+
+<ul>
+  <li>2回目以降の呼び出しは、PHPファイルを実行しません。キャッシュを返すだけになります</li>
+  <li>オブジェクトの場合はクローンされたものが返ります</li>
+  <li>PHPファイルはローカルスコープで実行されます</li>
+  <li>PHPファイルに変数を渡す方法は用意していません。<small>グローバル変数経由なら受け渡し可能です</small></li>
+</ul>
+</article>
+
+
+
+<article id="非同期処理">
+<h1>非同期処理</h1>
+<p>PHPを非同期で実行します。時間が掛かる処理を分離したい時に有効です</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>実行するPHPファイルのパス</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>PHPファイルに渡す引数<br>
+シリアライズ化できる形式なら、何でも渡せます</td>
+</tr>
+</table>
+
+<p>PHPはシェル経由で実行され、渡した引数は変数<var>$arg</var>に入ります。<small>引数が存在しない場合は null が入ります</small><br>
+実行した結果を受け取る仕組みはなく、戻り値はありません</p>
+<pre><cite>ファイル例</cite><!--
+<?php
+if(PHP_SAPI !== 'cli'){ //シェル経由以外は終了する
+    exit;
+}
+$arg; //引数のデータが入っている
+--></pre>
+
+</article>
+
+
+
+<article id="検査">
+<h1>検査</h1>
+<p>変数の値を検査します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>検査するもの</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>検査関数<br>
+検査関数の第1引数には値が渡されます。値を検査して真偽値を返してください<br>
+当ライブラリが用意した特別関数を使うこともできます
+</td>
+</tr>
+<tr>
+<td data-require="0" data-type="string">第3引数</td>
+<td>失敗時に渡すもの</td>
+</tr>
+</table>
+<p>検査に成功するとtrueが返り、失敗するとfalseが返ります</p>
+
+<table>
+<caption>特別関数一覧</caption>
+<tr><th>特別関数名</th><th>説明</th></tr>
+<tr><td>必須</td><td>1文字以上なら成功</td></tr>
+<tr><td>数</td><td>数なら成功 (0、負数、小数も成功)</td></tr>
+<tr><td>数字</td><td>数字のみなら成功 (0-9)</td></tr>
+<tr><td>自然数</td><td>1以上の整数なら成功</td></tr>
+<tr><td>整数</td><td>0以上の整数なら成功</td></tr>
+<tr><td>英字</td><td>英字のみなら成功 (A-Za-z)</td></tr>
+<tr><td>英数字</td><td>英数字のみなら成功 (A-Za-z0-9)</td></tr>
+<tr><td>URL</td><td>URLなら成功。http(s)://で始まる文字列</td></tr>
+<tr><td>画像データ</td><td>画像データなら成功 (getimagesizeに対応してる形式限定)</td></tr>
+<tr><td>UTF8</td><td>文字列がUTF8なら成功</td></tr>
+<tr><td>n文字～<br>n字～</td><td>n文字～なら成功<br>～は「以上」「以下」「以内」「より大きい」「より小さい」「未満」「と同じ」のいずれかの文字<br>～省略時は「と同じ」。nは文字数</td></tr>
+<tr><td>nバイト～</td><td>nバイト～なら成功<br>～は「以上」「以下」「以内」「より大きい」「より小さい」「未満」「と同じ」のいずれかの文字<br>～省略時は「と同じ」。nはバイト数</td></tr>
+</table>
+
+
+<pre><cite>特別関数の使用例</cite><!--
+//$_GET['id']の値が10文字以下か検査します
+検査($_GET['id'], "10文字以下");
+--></pre>
+
+<p>検査オブジェクトを利用すると、検査結果を一括して確認することができます</p>
+<ol>
+  <li>検査オブジェクトを作成する</li>
+  <li>検査オブジェクトを検査関数のように実行してください</li>
+  <li>検査結果は<var>$検査-&gt;結果()</var>で取得できます</li>
+  <li>すべて成功時は空配列となります</li>
+  <li>1つでも失敗したら連想配列となり、キーは失敗した検査番号、値は検査関数の第3引数で指定したものになります</li>
+</ol>
+
+<pre><cite>検査の一括確認</cite><!--
+$検査 = new 検査;
+
+$検査(105, "自然数");
+$検査(-23, "自然数");
+$検査(301, "自然数");
+
+//$検査->結果() は [1=>null] となります
+--></pre>
+
+</article>
+
+
+
+<article id="整形">
+<h1>整形</h1>
+<p>変数の値を整形します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>整形するもの。直接変更されます</td>
+</tr>
+<tr>
+<td data-require="1" data-type="callable">第2引数</td>
+<td>整形関数<br>
+整形関数の第1引数には値が渡されます。整形後の値を返してください</td>
+</tr>
+
+</table>
+<p>戻り値は整形後の値です</p>
+
+<pre><cite>整形例</cite><!--
+//$_GET['test']の値をtrim()します。$_GET['test']の内容は変更されます
+整形($_GET['test'], function($v){ return trim($v); });
+
+//PHPの組み込み関数を指定。上記と同等です
+整形($_GET['test'], "trim");
+--></pre>
+
+<p>未定義のキーを参照するとNoticeが発生しますが、それを抑制するには初期化しておきましょう</p>
+<pre><cite>スーパーグローバルの初期化例</cite><!--
+$_GET += ['key1'=>'', 'key2'=>'', 'key3'=>'']; //キーが未定義なら初期化され、定義済みなら何も起きない
+--></pre>
+
+</article>
+
+
+
+<article id="入力">
+<h1>入力</h1>
+<p>GET、POST、COOKIEで入力された値を取得します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td><var>get.変数名</var>または<var>post.変数名</var>または<var>cookie.変数名</var><small>変数名は大文字小文字を区別するので注意</small><br>
+"get."などの接頭辞を省略することも可能です。<br>その場合は、GET→POST→COOKIEの順に検索して最初に発見したものが返ります</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>取得できなかった場合に返すデフォルト値。省略時は空文字列<br>
+<small>取得した値が配列の時は無視されます</small></td>
+</tr>
+</table>
+<p>戻り値は入力された値です。取得できなかった場合はデフォルト値が返ります</p>
+
+
+</article>
+
+
+
+<article id="テンプレート">
+<h1>テンプレート</h1>
+<p>簡易的なテンプレートエンジンです<br>テンプレートファイルはPHPファイルです</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>テンプレートファイルのパス</td>
+</tr>
+<tr>
+<td data-require="1" data-type="array">第2引数</td>
+<td>変換関係を記載した連想配列<br>キー名はPHPの変数の命名規則に沿ってください</td>
+</tr>
+<tr>
+<td data-require="0" data-type="bool">第3引数</td>
+<td>値をエスケープしない場合はfalse<br>省略時はエスケープする</td>
+</tr>
+</table>
+
+<p>戻り値は合成後の文字列です</p>
+
+<pre><cite>サンプルプログラム</cite><!--
+print テンプレート("./template.html", [
+    "name"  => "田中",
+    "login" => false,
+    "menu"  => ['上級','中級','初級','<span>入門</span>'],
+]);
+--></pre>
+
+<p>連想配列はキー名がそのまま変数名になります。値は自動的にHTMLエスケープされます</p>
+
+<p>テンプレートファイルは普通のPHPです。PHPとして実行されます</p>
+
+<pre><cite>テンプレートファイル</cite><!--
+<h1>ようこそ<?php print $name ?>さん</h1>
+
+<?php if($login){ ?>
+    <p>ログイン中です</p>
+<?php } else{ ?>
+    <p>ログアウト中です</p>
+<?php } ?>
+
+<ul>
+<?php foreach($menu as $v){ ?>
+    <li><?php print $v ?></li>
+<?php } ?>
+</ul>
+--></pre>
+
+<p>PHPの代替構文により、次のように記述することもできます</p>
+<pre><cite>代替構文</cite><!--
+<h1>ようこそ<?= $name ?>さん</h1>
+
+<? if($login): ?>
+    <p>ログイン中です</p>
+<? else: ?>
+    <p>ログアウト中です</p>
+<? endif ?>
+
+<ul>
+<? foreach($menu as $v): ?>
+    <li><?= $v ?></li>
+<? endforeach ?>
+</ul>
+--></pre>
+
+
+
+<p><var>&lt;?</var>を使うには php.ini の<var>short_open_tag</var>が有効である必要があります<br>
+<var>&lt;?=</var> はPHP5.4から標準で使えます。short_open_tagとは無関係です</p>
+
+
+<pre><cite>結果の表示</cite><!--
+<h1>ようこそ田中さん</h1>
+
+<p>ログアウト中です</p>
+
+<ul>
+  <li>上級</li>
+  <li>中級</li>
+  <li>初級</li>
+  <li>&amp;lt;span&amp;gt;入門&amp;lt;/span&amp;gt;</li>
+</ul>
+--></pre>
+
+<ul>
+  <li>値は自動的にHTMLエスケープされます</li>
+  <li>変数名を<var>$_</var>から始めると、エスケープされてない値が得られます</li>
+  <li>変数一覧は<var>$ARG[1]</var>で配列として得られます</li>
+</ul>
+
+</article>
+
+
+
+<article id="ダウンロード">
+<h1>ダウンロード</h1>
+<p>ブラウザにファイルをダウンロードさせます</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>ダウンロードさせるファイルのパス<br>任意のデータ(文字列)も渡せます。データの先頭に<var>data://,</var>を付けて渡してください</td>
+</tr>
+<tr>
+<td data-require="0" data-type="string">第2引数</td>
+<td>ダウンロードファイルのファイル名。日本語対応<br>
+省略時は元のファイル名 <small>データ時はdata.txt</small></td>
+</tr>
+<tr>
+<td data-require="0" data-type="int">第3引数</td>
+<td>制限時間(秒)。省略時は6時間</td>
+</tr>
+</table>
+
+<p><small>ダウンロードが完了するまでPHPは実行状態になります。<br>
+PHPの初期設定ではPHPが実行できる時間は30秒に制限されているので、制限時間を延ばす必要があります</small></p>
+</article>
+
+
+
+<article id="GET送信">
+<h1>GET送信</h1>
+<p>HTTP GETを送信します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>送信先URL</td>
+</tr>
+<tr>
+<td data-require="0" data-type="array">第2引数</td>
+<td>送信するクエリがあれば連想配列で<br>name=value&name=valueのような文字列に変換されてURLに付与します</td>
+</tr>
+<tr>
+<td data-require="0" data-type="array">第3引数</td>
+<td>送信するヘッダがあれば連想配列で。改行は自動的に削除されます</td>
+</tr>
+</table>
+
+<p>戻り値は受信した本文です。失敗した場合は false が返ります</p>
+
+<p><small>この関数を実行すると受信ヘッダが <var>$_SERVER['response_header']</var> に配列の形でセットされます。<br>
+受信ヘッダが取得できなかった場合は空配列になります</small></p>
+
+
+<table>
+<caption>ネットワークに関係する php.ini の設定</caption>
+<tr>
+<th>ini</th>
+<th>説明</th>
+</tr>
+<tr>
+<td><a href="http://php.net/default_socket_timeout" target="_blank">default_socket_timeout</a></td>
+<td>タイムアウト秒数<br><small>初期値は60。「ini_set()」などで変更可能</small></td>
+</tr>
+<tr>
+<td><a href="http://php.net/user_agent" target="_blank">user_agent</a></td>
+<td>ユーザエージェント名<br><small>初期値はnull。「ini_set()」などで変更可能</small></td>
+</tr>
+<tr>
+<td><a href="http://php.net/allow_url_fopen" target="_blank">allow_url_fopen</a></td>
+<td>URLを開くことを許可するか<br><small>初期値は1で許可。「php.ini」で変更可能</small></td>
+</tr>
+</table>
+</article>
+
+
+<article id="並列GET送信">
+<h1>並列GET送信</h1>
+<p>HTTP GETを並列に送信します。cURLを使います</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>送信先URLを配列で</td>
+</tr>
+<tr>
+<td data-require="0" data-type="array">第2引数</td>
+<td>並列数。省略時は5</td>
+</tr>
+<tr>
+<td data-require="0" data-type="array">第3引数</td>
+<td><a href="http://php.net/curl_setopt" target="_blank">cURLオプション</a>を連想配列で。全URL共通です<br>
+例: [CURLOPT_TIMEOUT => 10]</td>
+</tr>
+</table>
+
+<p>戻り値は連想配列です。キーがURL、値が受信した本文です</p>
+
+<pre><cite>cURLオプションの初期値</cite><!--
+CURLOPT_RETURNTRANSFER => true,
+CURLOPT_FOLLOWLOCATION => true,
+CURLOPT_MAXREDIRS      => 10,
+CURLOPT_TIMEOUT        => 10,
+CURLOPT_SSL_VERIFYPEER => false,
+--></pre>
+
+</article>
+
+
+
+<article id="POST送信">
+<h1>POST送信</h1>
+<p>HTTP POSTを送信します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>送信先URL</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>送信するデータがあれば連想配列で<br>name=value&name=valueのような文字列に変換されて本文とします</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第3引数</td>
+<td>送信するヘッダがあれば連想配列で。改行は自動的に削除されます</td>
+</tr>
+</table>
+
+<p>戻り値は受信した本文です。失敗した場合は false が返ります</p>
+
+<p><small>この関数を実行すると受信ヘッダが <var>$_SERVER['response_header']</var> に配列の形でセットされます。<br>
+受信ヘッダが取得できなかった場合は空配列になります</small></p>
+
+<p><small>ネットワークに関する php.ini の設定は<a href="#GET送信">こちら</a>を参考にしてください</small></p>
+</article>
+
+
+
+<article id="ファイル送信">
+<h1>ファイル送信</h1>
+<p>HTTP POSTでファイルを送信します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>送信先URL</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>送信するデータがあれば連想配列で。後述</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第3引数</td>
+<td>送信するヘッダがあれば連想配列で。改行は自動的に削除されます</td>
+</tr>
+</table>
+
+<p>戻り値は受信した本文です。失敗した場合は false が返ります</p>
+
+
+<pre><cite>第2引数(送信データ)の記述例</cite><!--
+//ファイルを送信する ["フォームのname名" => ["ファイル名"=>"ファイルパス"]]
+$送信データ = ["file" => ["test.jpg" => "../test1.jpg"]];
+
+//データを送信する ["フォームのname名" => ["ファイル名"=>"data://,任意の文字列"]]
+$送信データ = ["file" => ["test.txt" => "data://,送信テスト"]];
+
+//1つのファイル＋1つのフォーム値を送信する
+$送信データ = ["file" => ["test.jpg" => "../test1.jpg"], "password" => "aiueo"];
+
+//複数のファイルを送信する。フォームのname名に[]を付ける
+$送信データ = ["file[]" => ["test1.jpg" => "../test1.jpg", "test2.jpg" => "../test2.jpg"]];
+--></pre>
+
+
+
+<p><small>この関数を実行すると受信ヘッダが <var>$_SERVER['response_header']</var> に配列の形でセットされます。<br>
+受信ヘッダが取得できなかった場合は空配列になります</small></p>
+<p><small>ネットワークに関する php.ini の設定は<a href="#GET送信">こちら</a>を参考にしてください</small></p>
+
+</article>
+
+
+
+<article id="ファイル受信">
+<h1>ファイル受信</h1>
+<p>フォームからアップロードされたファイルを受信します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>ファイルを保存するディレクトリ</td>
+</tr>
+<tr>
+<td data-require="0" data-type="array">第2引数</td>
+<td>アップロードを許可する拡張子を配列に入れる<br>
+省略時は ['.jpg', '.jpeg', '.png', '.gif']<br>
+ピリオドの有無は問わず、大文字小文字のどちらでもOK</td>
+</tr>
+</table>
+
+<p>戻り値は配列です。受信したファイルのパスが入ってます(後述)<br>
+何もアップロードされなかった時は <b>null</b> が返ります。 アップロードに失敗した時は false が返ります</p>
+<p><small>受信したファイルの名前は自動的に決定されます。拡張子は元のファイルと同じです</small></p>
+
+
+
+<pre><cite>アップロードフォームの記述例</cite><!--
+<form action="upload.php" method="POST" enctype="multipart/form-data">
+<input type="file" name="up" accept=".jpg,.jpeg,.png,.gif">
+<input type="submit" value="send">
+</form>
+--></pre>
+
+<p>例えば、上記のフォームでアップロードされた時、戻り値は ['up'=&gt;<b>[0=&gt;'ファイルのパス']</b>] となります。<br>
+多重配列ですが常に一つだけなので<var>$戻り値['up'][0]</var>で受信したファイルのパスを取り出すことができます</p>
+
+<pre><cite>複数形フォームの記述例</cite><!--
+<form action="upload.php" method="POST" enctype="multipart/form-data">
+<input type="file" name="up[]" accept=".jpg,.jpeg,.png,.gif">
+<input type="file" name="up[]" accept=".jpg,.jpeg,.png,.gif">
+<input type="submit" value="send">
+</form>
+--></pre>
+
+<p>上記の複数形フォームで2番目だけ入力された時、戻り値は ['up'=&gt;[<b>1</b>=&gt;'ファイルのパス']] となります。<br>
+複数存在する可能性があるので<var>foreach($戻り値['up'] as $path){}</var>のようなループで取り出します。<br>
+フォームは1次元配列まで対応しています</p>
+
+
+<table>
+<caption>アップロードに関係する php.ini の設定</caption>
+<tr>
+<th>ini</th>
+<th>説明</th>
+</tr>
+<tr>
+<td><a href="http://php.net/upload_max_filesize" target="_blank">upload_max_filesize</a></td>
+<td>1ファイルあたりの容量上限<br><small>初期値は2M。「php.ini」「.htaccess」「.user.ini」で変更可能</small></td>
+</tr>
+<tr>
+<td><a href="http://php.net/post_max_size" target="_blank">post_max_size</a></td>
+<td>アップロード全体の容量上限。upload_max_filesize より大きくする<br><small>初期値は8M。「php.ini」「.htaccess」「.user.ini」で変更可能</small></td>
+</tr>
+<tr>
+<td><a href="http://php.net/max_file_uploads" target="_blank">max_file_uploads</a></td>
+<td>一度にアップロードできるファイルの数<br><small>初期値は20。「php.ini」で変更可能</small></td>
+</tr>
+<tr>
+<td><a href="http://php.net/file_uploads" target="_blank">file_uploads</a></td>
+<td>アップロードの許可<br><small>初期値は1で許可する。「php.ini」で変更可能</small></td>
+</tr>
+<tr>
+<td><a href="http://php.net/max_input_time" target="_blank">max_input_time</a></td>
+<td>アップロード処理の制限時間(秒)<br><small>初期値は60。「php.ini」「.htaccess」「.user.ini」で変更可能</small></td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="メール送信">
+<h1>メール送信</h1>
+<p>メールを送信します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>送信設定を記述した連想配列(後述)</td>
+</tr>
+</table>
+<p>送信に成功した場合は true を返します。失敗した場合は false が返ります</p>
+
+
+<table>
+<caption>送信設定</caption>
+<tr>
+<th>キー</th>
+<th>値</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">題名</td>
+<td>メールの題名</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">本文</td>
+<td>メールの本文</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">送信先</td>
+<td>送信先のメールアドレス<br>複数ある場合は配列に入れてください</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">送信元</td>
+<td>送信元(あなた)のメールアドレス</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">送信者</td>
+<td>送信者(あなた)の名前</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">ファイル</td>
+<td>添付するファイルを連想配列で。複数可能<br>
+キーはメール内でのファイル名、値は添付するファイルのパス<br>
+任意のデータも渡せます。データの先頭に<var>data://,</var>を付けて連想配列の値に渡してください</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">cc</td>
+<td>cc。小文字です<br>
+複数ある場合は配列に入れてください</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">bcc</td>
+<td>bcc。小文字です<br>
+複数ある場合は配列に入れてください</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">ヘッダ</td>
+<td>追加したいヘッダがあれば<var>"key: value"</var>という書式で。<small>改行は削除されます</small><br>
+複数ある場合は配列に入れてください</td>
+</tr>
+</table>
+
+<pre><cite>送信例</cite><!--
+メール送信([
+    '題名'   => 'メールの題名',
+    '本文'   => 'メールの本文',
+    '送信先' => 'to@example.jp',
+    '送信元' => 'from@example.jp',
+]);
+--></pre>
+
+
+</article>
+
+
+
+<article id="FTPアップロード">
+<h1>FTPアップロード</h1>
+<p>ファイルをFTPでアップロードします</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>キーがアップ先のパス、値がアップ元のパスである連想配列<br>
+アップ先のパスの末尾が<var>/</var>ならディレクトリを作成します。<small>値は無視されます</small></td>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第2引数</td>
+<td>FTP設定の連想配列(後述)</td>
+</tr></table>
+
+<p>戻り値はアップロードが全て成功すればtrueが返ります。それ以外はfalseになります</p>
+
+<table>
+<caption>FTPの設定</caption>
+<tr>
+<th>キー</th>
+<th>値</th></tr>
+<tr>
+<td data-require="1" style="text-align:left">ホスト</td>
+<td>ホスト名。"ftp.example.com"のような文字列</td>
+</tr>
+<tr>
+<td data-require="1" style="text-align:left">id</td>
+<td>ログインID</td>
+</tr>
+<tr>
+<td data-require="1" style="text-align:left">パスワード</td>
+<td>ログインパスワード</td>
+</tr>
+<tr>
+<td data-require="0" style="text-align:left">ポート</td>
+<td>ポート番号。省略時は21</td>
+</tr>
+<tr>
+<td data-require="0" style="text-align:left">パッシブモード</td>
+<td>パッシブモードを有効にするならtrue(初期値)、無効にするならfalse</td>
+</tr>
+<tr>
+<td data-require="0" style="text-align:left">暗号化</td>
+<td>接続を暗号化するならtrue、しないならfalse(初期値)</td>
+</tr>
+</table>
+
+<ul>
+  <li>アップ先に同名のファイルが存在する時は上書きします</li>
+  <li>アップ先にディレクトリが存在しないとアップロードできません</li>
+  <li>常にバイナリモードで転送します</li>
+  <li>パーミッションは指定できません</li>
+</ul>
+
+
+<pre><cite>ミラーリングアップロード</cite><!--
+foreach(パス一覧('./test/') as $k => $v){
+    $upload["/public_html/test/$k"] = $v;
+}
+FTPアップロード($upload, ['ホスト'=>'xxx', 'id'=>'yyy', 'パスワード'=>'zzz']);
+--></pre>
+
+</article>
+
+
+<article id="ホスト確認">
+<h1>ホスト確認</h1>
+<p>URLやメールアドレスのホストが存在するか、DNSで確認します。</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>http(s)://で始まるURL、もしくはメールアドレス、もしくはホスト名</td>
+</tr>
+</table>
+<p>ホストが存在すれば true、存在しない時は false が返ります</p>
+
+<p><small>DNSのA、AAAAレコードを調査します。メールの場合はMXレコードも調査します</small></p>
+</article>
+
+
+
+<article id="キャッシュ無効">
+<h1>キャッシュ無効</h1>
+<p>ブラウザがコンテンツをキャッシュしないように、HTTPヘッダーを出力します</p>
+<p><small>HTTPヘッダーが既に送信済みの時は出力しません</small></p>
+</article>
+
+
+
+<article id="URL">
+<h1>URL</h1>
+<p>パラメータ付きの自サイトURLを作成します<br>
+<var>$_ENV['url']</var>に自サイトのURLが設定してあることが必要です</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="0" data-type="array">第1引数</td>
+<td>パラメータを入れた配列(後述)<br>省略時は<var>$_ENV['url']</var>が返ります</td>
+</tr>
+</table>
+
+
+<pre><cite>記述例</cite><!--
+$_ENV['url'] = 'http://example.com/';
+
+URL(['action', 'id', 'key'=>'value']); // http://example.com/action/id?key=value
+URL(['action', 'id']);                 // http://example.com/action/id
+URL(['action']);                       // http://example.com/action
+URL(['key'=>'value']);                 // http://example.com/?key=value
+URL();                                 // http://example.com/
+--></pre>
+
+<p><small>PATH_INFOの区切り文字は、<var>$_ENV['pathinfo.区切り文字']</var>で変更できます。省略時は '/'</small></p>
+</article>
+
+
+
+<article id="PATH_INFO分解">
+<h1>PATH_INFO分解</h1>
+<p>$_SERVER['PATH_INFO'] の値を配列に分解します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td data-require="0" data-type="array">第1引数</td>
+<td>区切り文字。省略時は<var>/</var></td>
+</tr>
+</table>
+
+<p>戻り値は配列です。<br>
+$_SERVER['PATH_INFO'] が存在しない時は空配列が返ります</p>
+</article>
+
+
+
+<article id="PATH_INFO設定">
+<h1>PATH_INFO設定</h1>
+
+<p>$_SERVER['PATH_INFO'] が設定されないサーバにおいて、$_SERVER['PATH_INFO'] を設定します</p>
+
+<p>戻り値は、設定された $_SERVER['PATH_INFO'] の値です。先頭にスラッシュが付きます</p>
+
+<p><small>PATH_INFOが取得できない時や存在しない時は $_SERVER['PATH_INFO'] は空文字になります</small></p>
+
+
+<pre><cite>.htaccessの記述例</cite><!--
+Allow from all
+RewriteEngine on
+#RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+--></pre>
+</article>
+
+
+
+<article id="現在のURL">
+<h1>現在のURL</h1>
+<p>現在のURLを返します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="0" data-type="">第1引数</td>
+<td>URLからクエリ文字列(?～)をカットするなら true を<br>初期値は false</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="ホームURL">
+<h1>ホームURL</h1>
+<p>URL文字列から<b>パス部以降</b>を除外したURLを返します。<br>返却されるURLの最後の文字は必ず<var>/</var>となります</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>URL文字列<br><var>http://</var>か<var>https://</var>か<var>//</var>で始まる文字列</td>
+</tr>
+</table>
+<pre><cite>使用例</cite><!--
+ホームURL("http://example.jp/sample/test.php?key=value#id"); // → http://example.jp/
+ホームURL("http://example.jp"); // → http://example.jp/
+--></pre>
+<p><small>この関数は機械的に処理するため、引数のURLが妥当かどうかまでは判断しません。<br>
+明白に不正なURLの場合は、元の文字列を返します</small></p>
+</article>
+
+
+
+<article id="トップURL">
+<h1>トップURL</h1>
+<p>URL文字列から<b>ファイル部以降</b>を除外したURLを返します。<br>返却されるURLの最後の文字は必ず<var>/</var>となります</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>URL文字列<br><var>http://</var>か<var>https://</var>か<var>//</var>で始まる文字列</td>
+</tr>
+</table>
+<pre><cite>使用例</cite><!--
+トップURL("http://example.jp/sample/test.php?key=value#id"); // → http://example.jp/sample/
+トップURL("http://example.jp/sample/"); // → http://example.jp/sample/
+トップURL("http://example.jp/sample"); // → http://example.jp/
+トップURL("//example.jp"); // → //example.jp/
+--></pre>
+<p><small>この関数は機械的に処理するため、引数のURLが妥当かどうかまでは判断しません。</small></p>
+</article>
+
+
+
+<article id="相対URLを絶対URLに変換">
+<h1>相対URLを絶対URLに変換</h1>
+<p>相対URLを絶対URLに変換します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>パス文字列</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>基準となるURL</td>
+</tr>
+</table>
+
+</article>
+
+
+
+
+<article id="Windowsなら">
+<h1>Windowsなら</h1>
+<p>OSがWindowsなら真を返します</p>
+</article>
+
+
+
+<article id="絶対パスなら">
+<h1>絶対パスなら</h1>
+<p>ファイル/ディレクトリのパスが絶対パスなら真を返します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>ファイル/ディレクトリのパス文字列</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="GETなら">
+<h1>GETなら</h1>
+<p>リクエストメソッドが GET なら真を返します</p>
+</article>
+
+
+
+<article id="POSTなら">
+<h1>POSTなら</h1>
+<p>リクエストメソッド が POST なら真を返します</p>
+</article>
+
+
+
+<article id="開発環境なら">
+<h1>開発環境なら</h1>
+<p>開発環境なら真を返します</p>
+<p><small>php.iniの「display_errors」が有効なら開発環境とみなします</small></p>
+</article>
+
+
+
+<article id="PHP≧">
+<h1>PHP≧</h1>
+<p>PHPのバージョンが～以上なら真を返します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>PHPのバージョン文字列。"7.0.0"、"7.0"など</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="自然数なら">
+<h1>自然数なら</h1>
+
+<p>自然数なら真を返します。自然数とは1以上の整数のことです</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>検証する変数</td>
+</tr>
+</table>
+
+<p><small>真が返る可能性があるのは整数型と文字列型だけです。それ以外は常にfalseとなります<br>
+文字列型の時は、数字(0-9)以外の文字が含まれていたら false です。先頭が0から始まっている時も false です</small></p>
+</article>
+
+
+
+<article id="str_match">
+<h1>str_match</h1>
+<p>文字列中に指定文字が含まれるか検索します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>検索文字</td>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第2引数</td>
+<td>対象文字列</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第3引数</td>
+<td>検索文字が見つかった位置を記憶する変数。位置は0から始まる数字<br>見つからなかった時はfalseが入ります</td>
+</tr>
+</table>
+
+<p>指定文字が含まれる場合はtrue、含まれない場合はfalseが返ります</p>
+</article>
+
+
+
+<article id="str_replace_once">
+<h1>str_replace_once</h1>
+<p>文字列を1度だけ置換します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>検索文字</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>置換文字</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第3引数</td>
+<td>対象文字列</td>
+</tr>
+</table>
+
+<p>戻り値は置換後の文字列です。</p>
+</article>
+
+
+
+<article id="strf">
+<h1>strf</h1>
+<p>ルールに基づき文字列を変換します。PHPの<a href="http://php.net/sprintf" target="_blank">sprintf()</a>のようなものです</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>フォーマット文字列</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>置換する値。複数指定できます<br>
+2つ目の値は第3引数に、3つ目の値は第4引数に...となります</td>
+</tr>
+</table>
+<table>
+<caption>変換ルール</caption>
+<tr><th>記号</th><th>説明</th></tr>
+<tr><td>%s</td><td>文字列</td></tr>
+<tr><td>%h</td><td>HTMLエスケープします。<var>&lt;&gt;&amp;&quot;&apos;</var>の5文字が対象</td></tr>
+<tr><td>%u</td><td>URLエンコードします</td></tr>
+<tr><td>%b</td><td>base64エンコードします</td></tr>
+<tr><td>%j</td><td>JSONエンコードします</td></tr>
+<tr><td>%n</td><td>改行文字を加えます。これは引数不要です</td></tr>
+</table>
+<pre><cite>使用例</cite><!--
+print strf('今日は%s月%s日です', 4, 17); //今日は4月17日です
+--></pre>
+
+</article>
+
+
+
+<article id="一文字分解">
+<h1>一文字分解</h1>
+<p>文字列を一文字ずつ分解して配列に入れます</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>分解したい文字列</td>
+</tr>
+</table>
+<p>戻り値は配列です</p>
+</article>
+
+
+<article id="BOM削除">
+<h1>BOM削除</h1>
+<p>文字列からUTF-8のBOMを削除します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>文字列</td>
+</tr>
+</table>
+
+<p>戻り値は、BOM削除後の文字列です</p>
+
+</article>
+
+
+
+<article id="日付">
+<h1>日付</h1>
+<p>UNIXタイムを日付文字列に変換します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="0" data-type="">第1引数</td>
+<td>書式。省略時は "[年]/[0月]/[0日] [0時]:[0分]"</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>UNIXタイム(単位は秒)。省略時は現在の時間 </td>
+</tr>
+</table>
+
+<table>
+<tr>
+<th>書式</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>[年]</td>
+<td>4桁の西暦</td>
+</tr>
+<tr>
+<td>[月]</td>
+<td>先頭にゼロが付かない月。1～12</td>
+</tr>
+<tr>
+<td>[日]</td>
+<td>先頭にゼロが付かない日。1～31</td>
+</tr>
+<tr>
+<td>[時]</td>
+<td>先頭にゼロが付かない時。0～23</td>
+</tr>
+<tr>
+<td>[分]</td>
+<td>先頭にゼロが付かない分。0～59</td>
+</tr>
+<tr>
+<td>[秒]</td>
+<td>先頭にゼロが付かない秒。0～60</td>
+</tr>
+<tr>
+<td>[曜日]</td>
+<td>曜日。日,月,火,水,木,金,土</td>
+</tr>
+<tr>
+<td>[0月]</td>
+<td>先頭にゼロが付く月。01～12</td>
+</tr>
+<tr>
+<td>[0日]</td>
+<td>先頭にゼロが付く日。01～31</td>
+</tr>
+<tr>
+<td>[0時]</td>
+<td>先頭にゼロが付く時。00～23</td>
+</tr>
+<tr>
+<td>[0分]</td>
+<td>先頭にゼロが付く分。00～59</td>
+</tr>
+<tr>
+<td>[0秒]</td>
+<td>先頭にゼロが付く秒。00～60</td>
+</tr>
+
+</table>
+
+<p><small>上記以外の書式はPHPの<a href="http://php.net/date" target="_blank">date関数</a>と同じです</small></p>
+</article>
+
+
+
+<article id="経過">
+<h1>経過</h1>
+<p>指定時間と現在の時間の差を言葉に変換します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>UNIXタイム(単位は秒)</td>
+</tr>
+</table>
+
+<p>次のいずれかの文字列が返却されます</p>
+<ul>
+  <li>今</li>
+  <li>～秒前</li>
+  <li>～分前</li>
+  <li>～時間前</li>
+  <li>～日前</li>
+  <li>～ヶ月前</li>
+  <li>～年前</li>
+</ul>
+<p><small>未来の時間が与えられた場合は"今"が返ります。<br>
+数字以外が与えられた場合は空文字列が返ります</small></p>
+</article>
+
+
+
+<article id="カレンダー配列">
+<h1>カレンダー配列</h1>
+
+<p>指定した月のカレンダーの配列を作ります</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="0" data-type="">第1引数</td>
+<td>年。省略時は今月</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>月。省略時は今月</td>
+</tr>
+</table>
+
+
+<p>戻り値は二次元の配列です。週毎に7つの日が入っています。<br>
+週の始まりは日曜日で、存在しない日は空文字列になっています</p>
+
+<pre><cite>今月のカレンダーをHTMLで作る</cite><!--
+foreach(カレンダー配列() as $週){
+    $tr .= "<tr>";
+    foreach($週 as $日){
+        $tr .= "<td>$日</td>";
+    }
+    $tr .= "</tr>";
+}
+print "<table>$tr</table>";
+--></pre>
+</article>
+
+
+
+<article id="日本語設定">
+<h1>日本語設定</h1>
+<p>PHPの設定を日本語向けにします。引数と戻り値はありません</p>
+
+
+<ul>
+  <li>date.timezone → Asia/Tokyo</li>
+  <li>default_charset → UTF-8</li>
+  <li>mbstring.language → Japanese</li>
+  <li>mbstring.detect_order → UTF-8,SJIS-win,eucJP-win,ASCII</li>
+  <li>setlocale(LC_ALL, 'ja_JP.UTF-8') <small>(Windows以外)</small></li>
+</ul>
+
+</article>
+
+
+
+<article id="h">
+<h1>h</h1>
+<p>指定文字列をHTMLエスケープします。<var>&amp;</var><var>&quot;</var><var>&apos;</var><var>&lt;</var><var>&gt;</var> の5文字が対象</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>HTMLエスケープしたい文字列<br>配列にも対応。再帰的に処理します</td>
+</tr>
+</table>
+
+<p>戻り値は変換後の文字列です</p>
+</article>
+
+
+
+<article id="改行置換">
+<h1>改行置換</h1>
+<p>指定文字列中に含まれる改行文字を全て置換します。<var>\r</var>と<var>\n</var>が対象</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>改行を置換したい文字列<br>配列にも対応。再帰的に処理します</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>改行の変換先。省略時は改行を削除します</td>
+</tr>
+</table>
+<p>戻り値は置換後の文字列です</p>
+</article>
+
+
+
+<article id="制御文字削除">
+<h1>制御文字削除</h1>
+<p>指定文字列中に含まれる<a href="https://ja.wikipedia.org/wiki/%E5%88%B6%E5%BE%A1%E6%96%87%E5%AD%97" target="_blank">制御文字</a>を改行も含め全て削除します。<br>
+ただし、タブはスペース4つに変換します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>制御文字を削除したい文字列<br>配列にも対応。再帰的に処理します</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>改行(\n)を削除しない場合はfalse。省略時は改行も削除されます<br>配列時は、改行を削除したくないキーを配列に入れると個別指定できます</td>
+</tr>
+</table>
+<p>戻り値は変換後の文字列です</p>
+
+<pre><cite>使用例</cite><!--
+//$_POSTに含まれる制御文字を全て削除する。ただし $_POST['textarea'] の改行コードは削除しない
+$_POST = 制御文字削除($_POST, ['textarea']);
+--></pre>
+</article>
+
+
+
+<article id="タグ">
+<h1>タグ</h1>
+<p>HTMLのタグを1つ作成します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>タグ名。<small>英数字ハイフンのみ</small><br>
+タグ名の先頭に<var>!</var>を付けると閉じタグを省略します</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>属性があれば連想配列で。<small><a href="#属性文字列">属性文字列()</a>を参考に</small><br>
+タグの本文は<var>本文</var>キーで指定します</td>
+</tr>
+</table>
+
+<p>戻り値はタグ文字列です。属性値と本文はHTMLエスケープされます</p>
+
+<pre><cite>使用例</cite><!--
+タグ("p"); //<p></p>
+タグ("p", ["class"=>"blue"]); //<p class="blue"></p>
+タグ("p", ["class"=>"blue", "本文"=>"こんにちは"]); //<p class="blue">こんにちは</p>
+タグ("!p", ["class"=>"blue", "本文"=>"こんにちは"]); //<p class="blue">こんにちは
+--></pre>
+
+<p>次に挙げるタグは閉じタグを自動的に省略します。本文は指定できません<br>
+br, wbr, hr, img, col, base, link, meta, input, keygen, area, param, embed, source, track, command</p>
+</article>
+
+
+
+<article id="属性文字列">
+<h1>属性文字列</h1>
+<p>HTMLタグの属性部分の文字列を作成します。&lt;p<b> id=&quot;sample&quot; class=&quot;test&quot;</b>&gt;</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="0" data-type="">第1引数</td>
+<td>属性を連想配列で指定してください。 例： ["id"=&gt;"sample", "class"=&gt;"test"]</td>
+</tr>
+</table>
+
+<ul>
+  <li>属性名はアルファベットとハイフンのみ使用できます。<small>不正な属性名はスキップされます</small></li>
+  <li>属性値はHTMLエスケープされます。 &lt; &gt; &amp; &quot; &apos; の5文字が対象</li>
+  <li>disableなどの属性値が存在しない属性は ["disable"=&gt;"disable"] と記述します</li>
+  <li>hrefやsrcなどURLを指定できる属性値では、セキュリティの都合上、プロトコルはhttp(s)のみ許容します</li>
+</ul>
+
+<p>戻り値は文字列です。先頭に空白が付きます</p>
+</article>
+
+
+
+<article id="自動リンク">
+<h1>自動リンク</h1>
+<p>文字列中に含まれるURLをaタグでリンクします</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>対象文字列<br>配列にも対応。再帰的に処理します</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>aタグに付与したい属性があれば連想配列で。<small><a href="#属性文字列">属性文字列()</a>を参考に</small></td>
+</tr>
+</table>
+
+<p><small>この関数はhttpとhttpsの2つに対応しています</small></p>
+</article>
+
+
+
+<article id="配列HTML">
+<h1>配列HTML</h1>
+<p>配列(連想配列)からテーブルタグを作成します。2次元まで対応しています</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>配列(連想配列)</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>tableタグに付与したい属性があれば連想配列で。<small><a href="#属性文字列">属性文字列()</a>を参考に</small></td>
+</tr>
+</table>
+<p>戻り値はtableタグです</p>
+
+<p><small>配列のキー名・値のHTMLエスケープは当関数が行います</small></p>
+</article>
+
+
+
+<article id="連想配列なら">
+<h1>連想配列なら</h1>
+<p>引数が連想配列なら真を返します。(単なる配列なら偽になります)</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>連想配列かどうか判定したい変数</td>
+</tr>
+</table>
+<p><small>配列の条件はキーが0からnまで連続していることです。それ以外は連想配列となります</small></p>
+</article>
+
+
+
+<article id="配列探索">
+<h1>配列探索</h1>
+<p>配列を再帰的に探索して、子孫にある全てのキーと値を返します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>配列、オブジェクト</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>枝要素も取得したい場合は true を<br>省略時は葉要素のみ取得します</td>
+</tr>
+</table>
+
+<p>戻り値は foreach にセットして使用してください</p>
+
+<pre><cite>使用例</cite><!--
+foreach(配列探索($array) as $k => $v){
+    //配列の全キーと値に対して処理できる
+}
+--></pre>
+
+<p><small>この関数の戻り値は <a href="http://php.net/RecursiveIteratorIterator" target="_blank">RecursiveIteratorIterator</a> オブジェクトです。getDepth()メソッドで現在の深さ(0～)を取得できます<br>
+PHPにも <a href="http://php.net/array_walk_recursive" target="_blank">array_walk_recursive()</a> という配列を再帰的に探索する関数があります。これは葉要素限定です</small></p>
+</article>
+
+
+
+<article id="配列掃除">
+<h1>配列掃除</h1>
+<p>配列から空要素(空文字列,null)を除去します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>配列</td>
+</tr>
+</table>
+
+<p>戻り値は除去後の配列です。配列の番号は振り直されます</p>
+
+</article>
+
+
+
+<article id="arrayf">
+<h1>arrayf</h1>
+<p>配列を指定した仕様に基づき文字列化します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>配列</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>フォーマット文字列<br><var>%k</var>はキー、<var>%v</var>は値、<var>%n</var>は改行に変換されます</td>
+</tr>
+</table>
+
+<p>戻り値は文字列です<br>
+PHPの型変換によって、nullとfalseは空文字、trueは1、配列は"Array"という文字列に変換されます</p>
+
+</article>
+
+
+
+<article id="列ソート">
+<h1>列ソート</h1>
+
+<p>2次元の配列において、指定したキーの値で列方向のソートを行います</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>二次元の配列、もしくはオブジェクトの配列</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>ソートするキー名</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第3引数</td>
+<td>ソート方法。"大きい順"か"小さい順"のどちらか</td>
+</tr>
+</table>
+<p>戻り値はソート成否の真偽値です。ソートは指定した配列に対して破壊的に行われます。</p>
+
+<pre><cite>使用例</cite><!--
+$array = [
+    ['id'=>4, 'num'=>10],
+    ['id'=>5, 'num'=>4],
+    ['id'=>6, 'num'=>24],
+];
+
+列ソート($array, 'num', '大きい順');
+
+//結果
+//[
+//  ['id'=>6, 'num'=>24],
+//  ['id'=>4, 'num'=>10],
+//  ['id'=>5, 'num'=>4],
+//]
+--></pre>
+
+
+
+</article>
+
+
+
+<article id="パーミッション">
+<h1>パーミッション</h1>
+<p>ファイルまたはディレクトリのパーミッションを取得/設定します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>パーミッションを取得/設定したいパス</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>設定したいパーミッション。"644"のような10進数の数字<br>省略時はパーミッションを取得します</td>
+</tr>
+</table>
+
+<p>戻り値はパーミッションです。10進数の数字です</p>
+<p><small>読み書き可能か確認するだけならPHPの関数 is_readable() や is_writable() を利用しましょう</small></p>
+</article>
+
+
+
+<article id="ファイル一覧">
+<h1>ファイル一覧</h1>
+<p>指定ディレクトリ以下に存在する全てのファイルのパスを取得します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>検索対象のディレクトリ</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>サブディレクトリも検索するならtrue(初期値)、しないならfalse</td>
+</tr>
+</table>
+
+<p>戻り値は連想配列です。キーは検索対象ディレクトリからの相対パス、値は絶対パスになります<br>
+見つからなかった場合は、空配列が返ります</p>
+
+<pre><cite>使用例</cite><!--
+foreach(ファイル一覧("./img/") as $path){
+    print basename($path) . "\n"; //ファイル名を表示
+}
+--></pre>
+<ul>
+  <li>結果にディレクトリは含まれません</li>
+  <li>Windowsでもディレクトリの区切りは<var>/</var>になります</li>
+</ul>
+</article>
+
+
+
+<article id="ディレクトリ一覧">
+<h1>ディレクトリ一覧</h1>
+<p>指定ディレクトリ以下に存在する全てのディレクトリのパスを取得します。</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>検索対象のディレクトリ</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>サブディレクトリも検索するならtrue(初期値)、しないならfalse</td>
+</tr>
+</table>
+
+<p>戻り値は連想配列です。キーは検索対象ディレクトリからの相対パス、値は絶対パスになります<br>
+見つからなかった場合は、空配列が返ります</p>
+
+
+<ul>
+  <li>ディレクトリパスの末尾には<var>/</var>が付きます</li>
+  <li>Windowsでもディレクトリの区切りは<var>/</var>になります</li>
+</ul>
+
+</article>
+
+
+
+<article id="パス一覧">
+<h1>パス一覧</h1>
+<p>指定ディレクトリ以下に存在する全てのファイルとディレクトリのパスを取得します。</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>検索対象のディレクトリ</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>サブディレクトリも検索するならtrue(初期値)、しないならfalse</td>
+</tr>
+</table>
+
+<p>戻り値は連想配列です。キーは検索対象ディレクトリからの相対パス、値は絶対パスになります<br>
+見つからなかった場合は、空配列が返ります</p>
+
+<pre><cite>使用例</cite><!--
+foreach(パス一覧("./img/") as $path){
+    if($path[-1] === '/'){
+        //ディレクトリの場合
+    }
+    else{
+        //ファイルの場合
+    }
+}
+--></pre>
+
+<ul>
+  <li>ディレクトリパスの末尾には<var>/</var>が付きます</li>
+  <li>Windowsでもディレクトリの区切りは<var>/</var>になります</li>
+</ul>
+</article>
+
+
+
+<article id="ファイル編集">
+<h1>ファイル編集</h1>
+<p>ファイルを編集します。ロック付き</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>編集するファイルのパス<br>ファイルが存在しなければ作成します</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>編集処理を行う関数<br>第1引数にはファイルの内容が文字列で渡されます。<br>
+編集後は文字列を返せば、それがファイルに保存されます<br>
+保存をキャンセルしたい時は false を返してください。</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第3引数</td>
+<td>編集関数に渡す引数があれば。<br>
+この引数が編集関数の第2引数へと渡ります<br>
+第4引数以降にも入力することで、複数渡すことが可能です。<br>
+
+
+</td>
+</tr>
+</table>
+<p>戻り値は、ファイルの保存に成功すれば 編集したファイルのパス が返ります<br>
+失敗した時は false が返ります</p>
+
+
+<pre><cite>使用例</cite><!--
+ファイル編集('./sample.txt', function($contents){
+    // $contentsに対して編集処理を行う
+    return $contents;
+});
+--></pre>
+<p>編集処理を行う関数において、第1引数に型を付けると配列などで受け取れるようになります。<br>
+対応している型は<var>array</var>と<var>Generator</var>の2つです。 <small>上記の例だと function(array $contents) と書けば配列で受け取れます</small></p>
+
+</article>
+
+
+
+<article id="ディレクトリ作成">
+<h1>ディレクトリ作成</h1>
+<p>ディレクトリを作成します。深いディレクトリも作成できます</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>作成するディレクトリのパス</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>作成するディレクトリのパーミッション。<br>"755"のような10進数の数字で指定します。省略時は"707"</td>
+</tr>
+</table>
+
+
+<p>成功した場合は作成したディレクトリのパスが返ります。<br>失敗した場合は false が返ります</p>
+
+<p><small>既にディレクトリが存在する場合は成功とみなされます。パーミッションは指定値に変更されます</small></p>
+</article>
+
+
+
+<article id="ディレクトリ削除">
+<h1>ディレクトリ削除</h1>
+<p>ディレクトリを削除します。中に含まれるもの全てを再帰的に削除します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>削除するディレクトリのパス</td>
+</tr>
+</table>
+
+<p>成功した場合は削除したディレクトリのパスが返ります。<br>
+失敗した場合は false が返ります</p>
+</article>
+
+
+
+<article id="zip圧縮">
+<h1>zip圧縮</h1>
+<p>zipファイルを作成します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>作成するzipファイルのパス</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>ディレクトリのパスを指定すると、指定ディレクトリ以下を一括して圧縮します<br>
+または下記のように連想配列を指定すると、任意のファイルを選択して圧縮します
+
+<ul>
+  <li>キーは作成するzip中パス<ul><li>パスに<var>/</var>を含めると、zip中にディレクトリを作成できます</li></ul></li>
+  <li>値は追加するファイルのパス<ul><li>任意のデータも指定できます。データの先頭に<var>data://,</var>を付けて渡してください</li></ul></li>
+</ul>
+</td>
+</tr>
+</table>
+<p>成功した場合は 作成したzipファイルのパス を返します。<br>
+失敗した場合は false が返ります</p>
+
+<p><small>ファイル名に日本語が使えますが、それを正しく解凍できるかはソフトによります。(Windows 10の標準ソフトはOK)</small></p>
+</article>
+
+
+
+<article id="zip追加">
+<h1>zip追加</h1>
+<p>既存のzipにファイルを追加します。<br>
+zip中に同名のファイルが存在する時は上書きします</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>既存のzipファイルのパス</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>下記の連想配列
+
+<ul>
+  <li>キーは追加するzip中パス<ul><li>パスに<var>/</var>を含めると、zip中にディレクトリを作成/指定できます</li></ul></li>
+  <li>値は追加するファイルのパス<ul><li>任意のデータも指定できます。データの先頭に<var>data://,</var>を付けて渡してください</li></ul></li>
+</ul></td>
+</tr>
+</table>
+<p>成功した場合は zipファイルのパス を返します。<br>
+失敗した場合は false が返ります</p>
+</article>
+
+
+
+<article id="zip解凍">
+<h1>zip解凍</h1>
+<p>zipファイルを解凍します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>zipファイルのパス</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>解凍先のディレクトリ。存在すること<br>省略時はzipファイルの場所に解凍されます</td>
+</tr>
+</table>
+
+<p>戻り値は、解凍したファイル一覧を配列で返します。<br>
+解凍に失敗した場合は false が返ります。</p>
+
+</article>
+
+
+
+<article id="一時保存">
+<h1>一時保存</h1>
+<p>OSの一時ファイルに値を<a href="http://php.net/serialize" target="_blank">serialize</a>形式で保存します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>保存したい値<br><small>リソース型、無名関数、無名クラスは非対応です</small></td>
+</tr>
+</table>
+
+<p>成功した場合は 一時ファイルのパス を返します。失敗した場合は false が返ります</p>
+
+<p><small>一時ファイルの寿命は、OSが一時ディレクトリを掃除した時です</small></p>
+</article>
+
+
+
+<article id="一時取得">
+<h1>一時取得</h1>
+<p><a href="#一時保存">一時保存</a>で保存した値を取得します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>一時ファイルのパス</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>取得できなかった時に返すデフォルト値。省略時は false</td>
+</tr>
+</table>
+<p>成功した場合は 値 を返します。失敗した場合は 第2引数の値 が返ります</p>
+
+<p><small>一時保存の内容に信頼できないオブジェクトを含む場合は、セキュリティ上の問題があるので注意しましょう</small></p>
+</article>
+
+
+
+<article id="JSON保存">
+<h1>JSON保存</h1>
+<p>値をJSON形式でファイルに保存します。<br>
+人間に読みやすい形で保存するので、設定の保存に使えます。</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>保存するファイルのパス</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>保存する値</td>
+</tr>
+</table>
+
+<p>成功した場合は"保存したファイルのパス"を返します。失敗したら false が返ります</p>
+
+<p>保存ファイルの拡張子を<var>.php</var>にすると、PHPファイルとして保存します<br>
+公開ディレクトリ内に保存したとしても外部からは内容を読めなくなります</p>
+
+<p>JSONの仕様</p>
+<ul>
+  <li>値には文字列・数値・配列・連想配列・true・false・nullの7種類を持てます</li>
+  <li>配列と連想配列の最後の値にはコンマをつけない</li>
+  <li>文字列は常にダブルクオート&quot;～&quot;で囲む(シングルクオートはNG)</li>
+  <li>文字列中にダブルクオートを使用したい時は「\」でエスケープする</li>
+  <li>true,false,nullは常に小文字</li>
+  <li>文字コードはUTF-8(BOMなし)</li>
+  <li>キー名には日本語が使用できます</li>
+  <li>JSONはコメントが使えないので、説明書へのリンクを持つ要素を入れておくなどの工夫が必要</li>
+</ul>
+</article>
+
+
+
+<article id="JSON取得">
+<h1>JSON取得</h1>
+<p>JSONを取得してPHPの変数として返します。<a href="#JSON保存">JSON保存</a>で保存した内容も取得します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>JSONファイルのパス または URL</td>
+</tr>
+</table>
+
+<p>取得に失敗した時は false が返ります</p>
+
+<p><small>オブジェクトは連想配列形式になります</small></p>
+</article>
+
+
+
+<article id="JSON追記">
+<h1>JSON追記</h1>
+<p>JSONファイルの配列の最後尾に、データを追記します<br>
+ファイルが存在しない場合は新規に作成します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>ファイルのパス</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>追記するデータ<br>JSON化できるものなら何でも可</td>
+</tr>
+</table>
+<p>書き込みに成功した場合はtrue、失敗したら false が返ります</p>
+
+<pre><cite>例</cite><!--
+JSON追記("sample.json", ['あ']); // [["あ"]]
+JSON追記("sample.json", [3,4]);  // [["あ"],[3,4]]
+--></pre>
+
+</article>
+
+
+
+<article id="JSON属性">
+<h1>JSON属性</h1>
+<p>data-json属性を作成します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>JavaScriptに渡したいデータ<br>文字列・数値・真偽値・配列・連想配列を渡せます</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>属性名。省略時は<var>data-json</var></td>
+</tr>
+</table>
+
+<p>戻り値は属性文字列です。HTMLの属性部分に貼り付けて利用ください</p>
+
+<pre><cite>JavaScript側での取得例</cite><!--
+//PHP側
+<div <?= json属性([1,2,3]) ?>></div>
+
+//JavaScript側
+var data = JSON.parse(div.getAttribute("data-json"));
+--></pre>
+
+
+</article>
+
+
+
+
+<article id="fromphp">
+<h1>fromphp</h1>
+<p>PHPの変数をJavaScriptへ渡します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>JavaScriptに渡したいデータ<br>文字列・数値・真偽値・配列・連想配列を渡せます</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>JavaScriptでデータを受け取る変数の名前。省略時は<var>fromphp</var></td>
+</tr>
+</table>
+
+<p>戻り値はscriptタグです。HTMLに貼り付けて利用ください<br>
+失敗時は空文字列が返ります</p>
+
+<p>JavaScript側では、グローバル変数<var>fromphp</var>でアクセスできます</p>
+<pre><cite>使用例</cite><!--
+<?= fromphp(['test1'=>'foo', 'test2'=>'bar']); ?>
+↓
+<script>var fromphp = {"test1":"foo","test2":"bar"};</script>
+--></pre>
+
+
+</article>
+
+
+
+<article id="配列保存">
+<h1>配列保存</h1>
+<p>配列をファイルに保存します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>保存するファイルのパス</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>保存する配列</td>
+</tr>
+</table>
+
+<p>成功した場合は"保存したファイルのパス"を返します。失敗したら false が返ります</p>
+
+<p>保存した配列は<var>include "保存したファイルのパス"</var>の戻り値で取得できます</p>
+</article>
+
+
+
+<article id="XML取得">
+<h1>XML取得</h1>
+
+<p>XMLを取得してPHPの連想配列に変換します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>XMLのURL または XMLファイルのパス または XML文字列</td>
+</tr>
+</table>
+
+<p>取得に失敗した時は 空配列 が返ります</p>
+
+<pre><cite>YahooニュースのRSSからニュース一覧を表示する</cite><!--
+$xml = XML取得("http://news.yahoo.co.jp/pickup/rss.xml");
+foreach($xml['rss']['channel']['item'] as $news){
+    print $news['title'] . "\n";
+}
+--></pre>
+</article>
+
+
+
+<article id="CSV取得">
+<h1>CSV取得</h1>
+
+<p>CSVファイルを取得して、各行を配列に変換します</p>
+
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>CSVファイルのパス</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>CSV取得の設定を連想配列で(後述)<br>
+</td>
+</tr>
+</table>
+<p>戻り値はジェネレータです。<br>
+foreachで回すと、キーには0から始まる番号、値には各行の値が入った配列が得られます。<br>
+<small>ジェネレータは <a href="http://php.net/iterator_to_array" target="_blank">iterator_to_array()</a> 関数で配列に変換できます</small></p>
+
+<ul>
+  <li>各行にある末尾の改行は削除されます</li>
+  <li>改行だけの行は空配列になります</li>
+  <li>空のセルは空文字列になります</li>
+</ul>
+
+<table>
+<caption>CSV取得の設定</caption>
+<tr>
+<th>キー</th>
+<th>値</th>
+</tr>
+<tr>
+<td data-require="0">スキップ</td>
+<td>先頭行からn行の読み込みをスキップします<br>
+例えば1と指定した場合は、先頭行の読み込みをスキップします<br>
+省略時はスキップしません</td>
+</tr>
+<tr>
+<td data-require="0">区切り文字</td>
+<td>区切り文字。<small>区切り文字とはCSVにおけるコンマのことです</small><br>
+省略時は自動検出します(コンマかタブなら検出可能)</td>
+</tr>
+<tr>
+<td data-require="0">エスケープ文字</td>
+<td>エスケープ文字。省略時は<var>"</var></td>
+</tr>
+<tr>
+<td data-require="0">入力コード</td>
+<td>CSVファイルの文字コード。省略時は自動検出<br>
+<a href="http://php.net/mb_list_encodings" target="_blank">mb関数</a>で指定するのと同じものが使えます。ShiftJISなら<var>sjis-win</var>と指定しましょう。</td>
+</tr>
+<tr>
+<td data-require="0">出力コード</td>
+<td>変換先の文字コード。省略時は文字コードを変換しません<br>
+<a href="http://php.net/mb_list_encodings" target="_blank">mb関数</a>で指定するのと同じものが使えます。ShiftJISなら<var>sjis-win</var>と指定しましょう。</td>
+</tr>
+</table>
+
+
+</article>
+
+
+
+<article id="CSV作成">
+<h1>CSV作成</h1>
+
+<p>配列などからCSVを作成します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>2次元の配列、オブジェクト</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>CSV作成の設定を連想配列で(後述)</td>
+</tr>
+
+</table>
+
+<p>戻り値はCSV文字列です</p>
+
+<ul>
+  <li>PHPの型変換によって、nullとfalseは空文字、trueは1、配列は"Array"という文字列に変換されます</li>
+  <li>Windows用に作成するなら文字コードは<var>sjis-win</var>に変換しましょう。 <small>mb_convert_encoding($戻り値, "sjis-win", "utf-8");</small></li>
+  
+</ul>
+
+<table>
+<caption>CSV作成の設定</caption>
+<tr>
+<th>キー</th>
+<th>値</th>
+</tr>
+<tr>
+<td data-require="0">区切り文字</td>
+<td>セルの区切り文字。省略時は<var>,</var></td>
+</tr><tr>
+<td data-require="0">エスケープ文字</td>
+<td>エスケープ文字。省略時は<var>"</var></td>
+</tr>
+<tr>
+<td data-require="0">改行変換</td>
+<td>セル内にある改行の変換先文字。省略時は<var>\n</var><br>
+改行を削除したいなら、空文字列か空白を指定しましょう</td>
+</tr>
+<tr>
+<td data-require="0">常に囲む</td>
+<td>すべてのセルを<var>""</var>で囲む場合はtrue<br>省略時は文字列のセルのみ囲みます</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="当たり">
+<h1>当たり</h1>
+<p>確率に基づいて抽選を行います</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>当たりの確率を0%～100%までの数字で<br>
+可読性のために%を付けることが可能です</td>
+</tr>
+</table>
+
+<p>当たるとtrue、外れるとfalse が返ります。<br>100%以上は常に当たり、0%以下は常に外れになります</p>
+<pre><cite>動作例</cite><!--
+for($i = 0; $i < 1000; $i++){
+    if(当たり("0.1%")){ print "$i 当たり\n"; } //期待値的に1回当たります
+}
+--></pre>
+</article>
+
+
+
+<article id="uuid">
+<h1>uuid</h1>
+<p>グローバルに一意な文字列を作成します。32文字の英数字(0-9a-f)で構成されます。uuid v4互換</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="0" data-type="">第1引数</td>
+<td>true でハイフンが付きます</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="ID発行">
+<h1>ID発行</h1>
+<p>ローカルに一意な文字列を作成します。11文字の英数字(0-9A-Za-z)で構成されます</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="0" data-type="">第1引数</td>
+<td>true で16文字に増えます</td>
+</tr>
+</table>
+
+<ul>
+  <li>先頭の文字は常にアルファベットになります</li>
+  <li>時計と乱数を組み合わせたIDです。100万分の1秒毎×確率1/4200 で一意です。<small>16文字にすると1/3.2兆</small></li>
+  <li>IDから発行時間を逆算できます</li>
+</ul>
+<pre><cite>IDから発行時間を逆算</cite><!--
+//11文字時のUNIXタイム
+$time = substr(base_decode("id"), -10);
+
+//16文字時のUNIXタイム
+$time = substr(base_decode(substr("id", 5)), -10);
+--></pre>
+</article>
+
+
+
+<article id="パスワード発行">
+<h1>パスワード発行</h1>
+<p>ランダムなパスワードを作成します。英数字(0-9A-Za-z)から構成されます</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="0" data-type="">第1引数</td>
+<td>発行するパスワードの文字数。省略時は8文字</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>人間が使いやすいように文字を限定したい場合は true に<br>
+abcdefghijkmnprstwxyz2345678 の28文字からパスワードを作ります</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="パスワード変換">
+<h1>パスワード変換</h1>
+<p>平文のパスワードをハッシュ化します。<br>
+ハッシュ化すると元の文字には戻せなくなるので、パスワードの保管用に最適です</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>平文のパスワード</td>
+</tr>
+</table>
+
+<p>戻り値はハッシュ文字列(60文字)です</p>
+
+
+<p><small>戻り値の文字数は将来的にPHP側のアルゴリズムの変更により増える可能性もあるので、最大256文字を目安に</small></p>
+</article>
+
+
+
+<article id="パスワード認証">
+<h1>パスワード認証</h1>
+<p>平文のパスワードと<a href="#パスワード変換">パスワード変換()</a>で作成した文字列とを比較します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>平文のパスワード</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td><a href="#パスワード変換">パスワード変換()</a>で作成した文字列</td>
+</tr>
+</table>
+
+<p>一致すれば true を返します。不一致の場合は false が返ります</p>
+</article>
+
+
+
+<article id="暗号化">
+<h1>暗号化</h1>
+<p>文字列をAES-128(CBC)で暗号化します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>暗号化したい文字列</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>パスワード</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="復号化">
+<h1>復号化</h1>
+<p><a href="#暗号化">暗号化()</a>で暗号化した文字列を復号します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>暗号化された文字列</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>パスワード</td>
+</tr>
+</table>
+
+<p>復号に失敗したら false を返します</p>
+</article>
+
+
+
+<article id="JWT発行">
+<h1>JWT発行</h1>
+<p>JSON Web Token(署名付きJSON)を発行します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>JWTに含めたいデータを連想配列で<br>一般的な使い方として、ユーザIDと有効期限を渡します<br>
+復号は簡単にできるのでパスワードなどの秘密情報は含めないでください</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>パスワード(秘密鍵)</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第3引数</td>
+<td>暗号化のアルゴリズム。省略時は"HS256"<br>
+"RS256"も指定できますが認証用に公開鍵が必要です</td>
+</tr>
+</table>
+
+<p>戻り値はJWT文字列です。URLに使用することが可能です<br>発行できなかった場合は false が返ります</p>
+</article>
+
+
+
+<article id="JWT分解">
+<h1>JWT分解</h1>
+<p>JWTを分解して、データ部または全部を取り出します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>JWT文字列</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>全部を返す場合はtrue。<br>
+省略時はデータ部のみ返します</td>
+</tr>
+</table>
+<p>戻り値は連想配列で、データ部の連想配列となります。分解に失敗した時はfalseが返ります<br>
+第2引数にtrueを指定した時は、'head'にヘッダ部の連想配列、'data'にデータ部の連想配列、'sign'に署名部の文字列となります<br>
+</p>
+
+</article>
+
+
+
+<article id="JWT認証">
+<h1>JWT認証</h1>
+<p>JWT文字列が正当かどうか検証します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>JWT文字列</td>
+</tr>
+<tr>
+<td data-require="1" data-type="">第2引数</td>
+<td>パスワード</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第3引数</td>
+<td>暗号化のアルゴリズム。省略時は"HS256"<br>
+"HS256"ならパスワードは秘密鍵、"RS256"なら公開鍵になります</td>
+</tr>
+</table>
+
+<p>JWTが正当ならtrue、不正なら false が返ります</p>
+
+<p><small>データの内容までは検査しません</small></p>
+</article>
+
+
+
+<article id="base64_encode_urlsafe">
+<h1>base64_encode_urlsafe</h1>
+<p>文字列をbase64に変換します。<br>
+PHPの組み込み関数であるbase64_encode()と違い、この関数で変換した文字列はURLに使用可能です</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>変換したい文字列</td>
+</tr>
+</table>
+
+
+<pre><cite>短い一意な文字列を作る</cite><!--
+base64_encode_urlsafe(pack('H*', uniqid(bin2hex(random_bytes(2)))));
+--></pre>
+</article>
+
+
+
+<article id="base64_decode_urlsafe">
+<h1>base64_decode_urlsafe</h1>
+<p><a href="#base64_encode_urlsafe">base64_encode_urlsafe()</a>で変換した文字列を元に戻します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>base64_encode_urlsafe()で変換した文字列</td>
+</tr>
+</table>
+</article>
+
+
+
+<article id="base_encode">
+<h1>base_encode</h1>
+
+<p>整数をn進数の文字列に変換します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>変換したい0以上の整数<br>大きな数字の場合は文字列で渡してください</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>進数。2～62。省略時は62</td>
+</tr>
+</table>
+
+<p>戻り値は文字列です</p>
+
+<p>変換ルールは '0-9a-zA-Z' の62文字です<br>
+2進数なら'01'の2文字を使い、16進数なら '0-9a-f'の16文字を使い、62進数なら '0-9a-zA-Z' の62文字使って変換します</p>
+</article>
+
+
+
+<article id="base_decode">
+<h1>base_decode</h1>
+
+<p><a href="#base_encode">base_encode()</a>で変換した文字を元に戻します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>base_encode()で変換した文字列</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>進数。2～62。省略時は62</td>
+</tr>
+</table>
+
+<p>戻り値は文字列型の数字です</p>
+</article>
+
+
+
+<article id="ベーシック認証">
+<h1>ベーシック認証</h1>
+<p>ベーシック認証を行います</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>認証関数。必須<br>第1引数には入力されたユーザID、第2引数には入力されたパスワードがセットされます。<br>ユーザIDとパスワードが正当ならtrueを返してください</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>認証領域(Realm)の名前<br>英語で記述してください。省略時は"member only"</td>
+</tr>
+</table>
+
+<p>認証に成功するとユーザIDを返します<br>
+認証に失敗したりキャンセルされた場合は false を返します。認証失敗ヘッダは送出済みなのでエラーページを表示してください</p>
+
+
+<p><small>ベーシック認証はパスワードを平文で送るので、セキュリティのためhttpsを利用しましょう</small></p>
+</article>
+
+
+
+<article id="セッション削除">
+<h1>セッション削除</h1>
+
+<p>現在のセッションに関連づけられたすべてのデータを削除します。<br>
+$_SESSION、Cookie、ファイルの3つを削除します</p>
+
+<p>HTMLを出力する以前に実行する必要があります</p>
+</article>
+
+
+
+<article id="CSRFタグ">
+<h1>CSRFタグ</h1>
+<p>CSRF対策のCookieを出力し、inputタグを返します。formタグの中に加えてください。<br>
+次の <a href="#CSRF確認">CSRF確認()</a> とセットで使用します。</p>
+
+<p>Cookieが有効である必要があり、HTMLを出力する以前に実行する必要があります</p>
+</article>
+
+
+
+<article id="CSRF確認">
+<h1>CSRF確認</h1>
+
+<p>投稿内容がCSRFセーフならtrue、CSRFアウトなら false を返します。POST専用<br>
+前の <a href="#CSRFタグ">CSRFタグ()</a> とセットで使用します。</p>
+
+<p>Cookieが有効である必要があり、HTMLを出力する以前に実行する必要があります</p>
+</article>
+
+
+
+<article id="MIMEタイプ">
+<h1>MIMEタイプ</h1>
+<p>ファイルの拡張子から判断してMIMEタイプを返します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>ファイル名やファイルパス</td>
+</tr>
+</table>
+
+<p>MIMEタイプが不明の場合は application/octet-stream を返します</p>
+</article>
+
+
+
+<article id="ベンチマーク">
+<h1>ベンチマーク</h1>
+
+<p>関数のベンチマークを実行し、1秒間に実行できる回数を表示します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>関数</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>関数に渡す引数。複数指定できます<br>
+2つ目の引数は第3引数に、3つ目の引数は第4引数に...となります</td>
+</tr>
+</table>
+<pre><cite>関数の渡し方</cite><!--
+ベンチマーク("関数名"); //文字列を指定
+ベンチマーク(function(){ ... }); //無名関数を指定
+ベンチマーク(([new クラス名, "メソッド名"]); //メソッドを指定
+ベンチマーク(["クラス名", "メソッド名"]); //静的メソッドを指定
+--></pre>
+</article>
+
+
+
+<article id="関数文字列化">
+<h1>関数文字列化</h1>
+<p>ユーザ定義関数のソースコードを取得します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>関数名、無名関数<br>メソッドも指定可能です。"クラス名::メソッド名"</td>
+</tr>
+</table>
+
+<p>戻り値は文字列です。未定義の場合は false が返ります</p>
+
+<p><small>ユーザ定義の関数一覧は<var>get_defined_functions()['user']</var>で取得できます</small></p>
+</article>
+
+
+
+<article id="クラス文字列化">
+<h1>クラス文字列化</h1>
+<p>ユーザ定義クラスのソースコードを取得します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>クラス名、オブジェクト、無名クラス<br>インターフェースとトレイトも指定可能です</td>
+</tr>
+</table>
+<p>戻り値は文字列です。未定義の場合は false が返ります</p>
+</article>
+
+
+
+<article id="クリップボードにコピー">
+<h1>クリップボードにコピー</h1>
+<p>文字列をクリップボードにコピーします。Windows専用</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="">第1引数</td>
+<td>コピーしたい文字列</td>
+</tr>
+</table>
+<p>戻り値はコピーした文字列です</p>
+</article>
+
+
+
+<article id="内部エラー">
+<h1>内部エラー</h1>
+<p>内部的なエラーを発生させます。<br>
+function.phpで使用していますが、他でも使用できます</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="0" data-type="">第1引数</td>
+<td>エラー文</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第2引数</td>
+<td>エラーの種類。<var>停止</var><var>警告</var><var>注意</var>の3つから選択。省略時は停止<br>停止はプログラムが終了します。警告と注意はエラー文を表示するだけで続行します</td>
+</tr>
+<tr>
+<td data-require="0" data-type="">第3引数</td>
+<td>バックトレースから除外するパス。前方一致で判定します<br>
+除外されなかった最初のものがエラー表示に使われます<br>
+省略時は当関数を呼び出したファイル</td>
+</tr>
+</table>
+<p>戻り値は常にfalseです</p>
+
+<ul>
+  <li>内部エラーは<var>E_USER_ERROR</var><var>E_USER_WARNING</var><var>E_USER_NOTICE</var>の3種類です。<br>これらのエラーは <a href="http://php.net/set_error_handler" target="_blank">set_error_handler()</a> で捕捉できます</li>
+  <li>PHPのエラー出力は STDOUT(<a href="http://php.net/display_errors" target="_blank">display_errors</a>) と STDERR(<a href="http://php.net/log_errors" target="_blank">log_errors</a>) の2つあります<br>エラーが2つ表示される場合は、どちらかを非表示にするとよいでしょう</li>
+</ul>
+
+</article>
+
+
+
+<footer>
+<nav><a href="./">ホームに戻る</a></nav>
+</footer>
+
+<script src="programming.js"></script>
+
+</body></html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link href="programming.css" rel="stylesheet">
+</head>
+<body>
+
+
+
+<article id="二重投稿なら">
+<h1>二重投稿なら</h1>
+<p>POSTされた内容($_POST)が二重投稿か確認します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td data-require="1" data-type="string">第1引数</td>
+<td>投稿履歴を保存するファイルのパス<br>ファイルは予め用意しておいてください</td>
+</tr>
+<tr>
+<td data-require="0" data-type="callable">第2引数</td>
+<td>重複確認から除外したい $_POST のキー<br>
+複数存在する時は配列に入れてください</td>
+</tr>
+
+</table>
+<p>二重投稿ならtrueが返ります。二重投稿以外はすべてfalseになります</p>
+
+<p><small>クライアントの識別は $_SERVER['REMOTE_ADDR'] で行います<br>
+投稿履歴は最大200クライントまで保存されます</small></p>
+
+<pre><cite>ソース</cite><!--
+function 二重投稿なら(string $path, $exclude = null) :bool{
+    $return  = false;
+    $id      = $_SERVER['REMOTE_ADDR'];
+    $post    = $_POST ?? [];
+    $history = unserialize(file_get_contents($path));
+
+    if($history === false){
+        内部エラー("投稿履歴ファイル $path が開けません", "警告");
+        return $return;
+    }
+    if(!POSTなら()){
+        内部エラー("メソッドがPOSTではありません", "注意");
+        return $return;
+    }
+
+    foreach((array)$exclude as $v){
+        unset($post[$v]);//存在しなくてもエラーにはならない
+    }
+    ksort($post);
+
+    if(isset($history[$id]) and $history[$id] === $post){
+        $return = true;
+    }
+    unset($history[$id]);
+    $history[$id] = $post;
+    if(count($history) > 200){
+        array_shift($history);
+    }
+    file_put_contents($path, serialize($history), LOCK_EX);
+    return $return;
+}
+--></pre>
+</article>
+
+
+
+<footer>
+<nav><a href="./">ホームに戻る</a></nav>
+</footer>
+
+<script src="programming.js"></script>
+
+</body></html>

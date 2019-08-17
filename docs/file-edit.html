@@ -17,24 +17,34 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>ファイルを編集する。ロック付き</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
+編集するファイル。存在しなければ作成されます
 
 </td></tr>
-<tr class="option"><td>2</td><td>
-
+<tr class="require"><td>2</td><td>
+編集処理を行う関数<br>
+ファイルの内容が配列で渡されます。<br>
+編集が終わったら配列か文字列を返すと保存します。それ以外だと保存しません。
+</td></tr>
+<tr class="option"><td>3</td><td>
+編集関数に渡す引数があれば。第4引数以降にも続けて書けます
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+成功すればtrue、失敗すればfalseが返ります
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
+file::edit('./file.txt', function ($contents){
+    // $contents(配列)に対して編集処理を行う
 
+    return $contents;
+});
 --></code>
 
 
