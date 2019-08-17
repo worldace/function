@@ -36,11 +36,8 @@ docオブジェクト
 <code class="php"><!--
 $doc = new doc('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>');
 --></code>
-
-<ul>
-<li>HTMLは、全体を1つのタグで囲っておく必要があります</li>
-<li>ベースとなるHTMLには<var>&lt;!DOCTYPE&gt;</var>を忘れずに記述してください</li>
-</ul>
+<p class="info-yellow">new doc()に渡すHTMLは全体を1つのタグで囲っておく必要があります</p>
+<p class="info-yellow">ベースとなるHTMLには<var>&lt;!DOCTYPE&gt;</var>を忘れずに記述してください</p>
 
 <h2>HTMLの出力</h2>
 
@@ -59,9 +56,9 @@ $str = "$doc"; //文字列としてコピーされる
 
 <h3>ID名から選択</h3>
 
-<p>docオブジェクトでは、ID名から要素を選択するのが基本となります。<var>$doc-&gt;ID名</var><br>
+<p>docオブジェクトでは、ID名から要素を選択するのが基本となります。<var>$doc-&gt;ID名</var></p>
+<p class="info-blue">操作したいタグには、あらかじめID属性を付けておくのがポイントです。</p>
 
-<b>操作したいタグには、あらかじめID属性を付けておくのがポイントです。</b></p>
 
 <code class="php" data-title="idで選択"><!--
 $doc = new doc('<div id="example"><div>');
@@ -102,7 +99,7 @@ foreach($doc('.dummy') as $el) {
 //metaタグが選択されるであろう
 $meta_description = $doc('[name="description"]')[0]; 
 --></code>
-<p>※複数のセレクタを組み合わせることはできません。</p>
+<p class="info-yellow">セレクタを複数組み合わせることはできません。</p>
 
 <h3>特別な選択</h3>
 
@@ -179,6 +176,7 @@ $doc = new doc('<ul></ul>'); // 部品なので<!DOCTYPE>は書かない
 return $doc; // 最後に$docオブジェクトを返す
 --></code>
 
+<p class="info-yellow">new doc()に渡すHTMLは全体を1つのタグで囲っておく必要があります</p>
 
 <h3>ディレクトリの設定</h3>
 <p>部品ファイルを置くディレクトリを<var>doc::$dir</var>に設定してください。</p>
@@ -191,14 +189,14 @@ return $doc; // 最後に$docオブジェクトを返す
 
 <ul>
 <li>部品ファイルはローカルスコープで実行されます</li>
-<li>部品ファイルで何も返さないと、元のタグは消えます</li>
-<li>部品ファイルでは<var>$el</var>で元のタグにアクセスできます</li>
+<li>部品ファイルでdocオブジェクトを返さないと、元のタグは消えます</li>
+<li>部品ファイル内では<var>$el</var>で元のタグにアクセスできます</li>
 <li>部品ファイルにデータを渡すには、属性経由をオススメします。<br>
 <var>&lt;doc-ul data=&quot;example&quot;&gt;&lt;/doc-ul&gt;</var>なら<var>$el-&gt;getAttribute(&apos;data&apos;);</var>で取得します</li>
 </ul>
 <ul>
 <li>部品タグは必ず閉じましょう</li>
-<li>部品タグは<var>$doc(&apos;&lt;doc-ul&gt;&apos;)</var>のように新規作成できます</li>
+<li>部品タグは普通に<var>$doc(&apos;&lt;doc-ul&gt;&apos;)</var>のように新規作成できます</li>
 <li>部品タグの循環読み込みには気を付けてください。無限ループします</li>
 </ul>
 
