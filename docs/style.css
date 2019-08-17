@@ -12,14 +12,6 @@ html{
 body{
     background-color: #eeeefa;
 }
-body#index {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-}
 article{
     border: solid 1px #3399ff;
     border-radius: 8px 8px 0 0;
@@ -138,6 +130,7 @@ table.function th:first-of-type{
     border-collapse: collapse;
     border-radius: 4px;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.07);
+    margin: 3rem auto;
 }
 #menu th{
     border: 1px solid #bbb;

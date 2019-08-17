@@ -911,6 +911,19 @@ class zip{
 
 
 
+class is{
+    static function int($v, int $min = 0, int $max = PHP_INT_MAX) :bool{
+        return filter_var($v, FILTER_VALIDATE_INT, ['options'=>['min_range'=>$min, 'max_range'=>$max]]) !== false;
+    }
+
+
+    static function utf8($v) :bool{
+        return preg_match('//u', $v);
+    }
+}
+
+
+
 class time{
     static function micro() :string{
         [$micro, $sec] = explode(' ', microtime());
@@ -1358,6 +1371,9 @@ class doc{
         }
         else if($selector[0] === '#'){
             return $this->doc->getElementById(substr($selector, 1));
+        }
+        else if($selector[0] === '*'){
+            return (new \DOMXPath($this->doc))->query('//*');
         }
         else{
             return $this->doc->getElementsByTagName($selector);
