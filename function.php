@@ -804,7 +804,7 @@ class csv{
             $newline = [];
             foreach($line as $v){
                 $v = preg_replace("/\r\n|\n|\r/", $option['br'], $v);
-                if($option['enclose'] or (strlen($v) and !is_numeric($v))){
+                if(strlen($v) and !is_numeric($v)){
                     $v = str_replace($option['escape'], $option['escape'].$option['escape'], $v);
                     $v = $option['escape'] . $v . $option['escape'];
                 }

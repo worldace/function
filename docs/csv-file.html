@@ -17,26 +17,59 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>CSVファイルをパースしてジェネレータにする</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+CSVファイル
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+設定があれば連想配列で(後述)
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+ジェネレータ。foreachで使います
 </td></tr>
 </table>
 
-
 <code class="php" data-title="使用例"><!--
+$csv = csv::file($csv_file, ['skip'=>1]);
+foreach($csv as $row){
+    //$rowは配列
+}
 
 --></code>
 
+
+<h3>CSVの設定</h3>
+
+<table>
+<tr><th>キー</th><th>値</th></tr>
+<tr><td>skip</td><td>
+先頭から何行スキップするか。省略時は0
+</td></tr>
+<tr><td>input</td><td>
+入力文字コード。省略時は自動検出します<br>
+<a href="https://www.php.net/mb_list_encodings" target="_blank">mb関数</a>と同じものが使えます。ShiftJISなら<var>sjis-win</var>と指定しましょう。
+</td></tr>
+<tr><td>output</td><td>
+変換先の文字コード。省略時は文字コードを変換しません<br>
+<a href="https://www.php.net/mb_list_encodings" target="_blank">mb関数</a>と同じものが使えます。ShiftJISなら<var>sjis-win</var>と指定しましょう。
+</td></tr>
+<tr><td>delimiter</td><td>
+区切り文字。通常はコンマ。省略時は自動検出します(コンマかタブなら検出可能)
+</td></tr>
+<tr><td>escape</td><td>
+エスケープ文字。省略時は<var>"</var>
+</td></tr>
+
+</table>
+
+<h3>仕様</h3>
+
+<p class="info-blue">各行にある末尾の改行は削除されます</p>
+<p class="info-blue">改行だけの行は空配列になり、空のセルは空文字列になります</p>
+<p class="info-blue"><a href="csv-parse.html">csv::parse()</a> とは引数と戻り値が違うだけで内容は同じですが、省メモリで動作します</p>
 
 </div>
 </article>

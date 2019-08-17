@@ -17,26 +17,55 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>CSV文字列を作成する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+2次元の配列、オブジェクト
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+設定があれば連想配列で(後述)
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+CSV文字列
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
+$csv_array = [
+    ['あ','い','う','え','お'],
+    [1,2,3,4,5],
+];
+
+print csv::create($csv_array);
+
+//"あ","い","う","え","お"
+//1,2,3,4,5
 
 --></code>
+<h3>CSVの設定</h3>
+<table>
+<tr><th>キー</th><th>値</th></tr>
+<tr><td>delimiter</td><td>
+区切り文字。省略時はコンマ
+</td></tr>
+<tr><td>escape</td><td>
+エスケープ文字。省略時は<var>"</var>
+</td></tr>
+<tr><td>br</td><td>
+セル内にある改行の改行文字。省略時は<var>\n</var><br>
+セル内の改行は削除したいなら、空文字列を指定してください
+</td></tr>
 
+</table>
+
+
+<h3>仕様</h3>
+
+<p class="info-blue">PHPの型変換によって、nullとfalseは<var>空文字</var>、trueは<var>1</var>、配列は<var>"Array"</var>に変換されます</p>
+<p class="info-blue">Windows用に作成するなら、出力結果を<var>sjis-win</var>に変換すると良いです</p>
 
 </div>
 </article>

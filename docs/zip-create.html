@@ -17,26 +17,36 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>zipファイルを作成する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+作成するzipファイルのパス
 </td></tr>
-<tr class="option"><td>2</td><td>
-
+<tr class="require"><td>2</td><td>
+ディレクトリを指定すると、そのディレクトリを全て圧縮します<br>
+連想配列を指定すると、任意のファイルを圧縮できます。<var>[&apos;zip中のパス&apos;=&gt;&apos;ファイルのパス&apos;]</var>
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+なし
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
+// ディレクトリを圧縮
+zip::create('./example.zip', '../img/');
 
+//任意のファイルを圧縮
+zip::create('./example.zip', [
+    'sample.jpg'      => '../img/test.jpg',
+    'docs/readme.txt' => './readme', // docsディレクトリは自動で作られる
+]);
 --></code>
 
+<p class="info-blue">連想配列の値「ファイルのパス」には、リソースや <a href="str-file.html">str::file()</a> が使用できます</p>
+<p class="info-blue">ファイル名には日本語が使えますが、それを解凍できるかは解凍ソフトによります</p>
 
 </div>
 </article>

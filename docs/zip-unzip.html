@@ -17,24 +17,25 @@
 </header>
 <div id="contents">
 
-<p></p>
+<p>zipファイルを解凍する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-
+zipファイルのパス
 </td></tr>
 <tr class="option"><td>2</td><td>
-
+解凍先のディレクトリ。存在すること<br>
+省略時は、zipファイルの場所に解凍されます
 </td></tr>
 <tr class="return"><td>戻</td><td>
-
+解凍したファイル一覧の配列
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-
+$result = zip::unzip('./example.zip', './example');
 --></code>
 
 
