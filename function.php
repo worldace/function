@@ -1066,9 +1066,12 @@ class php{
         array_unshift($files, $file);
 
         foreach($files as $_v){
-            $arg = (function() use($arg, $_v){
+            $_arg = (function() use($arg, $_v){
                 return require($_v);
             })();
+            if(isset($_arg)){
+                $arg = $_arg;
+            }
         }
 
         exit;
