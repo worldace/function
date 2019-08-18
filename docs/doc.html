@@ -169,12 +169,14 @@ $doc->body->appendChild($footer);
 
 <code class="php" data-title="doc-ul.php"><!--
 <?php
+// docファイルではdocオブジェクトを返してください
+
 $doc = new doc('<ul></ul>'); // 部品なので<!DOCTYPE>は書かない
 
 // $docを操作してHTMLを作り上げる
-// docファイル内では $el で元タグにアクセス可能
+// このファイルはローカルスコープで実行されます
 
-return $doc; //$docオブジェクトを返すのがポイント
+return $doc;
 --></code>
 
 <p class="info-yellow">new doc()に渡すHTMLは、全体を1つのタグで囲っておく必要があります</p>
@@ -184,20 +186,24 @@ return $doc; //$docオブジェクトを返すのがポイント
 
 <h3>docタグの使用</h3>
 <p>以上の準備が揃うと、docタグが使用できるようになります。<var>&lt;doc-ul&gt;&lt;/doc-ul&gt;</var><br>
-docタグは出力時に、対応するdocファイルに置換されます。</p>
+出力時に、docタグは対応するdocファイルに置換されます。</p>
 
 <p class="info-yellow">docタグは必ず閉じてください</p>
 <p class="info-yellow">docタグの循環読み込みには気を付けてください。無限ループします</p>
 <p class="info-blue">docタグは普通に新規作成できます。<var>$doc(&apos;&lt;doc-ul&gt;&apos;);</var></p>
+<p class="info-blue">docファイルでdocオブジェクトを返さない場合は、docタグは消えます</p>
 
-<h3>ヒント</h3>
+<h3>docタグからdocファイルへデータを渡す</h3>
 
-<ul>
-<li>docファイルはローカルスコープで実行されます</li>
-<li>docファイルでdocオブジェクトを返さないと、元のタグは消えます</li>
-<li>docファイル内では<var>$el</var>で元のタグにアクセスできます</li>
-<li>docファイルにデータを渡すには、属性経由をオススメします。<var>$el-&gt;getAttribute(&apos;name&apos;);</var>のように取得する</li>
-</ul>
+<p>docファイル内では<var>$el</var>で元のdocタグにアクセスできるので、属性経由でデータを渡せます。</p>
+
+<code class="html" data-title="docタグ"><!--
+<doc-ul name="value"></doc-ul>
+--></code>
+
+<code class="php" data-title="docファイル"><!--
+$el->getAttribute('name'); // value が取得できる
+--></code>
 
 
 
