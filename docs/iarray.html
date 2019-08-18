@@ -24,17 +24,17 @@
 <code class="php" data-title="使用例"><!--
 $a = new iarray();
 
-$a['key'] = 1;   // 代入
-$a['key'] = 2;   // 再代入不可
+$a['key'] = 'A';   // 代入
+$a['key'] = 'B';   // 再代入不可
 
-print $a['key']; // 1が表示される
+print $a['key'];   // Aが表示される
 
 unset($a['key']); // キーは消せない
 isset($a['key']); // true
 count($a);        // 1
 
 foreach($a as $k => $v){
-    print "$k:$v"; // key:1 が表示される
+    print "$k:$v"; // key:A が表示される
 }
 --></code>
 
@@ -56,14 +56,14 @@ $_ENV = new iarray($_ENV);
 <code class="php" data-title="使用例"><!--
 $a = new iarray();
 
-$a['key.0'] = 'a'; // $a['key'][0] と同等
-$a['key.1'] = 'b'; // $a['key'][1] と同等
-$a['key.1'] = 'c'; // 再代入不可
+$a['key.0'] = 'A'; // $a['key'][0] と同等
+$a['key.1'] = 'B'; // $a['key'][1] と同等
+$a['key.1'] = 'C'; // 再代入不可
 
-print $a['key.1']; // bが表示される
+print $a['key.1']; // Bが表示される
 
 foreach($a['key'] as $v){
-    print $v;      // aとbが表示される
+    print $v;      // AとBが表示される
 }
 --></code>
 <p class="info-blue">深い位置にいきなり値を代入でき、再代入不可の性質も受け継ぎます</p>
