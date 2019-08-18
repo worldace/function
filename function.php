@@ -1152,8 +1152,11 @@ class php{
 
         return ($count > 0) ? number_format($count) : number_format(1/($finish-$start), 3);
     }
+}
 
 
+
+class os{
     static function clipboard(string $str){
         if(self::is_windows()){
             $clip = popen('clip', 'w');
@@ -1167,8 +1170,6 @@ class php{
         return preg_match('/^WIN/', PHP_OS);
     }
 }
-
-
 
 
 class db{
