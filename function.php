@@ -1439,7 +1439,7 @@ class doc{
 
 
 
-class iarray implements \ArrayAccess, \IteratorAggregate{
+class iarray implements \ArrayAccess, \IteratorAggregate, \Countable{
     private $array;
 
 
@@ -1509,10 +1509,16 @@ class iarray implements \ArrayAccess, \IteratorAggregate{
 
 
     function offsetUnset($offset){
+        throw new Exception('キーは削除できません');
     }
 
 
     function getIterator(){
         return new \ArrayIterator($this->array);
+    }
+
+
+    function count() { 
+        return count($this->array);
     }
 }

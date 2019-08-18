@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>iarrayクラス</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>iarrayクラス</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>iarrayクラスは、キーに対して値を1度だけ代入できる<b>不変配列</b>を作ります</p>
+
+<h2>基本的な使い方</h2>
+
+<code class="php" data-title="使用例"><!--
+$a = new iarray();
+
+$a['key'] = 1;   // 代入
+$a['key'] = 2;   // 再代入不可
+
+print $a['key']; // 1が表示される
+
+unset($a['key']); // キーは消せない
+isset($a['key']); // true
+count($a);        // 1
+
+foreach($a as $k => $v){
+    print "$k:$v"; // key:1 が表示される
+}
+--></code>
+
+<p class="info-blue">再代入、キー削除、存在しないキーへのアクセスは例外が発生します</p>
+
+<h2>初期値</h2>
+
+
+<p>new時に配列を渡すこともできます。既存の値が変更できなくなります。<br>
+スーパーグローバル変数を不変化するのは、良い使用方法です。</p>
+<code class="php" data-title="使用例"><!--
+$_ENV = new iarray($_ENV);
+--></code>
+
+<h2>多重配列</h2>
+
+<p>iarrayでは、多重配列に対しては<b>ドット記法</b>を用いることでアクセスします</p>
+
+<code class="php" data-title="使用例"><!--
+$a = new iarray();
+
+$a['key.0'] = 'a'; // $a['key'][0] と同等
+$a['key.1'] = 'b'; // $a['key'][1] と同等
+$a['key.1'] = 'c'; // 再代入不可
+
+print $a['key.1']; // bが表示される
+
+foreach($a['key'] as $v){
+    print $v;      // aとbが表示される
+}
+--></code>
+<p class="info-blue">深い位置にいきなり値を代入でき、再代入不可の性質も受け継ぎます</p>
+
+</div>
+</article>
+
+<script>
+table_of_contents();
+</script>
+
+</body>
+</html>
