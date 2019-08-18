@@ -39,12 +39,9 @@ dbオブジェクト
 <code class="php"><!--
 $db = new db('./example.db', 'fruit'); //パスとテーブル名を渡す
 --></code>
-<ul>
-<li>ファイルが存在しない時は、自動的に作成されます</li>
-<li>PDOのエラータイプは例外、取得タイプは連想配列となります</li>
 
-
-</ul>
+<p class="info-blue">ファイルが存在しない時は、自動的に作成されます</p>
+<p class="info-blue">PDOのエラータイプは例外、取得タイプは連想配列となります</p>
 
 
 <h2>table</h2>
@@ -211,7 +208,7 @@ foreach($result as $fruit){
 --></code>
 
 
-<p>複数行取得では、idの大きい順から選択されます。逆順にしたい場合は第3引数にtrueを渡してください</p>
+<p class="info-blue">複数行取得では、idの大きい順から選択されます。逆順にしたい場合は第3引数にtrueを渡してください</p>
 
 <h2>search</h2>
 
@@ -325,7 +322,7 @@ $db->transaction(function($db){
 
 --></code>
 
-<p>コールバック関数にはdbオブジェクトが渡されます。<br>
+<p class="info-blue">コールバック関数にはdbオブジェクトが渡されます。<br>
 コールバック関数に追加の引数を渡したい場合は、transaction()の第二引数以降に渡してください。</p>
 
 <p>参考情報：<a href="https://www.php.net/manual/ja/language.types.callable.php" target="_blank">PHP callable</a></p>
@@ -333,7 +330,7 @@ $db->transaction(function($db){
 <p>当クラスでの取得データは連想配列となりますが、指定クラスのオブジェクトにすることもできます。</p>
 
 <p>テーブル名を指定する所を、クラス名にすると実現できます。<br>
-テーブル名と<b>同名のクラスが存在</b>し、クラス名を<b>フルパス</b>で渡すのが条件です。</p>
+テーブル名と<b>同名のクラスが存在</b>し、クラス名を<b>\から始まるフルパス</b>で渡すのが条件です。</p>
 <code class="php" data-title="データをオブジェクトで取得する"><!--
 class fruit{
    //あらかじめfruitクラスを用意しておく
@@ -348,7 +345,7 @@ foreach($db->select(0,10) as $fruit){
 --></code>
 
 
-<p>テーブルに関するデータと操作を1つのクラスにまとめることができます。</p>
+<p class="info-blue">テーブルに関するデータと操作を、1つのクラスにまとめることができます。</p>
 <h2>備考</h2>
 <h3>セキュリティ情報</h3>
 <ul>
