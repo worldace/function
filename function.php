@@ -1436,3 +1436,83 @@ class doc{
     }
 }
 
+
+
+
+class iarray implements \ArrayAccess, \IteratorAggregate{
+    private $array;
+
+
+    function __construct(array $array = []){
+        $this->array = $array;
+    }
+
+
+    function offsetSet($name, $value){
+        $array = &$this->array;
+        $keys  = explode('.', $name);
+
+        if(in_array('', $keys)){
+            throw new Exception('キー名が不正です');
+        }
+
+        while(count($keys) > 1){
+            $k = array_shift($keys);
+
+            if(!isset($array[$k])){
+                $array[$k] = [];
+            }
+            elseif(!is_array($array[$k])){
+                throw new Exception('代入できない場所です');
+            }
+
+            $array = &$array[$k];
+        }
+
+        if(!isset($array[$keys[0]])){
+            $array[$keys[0]] = $value;
+        }
+        else{
+            throw new Exception('再代入はできません');
+        }
+    }
+
+
+    function offsetGet($name){
+        $array = $this->array;
+
+        foreach(explode('.', $name) as $k){
+            if(isset($array[$k])){
+                $array = $array[$k];
+            }
+            else{
+                throw new Exception('存在しないキーです');
+            }
+        }
+        return $array;
+    }
+
+
+    function offsetExists($name){
+        $array = $this->array;
+
+        foreach(explode('.', $name) as $k){
+            if(isset($array[$k])){
+                $array = $array[$k];
+            }
+            else{
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    function offsetUnset($offset){
+    }
+
+
+    function getIterator(){
+        return new \ArrayIterator($this->array);
+    }
+}
