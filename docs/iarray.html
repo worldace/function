@@ -56,8 +56,8 @@ $_ENV = new iarray($_ENV);
 <code class="php" data-title="使用例"><!--
 $a = new iarray();
 
-$a['key.0'] = 'A'; // $a['key'][0] と同等
-$a['key.1'] = 'B'; // $a['key'][1] と同等
+$a['key.0'] = 'A'; // ['key'][0] 相当
+$a['key.1'] = 'B'; // ['key'][1] 相当
 $a['key.1'] = 'C'; // 再代入不可
 
 print $a['key.1']; // Bが表示される
@@ -66,7 +66,7 @@ foreach($a['key'] as $v){
     print $v;      // AとBが表示される
 }
 --></code>
-<p class="info-blue">深い位置にいきなり値を代入でき、再代入不可の性質も受け継ぎます</p>
+<p class="info-blue">値は深い位置にダイレクトに代入でき、深い位置でも再代入不可の性質は有効です</p>
 
 </div>
 </article>
