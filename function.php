@@ -683,7 +683,7 @@ class file{
 
 
 class dir{
-    static function make(string $dir, string $permission = '707') :bool{
+    static function create(string $dir, string $permission = '707') :bool{
         $mask = umask();
         umask(0);
         $return = mkdir($dir, octdec($permission), true);
