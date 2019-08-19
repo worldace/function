@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>検証クラス</title>
+  <link href="web.css" rel="stylesheet">
+<style>
+.省略{ color: #999; }
+.備考{ color: red; }
+</style>
+
+</head>
+<body>
+
+<div id="doc">
+<article>
+
+
+
+<h1>検証クラス</h1>
+<h2>確認関数</h2>
+
+<pre><!--
+確認("値") -> 自然数();
+--></pre>
+
+成功すればtrue、失敗すればfalseが返ります
+
+<h2>検証関数</h2>
+
+<p>$_GET と $_POST の値を検証します。<br>複数の条件で検証したい時は、条件を続けて記述することができます</p>
+<pre><!--
+ GET検証("キー名") -> 必須();
+POST検証("キー名") -> 必須() -> １００文字以内();
+--></pre>
+
+<p>失敗すると登録されたエラー関数を実行します</p>
+
+
+<h2>エラー関数</h2>
+
+<p>検証が失敗した時は、登録されているエラー関数を実行します。<br>
+エラー関数を登録するには、次のようにdefineで指定してください。未登録時の初期値は「エラー」です<br>
+
+<pre><!--
+define("検証エラー関数", "関数名");
+--></pre>
+
+
+<p>エラー関数には1番目の引数としてエラーメッセージが渡されます。<br>
+2番目の引数には検証オブジェクトが渡されます。</p>
+
+<p><small>関数の登録については「PHP コールバック」で検索してください</small></p>
+
+<h2>メソッド一覧</h2>
+<p>確認と検証で利用できるメソッド一覧です</p>
+<table>
+<tr><th>メソッド名</th><th>説明</th></tr>
+<tr><td>必須</td><td class="left">空文字かNullでなければ成功</td></tr>
+<tr><td>～と同じ</td><td class="left">～と同じなら成功。文字列でも可</td></tr>
+<tr><td>数</td><td class="left">数なら成功 (0、負数、小数も成功)</td></tr>
+<tr><td>自然数</td><td class="left">1以上の整数なら成功</td></tr>
+<tr><td>自然数と0</td><td class="left">0以上の整数なら成功</td></tr>
+<tr><td>～より大<span class="省略">きい</span></td><td class="left">～より大きい数なら成功 <span class="備考">*</span></td></tr>
+<tr><td>～より小<span class="省略">さい</span></td><td class="left">～より小さい数なら成功 <span class="備考">*</span></td></tr>
+<tr><td>～以上</td><td class="left">～以上の数なら成功 <span class="備考">*</span></td></tr>
+<tr><td>～以<span class="省略">下</span></td><td class="left">～以下の数なら成功 <span class="備考">*</span></td></tr>
+<tr><td>～<span class="省略">文</span>字以上</td><td class="left">～文字以上なら成功</td></tr>
+<tr><td>～<span class="省略">文</span>字以<span class="省略">下</span></td><td class="left">～文字以下なら成功</td></tr>
+<tr><td>数字</td><td class="left">数字のみなら成功 (0-9)</td></tr>
+<tr><td>英語</td><td class="left">英語のみなら成功 (A-Za-z)</td></tr>
+<tr><td>英数字</td><td class="left">英数字のみなら成功 (A-Za-z0-9)</td></tr>
+<tr><td>URL</td><td class="left">URLなら成功 (http/httpsのみ)</td></tr>
+<tr><td>画像データ</td><td class="left">画像データなら成功 (getimagesizeに対応してる形式限定)</td></tr>
+<tr><td>条件</td><td class="left">第1引数の条件式が true なら成功</td></tr>
+<tr><td>正規表現</td><td class="left">第1引数の正規表現が true なら成功。入力例→"/\.jpg$/i"</td></tr>
+</table>
+
+<ul>
+  <li>引数の記載のないメソッドは第1引数がエラーメッセージです。省略時は自動でメッセージを生成します</li>
+  <li>メソッド名の<span class="省略">薄字</span>は省略したり任意の文字にできます</li>
+  <li>メソッド名の～は任意の数を全角数字で入力してください</li>
+  <li><span class="備考">*</span>マークが付いているメソッドは、数の後ろに単位を付けることができます</li>
+</ul>
+
+</article>
+
+<nav class="back"><a href="./">目次に戻る</a></nav>
+</div>
+
+<script src="web.js"></script>
+
+</body></html>

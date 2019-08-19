@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>HTML文書</title>
+  <link href="web.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="doc">
+<article>
+
+
+
+<h1>HTML文書</h1>
+<div class="index">
+<h3 class="index-title">目次</h3>
+
+<ol class="index-menu">
+  <li><a href="#基本編">基本編</a></li>
+  <li><a href="#HTML文書">new HTML文書</a></li>
+  <li><a href="#本文">本文</a></li>
+  <li><a href="#HTML">HTML</a></li>
+  <li><a href="#タグ名">タグ名</a></li>
+  <li><a href="#DOM">DOM</a></li>
+  <li><a href="#属性">属性</a></li>
+  <li><a href="#属性削除">属性削除</a></li>
+  <li><a href="#作成">作成</a></li>
+  <li><a href="#追加">追加</a></li>
+  <li><a href="#複製">複製</a></li>
+  <li><a href="#削除">削除</a></li>
+</ol></div>
+
+
+
+
+
+<h2 id="基本編">基本編</h2>
+
+<p>HTML文書はDOMを利用してHTMLを作成するクラスです。PHP内蔵の<a href="https://secure.php.net/manual/ja/book.dom.php" target="_blank">DOM</a>を利用しています</p>
+
+
+<p>まずはHTMLを選択するのが基本です。CSSセレクタを利用して選択します</p>
+<pre><cite>選択例</cite><!--
+$html = new HTML文書();
+$html("CSSセレクタ"); //変数に()を付けて、第1引数にCSSセレクタを渡してください
+--></pre>
+
+<p>CSSセレクタでタグを選択したら、選択したタグに対して処理を行うことができます</p>
+
+<pre><cite>例</cite><!--
+$html("p")->本文("こんにちは"); //全ての<p>の本文に「こんにちは」がセットされる
+print $html("p")->本文(); //「こんにちは」が表示される
+--></pre>
+
+<p>作用系の関数は<b>全選択に同じ作用</b>をします。取得系の関数は<b>最初の選択のみ取得</b>します。<br>
+1つ1つに個別処理したい時や、全選択の値を取得したい時はforeachを利用します</p>
+
+<pre><cite>foreach例</cite><!--
+$html = new HTML文書("<ul><li>A</li><li>B</li><li>C</li></ul>");
+
+foreach($html("li") as $tag){
+    $tag->本文(uniqid()); // <li>の本文に全て別な文字がセットされる。作用系
+}
+
+foreach($html("li") as $tag){
+    print $tag->本文() . "\n"; //先ほどセットされた文字が全て表示される。取得系
+}
+--></pre>
+<p><small>$htmlの選択集合を[A,B,C]と表現すると、ループ中は選択集合が[A]→[B]→[C]と変化します。ループを全て終了すると元の[A,B,C]に戻ります<br>
+ただし途中でループを抜けると元に戻りません。例えば2回目で抜けると[B]のままです</small></p>
+
+<p>現在選択中の要素数を調べるには count() を利用します。PHPの標準関数です</p>
+<pre><cite>count()例</cite><!--
+$html = new HTML文書();
+count($html); //まだ何も選択していないので0
+count($html("title")); //1つの要素が選択されたので1
+count($html); //1度選択すれば次に選択が変化するまで同じ1です
+--></pre>
+
+<p>HTML全体を表示するなら普通にprintするだけでOKです</p>
+
+<pre><cite>HTML全体を表示</cite><!--
+$html = new HTML文書();
+print $html;
+--></pre>
+<p><small>現在選択中のHTMLを文字列として取得するには、 <a href="#HTML">HTML()</a>を利用してください</small></p>
+
+<p>HTML全体を文字列として変数に代入する場合は型変換が必要です</p>
+
+<pre><cite>HTML全体をコピー</cite><!--
+$html = new HTML文書();
+$str = "$html"; //$strにはHTML全体の文字列が代入されます。""が必要です
+$str = (string)$html; //明示的な型変換。上と同じ結果になります
+--></pre>
+
+
+<p>簡単なスクレイピングにも利用できます</p>
+
+<pre><cite>例</cite><!--
+$html = new HTML文書(file_get_contents("http://www.php.net/"));
+print $html(".footmenu > li:nth-child(3)")->本文(); //PHP公式サイトのフッターメニューの3番目は？
+--></pre>
+
+<h2 id="HTML文書">new HTML文書</h2>
+
+<p>HTML文書オブジェクトを新規作成します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td>第1引数</td>
+<td class="left">テンプレートになるHTML文字列。省略時は内蔵テンプレートを使用(後述)<br>
+</td>
+</tr>
+</table>
+
+
+<p>戻り値はHTML文書オブジェクトです</p>
+<pre><cite>使い方</cite><!--
+$html = new HTML文書();
+print $html; // 内蔵テンプレートが表示される
+--></pre>
+
+<pre><cite>内蔵テンプレート</cite><!--
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title></title>
+</head>
+<body></body>
+</html>
+--></pre>
+
+<p>HTMLを出力する時は、第1引数には次のような注意点があります</p>
+<ul>
+  <li><b>ユーザのPOSTなど信頼できない文字列は含めないでください</b></li>
+  <li>1つのタグで全体を囲んである必要があります <small>(ドキュメントタイプは除く)</small></li>
+  <li>JavaScriptやCSSのコードが含まれると&amp;のエスケープで問題が起きる場合があります。その場合は<a href="#作成">作成</a>や<a href="#追加">追加</a>で渡すようにしてください</li>
+</ul>
+
+
+<h2 id="本文">本文</h2>
+
+<p>現在選択してるタグの本文を取得または変更します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>第1引数</td>
+<td class="left">変更する本文。エスケープされます<br>省略時は取得動作になります</td>
+</tr>
+</table>
+
+<p>取得時は、最初に選択されたタグの本文が返ります。<br>
+複数必要ならば<a href="#基本編">foreach</a>を利用ください</p>
+
+
+<pre><cite>基本的な使い方</cite><!--
+$html = new HTML文書();
+$html("title")->本文("こんにちは世界"); // 「<title>こんにちは世界</title>」となる
+print $html("title")->本文(); //「こんにちは世界」が表示される
+--></pre>
+
+
+<pre><cite>詳細説明</cite><!--
+<選択したタグ>あい<b>う</b>えお</選択したタグ>
+<!-- 上記の場合は「あいうえお」が本文です。タグは含みませんが子孫の本文は含みます ーー＞
+
+<!-- 上記の本文を「かきくけこ」に変更すると、次のようになります ーー＞
+<選択したタグ>かきくけこ</選択したタグ>
+--></pre>
+
+<h2 id="HTML">HTML</h2>
+<p>現在選択してるタグをHTML文字列として返します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>なし</td>
+<td class="left">引数はありません</td>
+</tr>
+</table>
+
+<p>戻り値は、最初に選択されたタグのHTMLが返ります。<br>
+複数必要ならば<a href="#基本編">foreach</a>を利用ください</p>
+
+<pre><cite>使用例</cite><!--
+<?php
+$html = new HTML文書();
+print $html("title")->HTML(); // 「<title></title>」が表示される
+--></pre>
+
+<h2 id="タグ名">タグ名</h2>
+<p>現在選択してるタグのタグ名を返します。常に小文字です</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>なし</td>
+<td class="left">引数はありません</td>
+</tr>
+</table>
+
+<p>戻り値は、最初に選択されたタグのタグ名が返ります<br>
+複数必要ならば<a href="#基本編">foreach</a>を利用ください</p>
+
+
+<h2 id="DOM">DOM</h2>
+<p>現在選択してるタグをDOM要素として返します。</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>なし</td>
+<td class="left">引数はありません<!-- DOM要素を複製するならtrue<br>初期値はfalse --></td>
+</tr>
+</table>
+
+<p>戻り値は、最初に選択されたタグのDOMが返ります。<br>
+複数必要ならば<a href="#基本編">foreach</a>を利用ください</p>
+
+
+<h2 id="属性">属性</h2>
+
+<p>現在選択してるタグの属性を取得/変更/追加します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>第1引数</td>
+<td class="left">属性名。「href」「class」「id」といった名前です<br>連想配列を渡すと複数変更動作になります<br>省略時は全取得動作になります</td>
+</tr>
+<tr>
+<td>第2引数</td>
+<td class="left">変更/追加する属性値。エスケープされます<br>省略時は取得動作になります</td>
+</tr>
+</table>
+
+<p>取得時は、最初に選択されたタグの属性が返ります。(文字列か連想配列)<br>
+複数必要ならば<a href="#基本編">foreach</a>を利用ください</p>
+
+
+<pre><cite>属性の動作は4パターン</cite><!--
+//1. 属性値を1つ取得する
+$html("a")->属性("href"); // "http://www.yahoo.co.jp/" のように返ります
+
+//2. 属性を全て取得する
+$html("p")->属性(); // ["class"=>"test", "id"=>"sample1"] のように返ります
+
+//3. 属性値を1つ変更する
+$html("a")->属性("href", "http://www.yahoo.co.jp/");
+
+//4. 属性値を複数変更する
+$html("a")->属性(["href"=>"http://www.yahoo.co.jp/", "target"=>"_blank"]);
+--></pre>
+
+<p><small>属性値が存在しないタイプの場合は ["disable"=&gt;"disable"] のように属性名＝属性値としましょう</small></p>
+
+<h2 id="属性削除">属性削除</h2>
+
+<p>現在選択してるタグの属性を削除します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>第1引数</td>
+<td class="left">属性名<br>省略時は全属性を削除します</td>
+</tr>
+</table>
+
+
+
+<h2 id="作成">作成</h2>
+
+<p>DOM要素を1つ新規作成します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td>第1引数</td>
+<td class="left">タグ名</td>
+</tr>
+<tr>
+<td>第2引数</td>
+<td class="left">タグの属性を連想配列で ["id"=&gt;"sample", "disable"=&gt;"disable"]<br>不要な場合は null を入れてください</td>
+</tr>
+<tr>
+<td>第3引数</td>
+<td class="left">タグの本文。エスケープされます</td>
+</tr>
+</table>
+
+<p>戻り値はDOM要素です。<a href="#追加">追加()</a>の第2引数に渡して使用します</p>
+
+<pre><cite>使い方</cite><!--
+$html = new HTML文書();
+$dom  = $html->作成("p", null, "こんにちは世界");
+--></pre>
+
+
+
+<h2 id="追加">追加</h2>
+
+<p>現在選択中の場所にタグを追加します</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td>第1引数</td>
+<td class="left">追加するHTML文字列、<a href="#作成">DOM要素</a>、<a href="#DOM">DOM要素の入った配列</a>、<a href="#HTML文書">HTML文書オブジェクト</a><br><b>HTML文字列を選んだときの注意点<br>
+ユーザのPOSTなど信頼できない文字列を含む場合は、エスケープしてから渡してください</b></td>
+</tr>
+<tr>
+<td>第2引数</td>
+<td class="left">追加場所。"上", "下", "中上", "中下", "置換"のどれか1つ (後述)</td>
+</tr>
+</table>
+
+<pre><cite>使い方</cite><!--
+$html = new HTML文書();
+$html("body")->追加("<p>こんにちは世界</p>", "中上"); // <body>直下に「<p>こんにちは世界</p>」が追加される
+--></pre>
+
+
+
+<pre><cite>追加場所の説明</cite><!--
+<!-- 選択したタグを基準とし、どこに追加するか？  "置換"を選んだときは「選択したタグ」を置換しますーー＞
+
+<上></上>
+<選択したタグ>
+  <中上></中上>
+  <hr>
+  <中下></中下>
+</選択したタグ>
+<下></下>
+--></pre>
+
+<p><small>追加を実行すると、追加されたものが選択状態になります</small></p>
+
+<h2 id="複製">複製</h2>
+
+<p>現在選択してるタグをHTML文書に複製します</p>
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th></tr>
+<tr>
+<td>第1引数</td>
+<td class="left">CSSセレクタ。これで選択した場所に複製します</td>
+</tr>
+<tr>
+<td>第2引数</td>
+<td class="left">複製場所。"上", "下", "中上", "中下", "置換"のどれか1つ</td>
+</tr>
+</table>
+<p><small>複製を実行すると、複製されたものが選択状態になります</small></p>
+
+<h2 id="削除">削除</h2>
+
+<p>現在選択してるタグをHTML文書から削除します。子孫も全て消えます</p>
+
+<table>
+<tr>
+<th>引数</th>
+<th>説明</th>
+</tr>
+<tr>
+<td>なし</td>
+<td class="left">引数はありません</td>
+</tr>
+</table>
+
+<p><small>削除を実行すると、削除されたものが選択状態になります</small></p>
+
+
+</article>
+
+<nav class="back"><a href="./">目次に戻る</a></nav>
+</div>
+
+<script src="web.js"></script>
+
+</body></html>

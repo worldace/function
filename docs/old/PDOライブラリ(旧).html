@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>PDO ライブラリ</title>
+  <link href="web.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="doc">
+<article>
+
+
+
+<h1>PDO ライブラリ</h1>
+<div class="index">
+<h3 class="index-title">目次</h3>
+
+<ol class="index-menu">
+  <li><a href="#初期設定">初期設定</a></li>
+  <li><a href="#プレースホルダと割当">プレースホルダと割当</a></li>
+  <li><a href="#データベース取得">データベース取得</a></li>
+  <li><a href="#データベース行取得">データベース行取得</a></li>
+  <li><a href="#データベース列取得">データベース列取得</a></li>
+  <li><a href="#データベースセル取得">データベースセル取得</a></li>
+  <li><a href="#データベース件数">データベース件数</a></li>
+  <li><a href="#データベース追加">データベース追加</a></li>
+  <li><a href="#データベース更新">データベース更新</a></li>
+  <li><a href="#データベース削除">データベース削除</a></li>
+  <li><a href="#データベース実行">データベース実行</a></li>
+  <li><a href="#データベース作成">データベース作成</a></li>
+  <li><a href="#インデックス作成">インデックス作成</a></li>
+  <li><a href="#トランザクション">トランザクション</a></li>
+  <li><a href="#データベース接続">データベース接続</a></li>
+  <li><a href="#ソースコード">ソースコード</a></li>
+</ol>
+</div>
+<h2 id="初期設定">初期設定</h2>
+
+<p>SQLiteかMySQLかどちらか一方を選んで必ず設定してください。<br>
+データベースへの接続はこの初期設定に基づいて自動的に行われます。</p>
+
+<pre><cite>SQLite用の設定</cite><!--
+データベース設定("sqlite:データベースファイルのパス");
+--></pre>
+<p><small>データベースファイルのパスには日本語を含まないようにしてください</small></p>
+
+<pre><cite>MySQL用の設定</cite><!--
+データベース設定("mysql:host=ホスト名;dbname=データベース名;charset=utf8", "ユーザID", "パスワード");
+--></pre>
+
+
+<h2 id="プレースホルダと割当">プレースホルダと割当</h2>
+
+<h3>プレースホルダを使う</h3>
+
+<p>SQL文に変数を埋め込むことは原則として禁止です。(セキュリティ問題)<br>
+必ず変数をプレースホルダ <b>?</b> に置き換えてください。</p>
+<pre><!--
+//×ダメな例 - SQL文の中に変数が埋め込まれている
+$SQL文 = "insert into テーブル名 (列1, 列2, 列3) values ($列1の値, $列2の値, $列3の値)";
+データベース追加($SQL文);
+
+//○良い例 - 変数をプレースホルダに置き換えている
+$SQL文 = "insert into テーブル名 (列1, 列2, 列3) values (?, ?, ?)";
+$割当  = [$列1の値, $列2の値, $列3の値];
+データベース追加($SQL文, $割当);
+--></pre>
+
+<p>? に割り当てる変数は順番通りに配列の中に入れて、関数の第2引数に渡してください。(1つでも配列に入れる)<br>
+プレースホルダを使わない時は、第2引数の割当は省略することができます。</p>
+
+<p><small>当ライブラリは順番タイプのプレースホルダに対応しています。(名前タイプは非対応)</small></p>
+
+<h3>割当変数の型について</h3>
+
+<p>MySQLを使用する場合、割当変数の型に注意する必要があります</p>
+
+<pre><!--
+//×ダメな例
+$SQL文 = "select * from テーブル名 where id = ?";
+$割当  = [$_GET['id']]; //ここに問題が
+$結果 = データベース行取得($SQL文, $割当);
+--></pre>
+
+<p>MySQLにおいてはIDは整数型になります。一方、割当変数の$_GET['id']は文字列型になります。<br>
+このまま実行すると、整数型と文字列型で不整合となりエラーとなってしまいます。</p>
+<p><small>PHPにおいて $_GET や $_POST は常に文字列型となります</small></p>
+
+<p>このように型が不整合となる場合は、PHP側で型変換を行うようにしてください。</p>
+
+<pre><!--
+//○良い例
+$SQL文 = "select * from テーブル名 where id = ?";
+$割当  = [(int)$_GET['id']]; //これで大丈夫
+$結果 = データベース行取得($SQL文, $割当);
+--></pre>
+
+<p><small>SQLiteでは自動的に型変換が行われるのでエラーになりません</small></p>
+
+<h2 id="データベース取得">データベース取得</h2>
+<p>データベースから複数行取得します</p>
+
+<pre><cite>データベース取得</cite><!--
+$SQL文 = "select * from テーブル名 order by id desc limit 0, 50"; //idの大きい順に0～49番を取得
+$割当  = [];
+
+$結果 = データベース取得($SQL文, $割当);
+
+foreach($結果 as $各行){
+    print $各行['列名1'];
+    print $各行['列名2'];
+}
+--></pre>
+
+<p>検索結果は配列です。配列の各要素は連想配列であり、列名がキーです。<br>
+検索結果が0件の場合は空配列が返ります。</p>
+
+
+
+<h2 id="データベース行取得">データベース行取得</h2>
+<p>データベースから1行取得します</p>
+
+<pre><cite>データベース行取得</cite><!--
+$SQL文 = "select * from テーブル名 where id = ?";
+$割当  = [(int)$id];
+
+$結果 = データベース行取得($SQL文, $割当);
+
+print $結果['列名1'];
+print $結果['列名2'];
+--></pre>
+
+<p>検索結果は連想配列であり、列名がキーです<br>
+検索結果が0件の場合は false が返ります。</p>
+
+
+
+<h2 id="データベース列取得">データベース列取得</h2>
+<p>データベースから1列取得します</p>
+
+<pre><cite>データベース列取得</cite><!--
+$SQL文 = "select 列名 from テーブル名 order by id asc limit 50"; //idの小さい順に50件
+$割当  = [];
+
+$結果 = データベース列取得($SQL文, $割当);
+
+foreach($結果 as $値){
+    print $値;
+}
+--></pre>
+
+<p>検索結果は配列です。配列の各要素は値です。<br>
+検索結果が0件の場合は空配列が返ります。</p>
+
+<p><small>複数の列を取得する場合は、列名を,で区切り、データベース取得関数を使用してください</small></p>
+
+<h2 id="データベースセル取得">データベースセル取得</h2>
+<p>データベースから1セル取得します</p>
+
+<pre><cite>データベースセル取得</cite><!--
+$SQL文 = "select 列名 from テーブル名 where id = ?";
+$割当  = [(int)$id];
+
+$結果 = データベースセル取得($SQL文, $割当);
+
+print $結果;
+--></pre>
+
+<p>検索結果は値です。<br>
+検索結果が0件の場合は false が返ります。</p>
+
+<h2 id="データベース件数">データベース件数</h2>
+<p>データベースから件数を求めます</p>
+
+<pre><cite>データベース件数</cite><!--
+$SQL文 = "select count(*) from テーブル名";
+$割当  = [];
+
+$結果 = データベース件数($SQL文, $割当);
+
+print $結果;
+--></pre>
+
+<p>検索結果は件数です。</p>
+
+
+<h2 id="データベース追加">データベース追加</h2>
+
+<p>データベースに1行追加します</p>
+
+<pre><cite>データベース追加</cite><!--
+$SQL文 = "insert into テーブル名 (列名1, 列名2, 列名3) values (?, ?, ?)";
+$割当  = [$列名1の値, $列名2の値, $列名3の値];
+
+$結果 = データベース追加($SQL文, $割当);
+
+print $結果;
+--></pre>
+
+<p>結果は追加された行のid番号です。</p>
+
+<h2 id="データベース更新">データベース更新</h2>
+
+<p>データベースを1行更新します</p>
+
+<pre><cite>データベース更新</cite><!--
+$SQL文 = "update テーブル名 set 列名1 = ?, 列名2 = ?, 列名3 = ? where id = ?";
+$割当  = [$列名1の値, $列名2の値, $列名3の値, (int)$id];
+
+$結果 = データベース更新($SQL文, $割当);
+
+print $結果;
+--></pre>
+
+<p>結果は更新した件数です。</p>
+
+
+<h2 id="データベース削除">データベース削除</h2>
+
+<p>データベースから1行削除します</p>
+
+<pre><cite>データベース削除</cite><!--
+$SQL文 = "delete from テーブル名 where id = ?";
+$割当  = [(int)$id];
+
+$結果 = データベース削除($SQL文, $割当);
+
+print $結果;
+--></pre>
+
+<p>結果は削除した件数です。</p>
+
+
+
+<h2 id="データベース実行">データベース実行</h2>
+
+<p>データベースを実行します</p>
+
+<pre><cite>データベース実行</cite><!--
+$結果 = データベース実行($SQL文, $割当);
+--></pre>
+
+<p>結果はPDOStatementオブジェクトです。<br>
+第3引数にtrueを指定した時は、トランザクションを開始します</p>
+
+<h2 id="データベース作成">データベース作成</h2>
+<p>データベースにテーブルを1つ作成します。</p>
+<p>テーブル定義として「キーが列名」「値が型情報」の連想配列を用意してください。<br>
+型情報は常にMySQL互換で作成してください。(MySQLの型情報はSQLiteと互換性があるため)</p>
+<pre><cite>データベース作成</cite><!--
+$テーブル名 = "テーブル名";
+
+$テーブル定義 = array(
+"id"           => "integer primary key auto_increment",
+"動画URL"      => "varchar(500) not null",
+"横サイズ"     => "smallint unsigned not null",
+"縦サイズ"     => "smallint unsigned not null",
+"動画時間"     => "float unsigned not null",
+"投稿時間"     => "integer unsigned not null",
+"アクセス数"   => "integer unsigned default 0",
+"コメント数"   => "integer unsigned default 0",
+"ユーザID"     => "varchar(250) not null",
+"状態"         => "varchar(30) default '公開'",
+"タイトル"     => "varchar(250) not null",
+"本文"         => "text",
+);
+
+データベース作成($テーブル名, $テーブル定義);
+--></pre>
+
+<p><small>SQLiteでは型情報に「int」を含めば整数型になり、「char」「text」「blob」を含めば文字列型になります。<br>
+primary keyの後にautoincremanetをつけると、重複しないIDにすることができます。</small></p>
+
+
+<h2 id="インデックス作成">インデックス作成</h2>
+<p>列のインデックスを作成すると、その列を高速に検索できるようになります</p>
+<pre><cite>インデックス作成</cite><!--
+データベース実行("create index インデックス名 on テーブル名 (列名)");
+--></pre>
+
+<h2 id="トランザクション">トランザクション</h2>
+<pre><cite>トランザクション</cite><!--
+トランザクション開始(); //開始
+トランザクション終了(); //コミット
+トランザクション失敗(); //巻き戻す
+--></pre>
+
+<h2 id="データベース接続">データベース接続</h2>
+<p>データベースへの接続は初期設定に基づき自動で行わるので、通常は行う必要はありません。<br>
+接続先を変更したい場合に当関数を実行してください</p>
+<pre><cite>データベース接続</cite><!--
+//SQLiteに接続する
+$結果 = データベース接続("sqlite:./test.db");
+
+//MySQLに接続する
+$結果 = データベース接続("mysql:host=ホスト名;dbname=データベース名;charset=utf8", "ユーザID", "パスワード");
+
+//初期設定で接続する
+$結果 = データベース接続();
+--></pre>
+
+<p>結果はPDOオブジェクトです。接続はキャッシュされます</p>
+
+<h2 id="ソースコード">ソースコード</h2>
+<pre><!--
+// http://musou.s38.xrea.com/php/pdo_old.html
+function データベース接続($driver = "", $user = "", $pass = ""){
+    if(!$driver){
+        $driver = データベース::$標準ドライバ;
+        $user   = データベース::$標準ユーザ;
+        $pass   = データベース::$標準パスワード;
+    }
+    データベース::$pdo = new PDO($driver, $user, $pass, array(
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => true,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+    ));
+    return データベース::$pdo;
+}
+
+function データベース実行($SQL文, $割当 = null, $トランザクション = false){
+    if(!isset(データベース::$pdo)){ データベース接続(); }
+    if($トランザクション === true){ データベース::$pdo -> beginTransaction(); }
+
+    if($割当){
+        $stmt = データベース::$pdo -> prepare($SQL文);
+        for($i = 1; $i <= count($割当); $i++){
+            $type = gettype($割当[$i-1]);
+            if($type === "integer" or $type === "boolean"){
+                $stmt -> bindValue($i, $割当[$i-1], PDO::PARAM_INT);
+            }
+            else {
+                $stmt -> bindValue($i, $割当[$i-1], PDO::PARAM_STR);
+            }
+        }
+        $stmt -> execute();
+    }
+    else{
+        $stmt = データベース::$pdo -> query($SQL文);
+    }
+    return $stmt;
+}
+
+function データベース取得($SQL文, $割当 = null, $取得タイプ = PDO::FETCH_ASSOC){
+    return データベース実行($SQL文, $割当) -> fetchAll($取得タイプ);
+}
+
+function データベース行取得($SQL文, $割当 = null){
+    return データベース実行($SQL文, $割当) -> fetch();
+}
+
+function データベース列取得($SQL文, $割当 = null){
+    return データベース実行($SQL文, $割当) -> fetchAll(PDO::FETCH_COLUMN);
+}
+
+function データベースセル取得($SQL文, $割当 = null){
+    return データベース実行($SQL文, $割当) -> fetchColumn();
+}
+
+function データベース件数($SQL文, $割当 = null){
+    return データベース実行($SQL文, $割当) -> fetchColumn();
+}
+
+function データベース追加($SQL文, $割当 = null){
+    データベース実行($SQL文, $割当);
+    return データベース::$pdo -> lastInsertId();
+}
+
+function データベース更新($SQL文, $割当 = null){
+    return データベース実行($SQL文, $割当) -> rowCount();
+}
+
+function データベース削除($SQL文, $割当 = null){
+    return データベース実行($SQL文, $割当) -> rowCount();
+}
+
+function データベース作成($テーブル名, $テーブル定義){
+    foreach($テーブル定義 as $name => $value){
+        $列情報 .= "$name $value,";
+    }
+    $列情報 = rtrim($列情報, ',');
+    $SQL文 = "create table IF NOT EXISTS $テーブル名 ($列情報)";
+
+    $DB名 = (データベース::$標準ドライバ) ? データベース::$標準ドライバ : "sqlite";
+
+    if(preg_match('/^sqlite/i', $DB名)){ //SQLite用
+        $SQL文  = str_replace('auto_increment', 'autoincrement', $SQL文);
+    }
+    else { //MySQL用
+        $SQL文  = str_replace('autoincrement', 'auto_increment', $SQL文);
+        $SQL文 .= " ENGINE = InnoDB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci";
+    }
+    データベース実行($SQL文);
+}
+
+function トランザクション開始(){
+    if(!isset(データベース::$pdo)){ データベース接続(); }
+    データベース::$pdo -> beginTransaction();
+}
+
+function トランザクション終了(){
+    データベース::$pdo -> commit();
+}
+
+function トランザクション失敗(){
+    global $設定;
+    データベース::$pdo -> rollBack();
+}
+
+function データベース設定($driver, $user = null, $pass = null){
+    データベース::$標準ドライバ   = $driver;
+    データベース::$標準ユーザ     = $user;
+    データベース::$標準パスワード = $pass;
+}
+
+class データベース{
+    public static $標準ドライバ;
+    public static $標準ユーザ;
+    public static $標準パスワード;
+    public static $pdo;
+}
+--></pre>
+
+
+
+
+
+
+
+</article>
+
+<nav class="back"><a href="./">目次に戻る</a></nav>
+</div>
+<script src="web.js"></script>
+
+</body></html>
