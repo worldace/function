@@ -1454,7 +1454,7 @@ class iarray implements \ArrayAccess, \IteratorAggregate, \Countable{
         $keys  = explode('.', $name);
 
         if(in_array('', $keys)){
-            throw new Exception('キー名が不正です');
+            throw new \Exception('キー名が不正です');
         }
 
         while(count($keys) > 1){
@@ -1464,7 +1464,7 @@ class iarray implements \ArrayAccess, \IteratorAggregate, \Countable{
                 $array[$k] = [];
             }
             elseif(!is_array($array[$k])){
-                throw new Exception('代入できない場所です');
+                throw new \Exception('代入できない場所です');
             }
 
             $array = &$array[$k];
@@ -1474,7 +1474,7 @@ class iarray implements \ArrayAccess, \IteratorAggregate, \Countable{
             $array[$keys[0]] = $value;
         }
         else{
-            throw new Exception('再代入はできません');
+            throw new \Exception('再代入はできません');
         }
     }
 
@@ -1487,7 +1487,7 @@ class iarray implements \ArrayAccess, \IteratorAggregate, \Countable{
                 $array = $array[$k];
             }
             else{
-                throw new Exception('存在しないキーです');
+                throw new \Exception('存在しないキーです');
             }
         }
         return $array;
@@ -1510,7 +1510,7 @@ class iarray implements \ArrayAccess, \IteratorAggregate, \Countable{
 
 
     function offsetUnset($offset){
-        throw new Exception('キーは削除できません');
+        throw new \Exception('キーは削除できません');
     }
 
 
@@ -1521,5 +1521,10 @@ class iarray implements \ArrayAccess, \IteratorAggregate, \Countable{
 
     function count() { 
         return count($this->array);
+    }
+
+
+    function __invoke(){
+        return $this->array;
     }
 }
