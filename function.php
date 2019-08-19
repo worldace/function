@@ -185,6 +185,26 @@ class str{
     }
 
 
+    static function match_start(?string $str, string $needle) :bool{
+        return substr($str, 0, strlen($needle)) === $needle;
+    }
+
+
+    static function match_end(?string $str, string $needle) :bool{
+        return substr($str, -strlen($needle)) === $needle;
+    }
+
+
+    static function shift(?string $str, string $needle){
+        return strstr($str, $needle, true);
+    }
+
+
+    static function pop(?string $str, string $needle){
+        return substr(strrchr($str, $needle), 1);
+    }
+
+
     static function replace_once(?string $str, string $needle, string $replace) :string{
         $pos = strpos($str, $needle);
         return ($pos === false) ? $str : substr_replace($str, $replace, $pos, strlen($needle));
