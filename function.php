@@ -606,6 +606,31 @@ class file{
     }
 
 
+    static function edit_contents(string $file, callable $fn, ...$args){
+        $fp = fopen($file, 'cb+');
+        if(!$fp){
+            return false;
+        }
+        flock($fp, LOCK_EX);
+
+        $contents = $fn(stream_get_contents($fp), ...$args);
+
+        if(is_string($contents)){
+            ftruncate($fp, 0);
+            rewind($fp);
+            fwrite($fp, $contents);
+            flock($fp, LOCK_UN);
+            fclose($fp);
+            return true;
+        }
+        else{
+            flock($fp, LOCK_UN);
+            fclose($fp);
+            return false;
+        }
+    }
+
+
     static function permission(string $file, string $permission = null) :string{
         if(!preg_match('/^0/', $permission) and $permission >= 100 and $permission <= 777){
             chmod($file, octdec($permission));
