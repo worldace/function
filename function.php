@@ -221,6 +221,11 @@ class str{
     }
 
 
+    static function template(?string $str, array $table) :string{
+        return preg_replace_callback('/{{(.+?)}}/', function($m) use($table){ return $table[$m[1]]; }, $str);
+    }
+
+
     static function base64_encode_urlsafe(?string $str) :string{
         return rtrim(strtr(base64_encode($str), '+/', '-_'), '=');
     }

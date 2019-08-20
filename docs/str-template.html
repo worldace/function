@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>str::template()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>str::template()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>簡易的なテンプレートエンジン</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+テンプレート文字列。変数の書き方は<var>{{変数名}}</var>
+</td></tr>
+<tr class="require"><td>2</td><td>
+変換表を連想配列で。<var>[変数名=&gt;文字列]</var>
+</td></tr>
+<tr class="return"><td>戻</td><td>
+変換後の文字列
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+print str::template('私の名前は{{name}}です。年齢は{{age}}歳です', [
+    'name' => '太郎',
+    'age'  => 16,
+]);
+
+// 私の名前は太郎です。年齢は16歳です
+--></code>
+
+
+</div>
+</article>
+
+</body>
+</html>
