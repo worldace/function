@@ -1508,7 +1508,7 @@ class doc{
         foreach($contents as $row){
             $tr = $this->doc->createElement('tr');
             $el->appendChild($tr);
-            foreach($row as $cell){
+            foreach((array)$row as $cell){
                 $td = $this->doc->createElement('td', $cell);
                 $tr->appendChild($td);
             }
