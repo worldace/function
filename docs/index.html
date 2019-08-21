@@ -126,9 +126,9 @@ function text2table(text, callback){
 
     for(var i = 0; i < max; i++){
         var tr = table.insertRow();
-        for(var j = 0; j < array.length; j++){
+        for(var n = 0; n < array.length; n++){
             var td = tr.insertCell();
-            callback(td, array[j][i]);
+            callback(td, array[n][i]);
         }
     }
     return table;
