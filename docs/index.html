@@ -101,18 +101,15 @@ os::is_windows
 
 
 <script>
-var tmpl  = document.querySelector('script[type="table"]');
+var tmpl  = document.querySelector('[type="table"]');
 var table = text2table(tmpl.textContent, function(td, content){
-    if(!content){
-        return;
+    if(content){
+        var href = content.replace('クラス', '').replace('::', '-') + '.html';
+        td.insertAdjacentHTML('afterbegin', '<a href="' + href + '">' + content + '</a>');
     }
-    var a         = document.createElement('a');
-    a.href        = content.replace('クラス', '').replace('::', '-') + '.html';
-    a.textContent = content;
-    td.appendChild(a);
 });
 
-table.id  = 'menu';
+table.id = 'menu';
 table.insertAdjacentHTML('afterbegin', '<tr><th colspan="' + table.rows[0].cells.length + '">function.php</th></tr>');
 tmpl.parentNode.replaceChild(table, tmpl);
 
@@ -120,13 +117,12 @@ tmpl.parentNode.replaceChild(table, tmpl);
 
 function text2table(text, callback){
     var array = text.trim().split(/\n{2,}/);
+    var table = document.createElement('table');
 
     for(var i = 0; i < array.length; i++){
         array[i] = array[i].split("\n");
-        var max = Math.max(max || 1 , array[i].length);
+        var max = Math.max(array[i].length, max || 1);
     }
-
-    var table = document.createElement('table');
 
     for(var i = 0; i < max; i++){
         var tr = table.insertRow();
@@ -135,7 +131,6 @@ function text2table(text, callback){
             callback(td, array[j][i]);
         }
     }
-
     return table;
 }
 </script>
