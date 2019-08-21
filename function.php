@@ -53,7 +53,7 @@ class request{
     }
 
 
-    static function files(string $name) :array{ // ['name'=>,'type'=>,'tmp_name'=>,'error'=>,'size'=>]
+    static function file(string $name) :array{ // ['name'=>,'type'=>,'tmp_name'=>,'error'=>,'size'=>]
         $files = $_FILES[$name] ?? [];
 
         if(!is_array($files['name'])){
@@ -70,7 +70,7 @@ class request{
 
 
     static function upload(string $name, string $dir, array $whitelist = ['jpg','jpeg','png','gif']) :array{
-        $files = self::files($name);
+        $files = self::file($name);
 
         if(isset($files['name'])){ //single
             $files['upload'] = self::upload_move($files, $dir, $whitelist);
@@ -1111,6 +1111,17 @@ class random{
             $i = mt_rand(1, round(100/$chance*100000));
             return $i <= 100000;
         }
+    }
+}
+
+
+
+class page{
+    static function number(int $page_number, int $count_all, int $count_per_page) :\stdClass{
+        $page = new \stdClass;
+        $page->prev = ($page_number > 1) ? $page_number - 1 : null;
+        $page->next = ($count_all > $page_number * $count_per_page) ? $page_number + 1 : null;
+        return $page;
     }
 }
 
