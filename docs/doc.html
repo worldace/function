@@ -125,7 +125,7 @@ $doc->body->appendChild($div);
 <li>本文は省略可。本文に含まれるタグはエスケープされます</li>
 <li>属性は省略可。エスケープされます</li>
 </ul>
-<h3>小タグの一括生成</h3>
+<h3>子タグの一括生成</h3>
 
 <p><var>table</var><var>select</var><var>ol</var><var>ul</var>の4タグに関して、本文を配列で渡すことにより、子タグを一括して生成できます。</p>
 
@@ -206,25 +206,10 @@ return $doc;
 
 <h3>$DOCオブジェクト</h3>
 
-<p>docファイル内では<var>$DOC</var>というオブジェクトが自動生成され、元のdocタグなどにアクセスできます。</p>
-<table>
-<caption>$DOCオブジェクト</caption>
-<tr><th>プロパティ</th><th>説明</th></tr>
-<tr><td>tag</td><td>元のdocタグ</td></tr>
-<tr><td>html</td><td>大元のhtml要素</td></tr>
-<tr><td>head</td><td>大元のhead要素</td></tr>
-<tr><td>body</td><td>大元のbody要素</td></tr>
-</table>
+<p>docファイル内では<var>$DOC</var>で、大元の$docオブジェクトにアクセスできます。<br>
+また<var>$DOC-&gt;tag</var>で、呼び出し元のdocタグにアクセスできます。</p>
 
-<p>$DOCオブジェクトを利用すれば、属性経由でdocファイルにデータを渡すこともできます</p>
-<code class="html" data-title="docタグ"><!--
-<doc-footer name="value"></doc-footer>
---></code>
-
-<code class="php" data-title="docファイル"><!--
-$DOC->tag->getAttribute('name'); // value が取得できる
---></code>
-
+<p class="info-blue">docファイルにデータを渡すには$DOCオブジェクトを利用するとよいでしょう</p>
 
 
 <h2>実例サンプル</h2>
@@ -234,7 +219,7 @@ $DOC->tag->getAttribute('name'); // value が取得できる
 $doc = new doc('<ul id="list"></ul>');
 
 foreach([1,2,3] as $v) {
-    //li要素を作成しよう    
+    //li要素を作成しよう
     $li = $doc('<li>', $v);
     //ulに追加しよう
     $doc->list->appendChild($li);

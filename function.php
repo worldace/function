@@ -1467,11 +1467,7 @@ class doc{
         $this->doc->formatOutput = true;
 
         if(self::$dir){
-            $DOC = new stdClass;
-            $DOC->html = $this->html;
-            $DOC->head = $this->head;
-            $DOC->body = $this->body;
-            $this->replace_component($DOC);
+            $this->replace_component($this);
         }
 
         if($this->doc->type === 'html'){
