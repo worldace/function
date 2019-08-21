@@ -204,16 +204,25 @@ return $doc;
 <p class="info-blue">docタグは普通に作成できます。<var>$doc(&apos;&lt;doc-footer&gt;&apos;);</var></p>
 <p class="info-blue">docファイルでdocオブジェクトを返さない場合は、docタグは消えます</p>
 
-<h3>docタグからdocファイルへデータを渡す</h3>
+<h3>$DOCオブジェクト</h3>
 
-<p>docファイル内では<var>$el</var>で元のdocタグにアクセスできるので、属性経由でデータを渡せます。</p>
+<p>docファイル内では<var>$DOC</var>というオブジェクトが自動生成され、元のdocタグなどにアクセスできます。</p>
+<table>
+<caption>$DOCオブジェクト</caption>
+<tr><th>プロパティ</th><th>説明</th></tr>
+<tr><td>tag</td><td>元のdocタグ</td></tr>
+<tr><td>html</td><td>大元のhtml要素</td></tr>
+<tr><td>head</td><td>大元のhead要素</td></tr>
+<tr><td>body</td><td>大元のbody要素</td></tr>
+</table>
 
+<p>$DOCオブジェクトを利用すれば、属性経由でdocファイルにデータを渡すこともできます</p>
 <code class="html" data-title="docタグ"><!--
 <doc-footer name="value"></doc-footer>
 --></code>
 
 <code class="php" data-title="docファイル"><!--
-$el->getAttribute('name'); // value が取得できる
+$DOC->tag->getAttribute('name'); // value が取得できる
 --></code>
 
 

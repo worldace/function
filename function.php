@@ -1467,7 +1467,11 @@ class doc{
         $this->doc->formatOutput = true;
 
         if(self::$dir){
-            $this->replace_component();
+            $DOC = new stdClass;
+            $DOC->html = $this->html;
+            $DOC->head = $this->head;
+            $DOC->body = $this->body;
+            $this->replace_component($DOC);
         }
 
         if($this->doc->type === 'html'){
@@ -1517,20 +1521,22 @@ class doc{
     }
 
 
-    private function replace_component(){
+    private function replace_component($DOC){
         foreach($this('*') as $el){
             if(strpos($el->tagName, 'doc-') === 0){
-                $component = $this->load_component(self::$dir.'/'.$el->tagName.'.php', $el);
+                $DOC->file = sprintf('%s/%s.php', self::$dir, $el->tagName);
+                $DOC->tag  = $el;
+                $component = $this->load_component($DOC);
                 ($component) ? $el->parentNode->replaceChild($component, $el) : $el->parentNode->removeChild($el);
             }
         }
     }
 
 
-    private function load_component($file, $el){
-        $component = require($file);
+    private function load_component($DOC){
+        $component = require($DOC->file);
         if($component instanceof self){
-            $component->replace_component();
+            $component->replace_component($DOC);
             return $this->doc->importNode($component->doc->documentElement, true);
         }
         else{
