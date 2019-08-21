@@ -18,6 +18,11 @@ class request{
     }
 
 
+    static function query(){
+        return self::input(INPUT_SERVER, 'QUERY_STRING');
+    }
+
+
     static function header(string $name){
         $name = strtoupper($name);
         $name = str_replace('-', '_', $name);

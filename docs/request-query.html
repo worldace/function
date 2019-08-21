@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title>request::post()</title>
+<title>request::query()</title>
 <link href="style.css" rel="stylesheet">
 <script src="script.js"></script>
 </head>
@@ -12,26 +12,26 @@
 
 <article>
 <header>
-<h1>request::post()</h1>
+<h1>request::query()</h1>
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
 <div id="contents">
 
-<p>POSTの値を取得する</p>
+<p>クエリ文字列を取得する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
-<tr class="require"><td>1</td><td>
-POSTのキー名
+<tr class="noarg"><td>-</td><td>
+なし
 </td></tr>
 <tr class="return"><td>戻</td><td>
-対応するPOSTの値。キーが存在しない場合はnull
+クエリ文字列。存在しない場合はnull
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-print request::post('example');
+print request::query(); // name=value&key=value
 --></code>
 
 
