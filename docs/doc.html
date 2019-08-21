@@ -124,8 +124,19 @@ $doc->body->appendChild($div);
 <ul>
 <li>本文は省略可。本文に含まれるタグはエスケープされます</li>
 <li>属性は省略可。エスケープされます</li>
-
 </ul>
+<h3>小タグの一括生成</h3>
+
+<p><var>table</var><var>select</var><var>ol</var><var>ul</var>の4タグに関して、本文を配列で渡すことにより、子タグを一括して生成できます。</p>
+
+<code class="php" data-title="ul一括生成"><!--
+$doc('<ul>', [1,2], ['id'=>'example']);
+
+//<ul id="example">
+//  <li>1</li>
+//  <li>2</li>
+//</ul>
+--></code>
 
 <h2>外部ファイルのインポート</h2>
 

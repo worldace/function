@@ -1424,10 +1424,23 @@ class doc{
         }
         else if($selector[0] === '<'){
             $tagName = str_replace(['<','>'], '', $selector);
-            $el = $this->doc->createElement($tagName, $text);
+            $el = $this->doc->createElement($tagName);
             foreach($attr as $k => $v){
                 $el->setAttribute($k, $v);
             }
+
+            if(is_array($text)){
+                if($tagName === 'table'){
+                    $el = $this->createTableElement($el, $text);
+                }
+                else if($tagName === 'ol' or $tagName === 'ul' or $tagName === 'select'){
+                    $el = $this->createListElement($el, $text);
+                }
+            }
+            else{
+                $el->textContent = $text;
+            }
+
             return $el;
         }
         else if($selector[0] === '.'){
@@ -1478,6 +1491,29 @@ class doc{
                 $this->$id = $v;
             }
         }
+    }
+
+
+    private function createListElement($el, array $contents){
+        $child_tagName = ['select'=>'option', 'ol'=>'li', 'ul'=>'li'][$el->tagName];
+        foreach($contents as $v){
+            $child = $this->doc->createElement($child_tagName, $v);
+            $el->appendChild($child);
+        }
+        return $el;
+    }
+
+
+    private function createTableElement($el, array $contents){
+        foreach($contents as $row){
+            $tr = $this->doc->createElement('tr');
+            $el->appendChild($tr);
+            foreach($row as $cell){
+                $td = $this->doc->createElement('td', $cell);
+                $tr->appendChild($td);
+            }
+        }
+        return $el;
     }
 
 
