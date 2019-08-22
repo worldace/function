@@ -28,7 +28,7 @@
 検索ワード
 </td></tr>
 <tr class="return"><td>戻</td><td>
-切り出した文字列。検索ワードが見つからない場合はfalseが返ります
+切り出した文字列。検索ワードが見つからない場合は元の文字列が返ります
 </td></tr>
 </table>
 
@@ -36,7 +36,7 @@
 <code class="php" data-title="使用例"><!--
 print str::shift('www.example.com/', '.'); // www
 print str::shift('/www/public/', '/');     // 空文字列
-print str::shift('/www/public/', '.');     // false
+print str::shift('/www/public/', '.');     // /www/public/
 --></code>
 
 
