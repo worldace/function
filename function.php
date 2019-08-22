@@ -1470,7 +1470,7 @@ class doc{
         $this->doc->formatOutput = true;
 
         if(self::$dir){
-            $this->replace_component($this);
+            $this->replace_doctag($this);
         }
 
         if($this->doc->type === 'html'){
@@ -1529,26 +1529,23 @@ class doc{
     }
 
 
-    private function replace_component($DOC){
+    private function replace_doctag($DOC){
         foreach($this('*') as $el){
             if(strpos($el->tagName, 'doc-') === 0){
                 $DOC->file = sprintf('%s/%s.php', self::$dir, $el->tagName);
                 $DOC->tag  = $el;
-                $component = $this->load_component($DOC);
+                $component = $this->require_docfile($DOC);
                 ($component) ? $el->parentNode->replaceChild($component, $el) : $el->parentNode->removeChild($el);
             }
         }
     }
 
 
-    private function load_component($DOC){
+    private function require_docfile($DOC){
         $component = require($DOC->file);
         if($component instanceof self){
-            $component->replace_component($DOC);
+            $component->replace_doctag($DOC);
             return $this->doc->importNode($component->doc->documentElement, true);
-        }
-        else{
-            return null;
         }
     }
 }
