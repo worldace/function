@@ -1530,22 +1530,22 @@ class doc{
 
 
     private function replace_doctag($DOC){
-        foreach($this('*') as $el){
-            if(strpos($el->tagName, 'doc-') === 0){
-                $DOC->file = sprintf('%s/%s.php', self::$dir, $el->tagName);
-                $DOC->tag  = $el;
-                $doc_el    = $this->require_docfile($DOC);
-                ($doc_el) ? $el->parentNode->replaceChild($doc_el, $el) : $el->parentNode->removeChild($el);
+        foreach($this('*') as $doctag){
+            if(strpos($doctag->tagName, 'doc-') === 0){
+                $DOC->file  = sprintf('%s/%s.php', self::$dir, $doctag->tagName);
+                $DOC->tag   = $doctag;
+                $docfile_el = $this->require_docfile($DOC);
+                ($docfile_el) ? $doctag->parentNode->replaceChild($docfile_el, $doctag) : $doctag->parentNode->removeChild($doctag);
             }
         }
     }
 
 
     private function require_docfile($DOC){
-        $doc = require($DOC->file);
-        if($doc instanceof self){
-            $doc->replace_doctag($DOC);
-            return $this->doc->importNode($doc->doc->documentElement, true);
+        $docfile = require($DOC->file);
+        if($docfile instanceof self){
+            $docfile->replace_doctag($DOC);
+            return $this->doc->importNode($docfile->doc->documentElement, true);
         }
     }
 }
