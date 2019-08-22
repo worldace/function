@@ -454,12 +454,12 @@ class ftp{
     }
 
 
-    function upload($from, string $to){
+    function upload(string $from, string $to){
         ftp_put($this->ftp, $to, $from, FTP_BINARY);
     }
 
 
-    function mirroring_upload($from, $to){
+    function mirroring_upload(string $from, string $to) :array{
         $server = [];
         foreach(ftp_mlsd($this->ftp, $to) as $v){
             if($v['type'] !== 'file'){
@@ -468,16 +468,16 @@ class ftp{
             $server[$v['name']] = $v['modify'];
         }
 
+        $result = [];
         foreach(file::list($from, false) as $v){
             $name = basename($v);
-            if(!array_key_exists($name, $server)){ // サーバーにない場合はアップ
+            if(!isset($server[$name]) or date('YmdHis', filemtime($v)) > $server[$name]){
+                // サーバーにない場合と、ローカルの方が新しい場合はアップ
                 $this->upload($v, "$to/$name");
-            }
-            $local_time = date('YmdHis', filemtime($v));
-            if($local_time > $server[$name]){ // ローカルの方が新しい場合はアップ
-                $this->upload($v, "$to/$name");
+                $result[] = $v;
             }
         }
+        return $result;
     }
 }
 
