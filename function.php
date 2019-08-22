@@ -653,6 +653,7 @@ class file{
             $base = $dir;
         }
 
+        $return = [];
         foreach(array_diff(scandir($dir), ['.','..']) as $file){
             $path     = "$dir/$file";
             $relative = substr($path, strlen($base)+1);
@@ -664,7 +665,7 @@ class file{
             }
         }
 
-        return $return ?? [];
+        return $return;
     }
 
 
@@ -677,6 +678,7 @@ class file{
             $base = $dir;
         }
 
+        $return = [];
         foreach(array_diff(scandir($dir), ['.','..']) as $file){
             $path     = "$dir/$file";
             $relative = substr($path, strlen($base)+1);
@@ -691,7 +693,7 @@ class file{
             }
         }
 
-        return $return ?? [];
+        return $return;
     }
 
 
@@ -769,6 +771,7 @@ class dir{
             $base = $dir;
         }
 
+        $return = [];
         foreach(array_diff(scandir($dir), ['.','..']) as $file){
             $path     = "$dir/$file";
             $relative = substr($path, strlen($base)+1);
@@ -780,7 +783,7 @@ class dir{
             }
         }
 
-        return $return ?? [];
+        return $return;
     }
 
 }
