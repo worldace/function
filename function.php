@@ -1534,18 +1534,18 @@ class doc{
             if(strpos($el->tagName, 'doc-') === 0){
                 $DOC->file = sprintf('%s/%s.php', self::$dir, $el->tagName);
                 $DOC->tag  = $el;
-                $component = $this->require_docfile($DOC);
-                ($component) ? $el->parentNode->replaceChild($component, $el) : $el->parentNode->removeChild($el);
+                $doc_el    = $this->require_docfile($DOC);
+                ($doc_el) ? $el->parentNode->replaceChild($doc_el, $el) : $el->parentNode->removeChild($el);
             }
         }
     }
 
 
     private function require_docfile($DOC){
-        $component = require($DOC->file);
-        if($component instanceof self){
-            $component->replace_doctag($DOC);
-            return $this->doc->importNode($component->doc->documentElement, true);
+        $doc = require($DOC->file);
+        if($doc instanceof self){
+            $doc->replace_doctag($DOC);
+            return $this->doc->importNode($doc->doc->documentElement, true);
         }
     }
 }
