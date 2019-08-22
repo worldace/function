@@ -449,7 +449,7 @@ class ftp{
     }
 
     function __destruct(){
-        ftp_close($this->ftp);
+        @ftp_close($this->ftp); // ftp_close() SSL_read on shutdown エラー抑制
     }
 
     function upload($from, string $to){
