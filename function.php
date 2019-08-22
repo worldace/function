@@ -448,23 +448,34 @@ class ftp{
         ftp_pasv($this->ftp, true);
     }
 
+
     function __destruct(){
         @ftp_close($this->ftp); // ftp_close() SSL_read on shutdown エラー抑制
     }
+
 
     function upload($from, string $to){
         ftp_put($this->ftp, $to, $from, FTP_BINARY);
     }
 
-    function mirror($from, $to){
-        foreach(ftp_nlist($this->ftp, $to) as $v){
-            $server_files []= basename($v);
+
+    function mirroring_upload($from, $to){
+        $server = [];
+        foreach(ftp_mlsd($this->ftp, $to) as $v){
+            if($v['type'] !== 'file'){
+                continue;
+            }
+            $server[$v['name']] = $v['modify'];
         }
 
-        foreach(glob("$from/*") as $v){ //ローカルにあってサーバにないファイルだけアップ。フォルダ非対応
-            $v = basename($v);
-            if(!in_array($v, $server_files) and is_file("$from/$v")){
-                $this->upload("$from/$v", "$to/$v");
+        foreach(file::list($from, false) as $v){
+            $name = basename($v);
+            if(!array_key_exists($name, $server)){ // サーバーにない場合はアップ
+                $this->upload($v, "$to/$name");
+            }
+            $local_time = date('YmdHis', filemtime($v));
+            if($local_time > $server[$name]){ // ローカルの方が新しい場合はアップ
+                $this->upload($v, "$to/$name");
             }
         }
     }
