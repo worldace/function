@@ -208,7 +208,7 @@ class str{
 
     static function pop(?string $str, string $needle){
         $result = substr(strrchr($str, $needle), 1);
-        return ($result !== false) ? $result : $str;
+        return ($result !== false) ? $result : '';
     }
 
 
