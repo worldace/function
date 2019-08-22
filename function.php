@@ -663,14 +663,17 @@ class file{
 
 
     static function list(string $dir, bool $recursive = true, string $base = '') :array{
-       $separator = DIRECTORY_SEPARATOR;
        if($base === ''){ //初回
-            $base = $dir = realpath($dir);
+            $dir = realpath($dir);
+            if(preg_match('/^WIN/', PHP_OS)){
+                $dir = str_replace('\\', '/', $dir);
+            }
+            $base = $dir;
         }
 
         $return = [];
         foreach(array_diff(scandir($dir), ['.','..']) as $file){
-            $path     = "$dir$separator$file";
+            $path     = "$dir/$file";
             $relative = substr($path, strlen($base)+1);
             if(is_dir($path) and $recursive){
                 $return = array_merge($return, self::list($path, true, $base));
@@ -685,17 +688,20 @@ class file{
 
 
     static function list_all(string $dir, bool $recursive = true, string $base = '') :array{
-       $separator = DIRECTORY_SEPARATOR;
        if($base === ''){ //初回
-            $base = $dir = realpath($dir);
+            $dir = realpath($dir);
+            if(preg_match('/^WIN/', PHP_OS)){
+                $dir = str_replace('\\', '/', $dir);
+            }
+            $base = $dir;
         }
 
         $return = [];
         foreach(array_diff(scandir($dir), ['.','..']) as $file){
-            $path     = "$dir$separator$file";
+            $path     = "$dir/$file";
             $relative = substr($path, strlen($base)+1);
             if(is_dir($path)){
-                $return[$relative.$separator] = $path.$separator;
+                $return[$relative.'/'] = $path.'/';
                 if($recursive){
                     $return = array_merge($return, self::list_all($path, true, $base));
                 }
@@ -775,17 +781,20 @@ class dir{
 
 
     static function list(string $dir, bool $recursive = true, string $base = '') :array{
-       $separator = DIRECTORY_SEPARATOR;
        if($base === ''){ //初回
-            $base = $dir = realpath($dir);
+            $dir = realpath($dir);
+            if(preg_match('/^WIN/', PHP_OS)){
+                $dir = str_replace('\\', '/', $dir);
+            }
+            $base = $dir;
         }
 
         $return = [];
         foreach(array_diff(scandir($dir), ['.','..']) as $file){
-            $path     = "$dir$separator$file";
+            $path     = "$dir/$file";
             $relative = substr($path, strlen($base)+1);
             if(is_dir($path)){
-                $return[$relative.$separator] = $path.$separator;
+                $return[$relative.'/'] = $path.'/';
                 if($recursive){
                     $return = array_merge($return, self::list($path, true, $base));
                 }
