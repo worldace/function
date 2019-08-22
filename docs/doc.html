@@ -125,11 +125,11 @@ $doc->body->appendChild($div);
 <li>本文は省略可。本文に含まれるタグはエスケープされます</li>
 <li>属性は省略可。エスケープされます</li>
 </ul>
-<h3>子タグの一括生成</h3>
+<h3>子タグの一括作成</h3>
 
-<p><var>table</var><var>select</var><var>ol</var><var>ul</var>の4タグに関して、本文を配列で渡すことにより、子タグを一括して生成できます。</p>
+<p><var>ul</var><var>ol</var><var>select</var><var>table</var>のタグは、本文を配列で渡すと、子タグを一括して作成できます。</p>
 
-<code class="php" data-title="ul一括生成"><!--
+<code class="php" data-title="ul"><!--
 $doc('<ul>', [1,2], ['id'=>'example']);
 
 //<ul id="example">
@@ -138,6 +138,31 @@ $doc('<ul>', [1,2], ['id'=>'example']);
 //</ul>
 --></code>
 
+<code class="php" data-title="select"><!--
+$doc('<select>', [1,2]);
+
+//<select>
+//  <option value="1">1</option>
+//  <option value="2">2</option>
+//</select>
+--></code>
+
+
+<code class="php" data-title="table"><!--
+$doc('<table>', [1,2]);
+
+//<table>
+//  <tr><td>1</td></tr>
+//  <tr><td>2</td></tr>
+//</table>
+
+$doc('<table>', [[1,2], [3,4]]);
+
+//<table>
+//  <tr><td>1</td><td>2</td></tr>
+//  <tr><td>3</td><td>4</td></tr>
+//</table>
+--></code>
 <h2>外部ファイルのインポート</h2>
 
 

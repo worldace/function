@@ -1433,7 +1433,10 @@ class doc{
                 if($tagName === 'table'){
                     $el = $this->createTableElement($el, $text);
                 }
-                else if($tagName === 'ol' or $tagName === 'ul' or $tagName === 'select'){
+                else if($tagName === 'select'){
+                    $el = $this->createSelectElement($el, $text);
+                }
+                else if($tagName === 'ol' or $tagName === 'ul'){
                     $el = $this->createListElement($el, $text);
                 }
             }
@@ -1495,9 +1498,18 @@ class doc{
 
 
     private function createListElement($el, array $contents){
-        $child_tagName = ['select'=>'option', 'ol'=>'li', 'ul'=>'li'][$el->tagName];
         foreach($contents as $v){
-            $child = $this->doc->createElement($child_tagName, $v);
+            $child = $this->doc->createElement('li', $v);
+            $el->appendChild($child);
+        }
+        return $el;
+    }
+
+
+    private function createSelectElement($el, array $contents){
+        foreach($contents as $v){
+            $child = $this->doc->createElement('option', $v);
+            $child->setAttribute('value', $v);
             $el->appendChild($child);
         }
         return $el;
