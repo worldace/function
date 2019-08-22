@@ -461,6 +461,11 @@ class ftp{
     }
 
 
+    function delete_file(string $to) :bool{
+        return ftp_delete($this->ftp, $to);
+    }
+
+
     function mirroring_upload(string $from, string $to) :array{
         $server = [];
         foreach(ftp_mlsd($this->ftp, $to) as $v){
@@ -472,7 +477,7 @@ class ftp{
 
         $result = [];
         foreach(file::list($from, false) as $v){
-            $name = basename($v);
+            $name = str::pop($v, DIRECTORY_SEPARATOR); // basename($v) はバグるから使わない
             if(!isset($server[$name]) or date('YmdHis', filemtime($v)) > $server[$name]){
                 // サーバーにない場合と、ローカルの方が新しい場合はアップ
                 $this->upload($v, "$to/$name");
