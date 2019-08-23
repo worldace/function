@@ -441,161 +441,6 @@ class http{
 
 
 
-class ftp{
-    private $ftp;
-
-    function __construct(string $host, string $id, string $password, bool $is_ssl = true){
-        $this->ftp = ($is_ssl) ? ftp_ssl_connect($host) : ftp_connect($host);
-        ftp_login($this->ftp, $id, $password);
-        ftp_pasv($this->ftp, true);
-    }
-
-
-    function __destruct(){
-        @ftp_close($this->ftp); // ftp_close() SSL_read on shutdown エラー抑制
-    }
-
-
-    function upload(string $from, string $to){
-        ftp_put($this->ftp, $to, $from, FTP_BINARY);
-    }
-
-
-    function delete_file(string $to) :bool{
-        return ftp_delete($this->ftp, $to);
-    }
-
-
-    function mirroring_upload(string $from, string $to) :array{
-        $server = [];
-        foreach(ftp_mlsd($this->ftp, $to) as $v){
-            if($v['type'] !== 'file'){
-                continue;
-            }
-            $server[$v['name']] = $v['modify'];
-        }
-
-        $result = [];
-        foreach(file::list($from, false) as $v){
-            $name = str::pop($v, DIRECTORY_SEPARATOR); // basename($v) はバグるから使わない
-            if(!isset($server[$name]) or date('YmdHis', filemtime($v)) > $server[$name]){
-                // サーバーにない場合と、ローカルの方が新しい場合はアップ
-                $this->upload($v, "$to/$name");
-                $result[] = $v;
-            }
-        }
-        return $result;
-    }
-}
-
-
-
-class mail{
-    private $to     = '';
-    private $from   = '';
-    private $title  = '';
-    private $body   = '';
-    private $name   = '';
-    private $file   = [];
-    private $header = ['MIME-Version: 1.0', 'Content-Transfer-Encoding: base64'];
-
-
-    function __construct(string $to, string $from, string $title, string $body){
-        $this->to    = str_replace(["\r","\n"," ",","], '', $to);
-        $this->from  = str_replace(["\r","\n"," ",","], '', $from);
-        $this->title = str_replace(["\r","\n"] , '', $title);
-        $this->body  = $body;
-    }
-
-
-    function from(string $name){
-        $this->name = str_replace(["\r","\n",","], '', $name);
-        return $this;
-    }
-
-
-    function file(string $name, $value){
-        $this->file[$name] = $value;
-        return $this;
-    }
-
-
-    function cc(string $cc){
-        $cc = str_replace(["\r","\n"," ",","], '', $cc);
-        $this->header[] = "Cc: $cc";
-        return $this;
-    }
-
-
-    function bcc(string $bcc){
-        $bcc = str_replace(["\r","\n"," ",","], '', $bcc);
-        $this->header[] = "Bcc: $bcc";
-        return $this;
-    }
-
-
-    function header(string $header){
-        $this->header[] = str_replace(["\r","\n"], '', $header);
-        return $this;
-    }
-
-
-    function send(){
-        $title  = mb_encode_mimeheader($this->title, 'utf-8');
-        $body   = ($this->file) ? $this->build_multipart() : $this->build_body();
-        $header = $this->build_header();
-        return mail($this->to, $title, $body, $header);
-    }
-
-
-    private function build_body(){
-        $this->header[] = 'Content-Type: text/plain; charset=utf-8';
-        return chunk_split(base64_encode($this->body));
-    }
-
-
-    private function build_multipart(){
-        $_ = sprintf('__%s__', uniqid());
-        $n = "\r\n";
-
-        $this->header[] = sprintf('Content-Type: multipart/mixed; boundary="%s"', $_);
-
-        $body  = sprintf('--%s%s', $_, $n);
-        $body .= sprintf('Content-Transfer-Encoding: base64%s', $n);
-        $body .= sprintf('Content-Type: text/plain; charset="utf-8"%s%s', $n, $n);
-        $body .= chunk_split(base64_encode($this->body)) . $n;
-
-        foreach($this->file as $k => $v){
-            $v = is_resource($v) ? stream_get_contents($v) : file_get_contents($v);
-            if($v === false){
-                continue;
-            }
-            $body .= sprintf('--%s%s', $_, $n);
-            $body .= sprintf('Content-Type: %s%s', file::mime($k), $n);
-            $body .= sprintf('Content-Transfer-Encoding: base64%s', $n);
-            $body .= sprintf('Content-Disposition: attachment; filename="%s"%s%s', mb_encode_mimeheader($k,'utf-8'), $n, $n);
-            $body .= chunk_split(base64_encode($v)) . $n;
-        }
-
-        $body .= sprintf('--%s--%s', $_, $n);
-        return $body;
-    }
-
-
-    private function build_header(){
-        if(strlen($this->name)){
-            $this->header[] = sprintf('From: %s <%s>', mb_encode_mimeheader($this->name,'utf-8'), $this->from);
-        }
-        else{
-            $this->header[] = "From: $this->from";
-        }
-
-        return implode("\r\n", $this->header) . "\r\n";
-    }
-}
-
-
-
 class file{
     static function edit(string $file, callable $fn, ...$args){
         $fp = fopen($file, 'cb+');
@@ -1660,5 +1505,158 @@ class iarray implements \ArrayAccess, \IteratorAggregate, \Countable{
 
     function __invoke(){
         return $this->array;
+    }
+}
+
+
+
+class ftp{
+    private $ftp;
+
+    function __construct(string $host, string $id, string $password, bool $is_ssl = true){
+        $this->ftp = ($is_ssl) ? ftp_ssl_connect($host) : ftp_connect($host);
+        ftp_login($this->ftp, $id, $password);
+        ftp_pasv($this->ftp, true);
+    }
+
+
+    function __destruct(){
+        @ftp_close($this->ftp); // ftp_close() SSL_read on shutdown エラー抑制
+    }
+
+
+    function upload(string $from, string $to){
+        ftp_put($this->ftp, $to, $from, FTP_BINARY);
+    }
+
+
+    function delete_file(string $to) :bool{
+        return ftp_delete($this->ftp, $to);
+    }
+
+
+    function mirroring_upload(string $from, string $to) :array{
+        $server = [];
+        foreach(ftp_mlsd($this->ftp, $to) as $v){
+            if($v['type'] === 'file'){
+                $server[$v['name']] = $v['modify'];
+            }
+        }
+
+        $result = [];
+        foreach(file::list($from, false) as $v){
+            $name = str::pop($v, DIRECTORY_SEPARATOR); // basename($v) はバグるから使わない
+            if(!isset($server[$name]) or date('YmdHis', filemtime($v)) > $server[$name]){
+                $this->upload($v, "$to/$name"); // サーバーにない場合と、ローカルの方が新しい場合はアップ
+                $result[] = $v;
+            }
+        }
+        return $result;
+    }
+}
+
+
+
+class mail{
+    private $to     = '';
+    private $from   = '';
+    private $title  = '';
+    private $body   = '';
+    private $name   = '';
+    private $file   = [];
+    private $header = ['MIME-Version: 1.0', 'Content-Transfer-Encoding: base64'];
+
+
+    function __construct(string $to, string $from, string $title, string $body){
+        $this->to    = str_replace(["\r","\n"," ",","], '', $to);
+        $this->from  = str_replace(["\r","\n"," ",","], '', $from);
+        $this->title = str_replace(["\r","\n"] , '', $title);
+        $this->body  = $body;
+    }
+
+
+    function from(string $name){
+        $this->name = str_replace(["\r","\n",","], '', $name);
+        return $this;
+    }
+
+
+    function file(string $name, $value){
+        $this->file[$name] = $value;
+        return $this;
+    }
+
+
+    function cc(string $cc){
+        $cc = str_replace(["\r","\n"," ",","], '', $cc);
+        $this->header[] = "Cc: $cc";
+        return $this;
+    }
+
+
+    function bcc(string $bcc){
+        $bcc = str_replace(["\r","\n"," ",","], '', $bcc);
+        $this->header[] = "Bcc: $bcc";
+        return $this;
+    }
+
+
+    function header(string $header){
+        $this->header[] = str_replace(["\r","\n"], '', $header);
+        return $this;
+    }
+
+
+    function send(){
+        $title  = mb_encode_mimeheader($this->title, 'utf-8');
+        $body   = ($this->file) ? $this->build_multipart() : $this->build_body();
+        $header = $this->build_header();
+        return mail($this->to, $title, $body, $header);
+    }
+
+
+    private function build_body(){
+        $this->header[] = 'Content-Type: text/plain; charset=utf-8';
+        return chunk_split(base64_encode($this->body));
+    }
+
+
+    private function build_multipart(){
+        $_ = sprintf('__%s__', uniqid());
+        $n = "\r\n";
+
+        $this->header[] = sprintf('Content-Type: multipart/mixed; boundary="%s"', $_);
+
+        $body  = sprintf('--%s%s', $_, $n);
+        $body .= sprintf('Content-Transfer-Encoding: base64%s', $n);
+        $body .= sprintf('Content-Type: text/plain; charset="utf-8"%s%s', $n, $n);
+        $body .= chunk_split(base64_encode($this->body)) . $n;
+
+        foreach($this->file as $k => $v){
+            $v = is_resource($v) ? stream_get_contents($v) : file_get_contents($v);
+            if($v === false){
+                continue;
+            }
+            $body .= sprintf('--%s%s', $_, $n);
+            $body .= sprintf('Content-Type: %s%s', file::mime($k), $n);
+            $body .= sprintf('Content-Transfer-Encoding: base64%s', $n);
+            $body .= sprintf('Content-Disposition: attachment; filename="%s"%s%s', mb_encode_mimeheader($k,'utf-8'), $n, $n);
+            $body .= chunk_split(base64_encode($v)) . $n;
+        }
+
+        $body .= sprintf('--%s--%s', $_, $n);
+        return $body;
+    }
+
+
+    private function build_header(){
+        if(strlen($this->name)){
+            $this->header[] = sprintf('From: %s <%s>', mb_encode_mimeheader($this->name,'utf-8'), $this->from);
+        }
+        else{
+            $this->header[] = "From: $this->from";
+        }
+
+        return implode("\r\n", $this->header) . "\r\n";
     }
 }
