@@ -58,8 +58,8 @@ class request{
     }
 
 
-    static function file(string $name) :array{ // ['name'=>,'type'=>,'tmp_name'=>,'error'=>,'size'=>]
-        $files = $_FILES[$name] ?? [];
+    static function file(string $name) :array{
+        $files = $_FILES[$name] ?? ['name'=>'', 'type'=>'' ,'tmp_name'=>'' ,'error'=>UPLOAD_ERR_NO_FILE, 'size'=>0];
 
         if(!is_array($files['name'])){
             return $files;
