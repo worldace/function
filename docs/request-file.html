@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>request::file()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>request::file()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>アップロードされたファイルの情報を取得する。PHPの <a href="https://www.php.net/manual/ja/features.file-upload.post-method.php" target="_blank">$_FILES</a> 相当</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+フォームのname名
+</td></tr>
+<tr class="return"><td>戻</td><td>
+アップロードの情報が入ってる連想配列(後述)
+</td></tr>
+</table>
+
+<p class="info-yellow">この関数はアップロードの本処理は行いません。本処理は各自で行ってください</p>
+
+<code class="php" data-title="使用例"><!--
+$upload = request::file('example');
+
+if(!$upload['error']){ // 正常にアップロードされた
+    move_uploaded_file($upload['tmp_name'], './example.jpg');
+}
+--></code>
+
+<table>
+<caption>アップロードの情報</caption>
+<tr><th>キー</th><th>値</th></tr>
+<tr><td>name</td><td>元のファイル名</td></tr>
+<tr><td>tmp_name</td><td>一時保存の場所</td></tr>
+<tr><td>size</td><td>ファイルサイズ(バイト)</td></tr>
+<tr><td>type</td><td>ファイルのMIMEタイプ</td></tr>
+<tr><td>error</td><td><a href="https://www.php.net/manual/ja/features.file-upload.errors.php" target="_blank">エラーコード</a></td></tr>
+</table>
+
+
+<h2>複数アップロード時</h2>
+<p>1つのnameで複数のファイルをアップロードするタイプの場合は、結果の連想配列が要素の<b>配列</b>が戻り値となります</p>
+</div>
+</article>
+
+</body>
+</html>

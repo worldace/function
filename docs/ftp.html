@@ -35,8 +35,7 @@ FTPサーバのホスト名
 パスワード
 </td></tr>
 <tr class="option"><td>4</td><td>
-暗号化による接続を行う場合はtrue、行わない場合はfalse<br>
-省略時は暗号化接続です
+暗号化による接続を行う場合はtrue(初期値)、行わない場合はfalse
 </td></tr>
 <tr class="return"><td>戻</td><td>
 ftpオブジェクト
@@ -69,6 +68,56 @@ $ftp = new ftp('ftp.example.com', 'id', 'password');
 <code class="php" data-title="使用例"><!--
 $ftp->upload('from', 'to');
 --></code>
+
+
+<h2>mirroring_upload</h2>
+
+<p>ミラーリングアップロードを行う</p>
+
+<p class="info-green">サーバ側にファイルが存在しない場合と、サーバ側の方がファイルが古い場合にのみアップロードします</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+アップロード元ディレクトリ
+</td></tr>
+<tr class="require"><td>2</td><td>
+アップロード先ディレクトリ
+</td></tr>
+<tr class="return"><td>戻</td><td>
+アップロードされたファイル一覧を配列で。ローカル側のパスです
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+$ftp->mirroring_upload('from', 'to');
+--></code>
+
+
+
+
+<p class="info-blue">ファイルを削除することはありません</p>
+<p class="info-blue">ディレクトリはアップロードされません。サブディレクトリ内のファイルもアップロードされません</p>
+
+
+
+<h2>delete_file</h2>
+<p>ファイルを1つ削除する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+削除するファイル
+</td></tr>
+<tr class="return"><td>戻</td><td>
+削除したらtrue、失敗したらfalse
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+$ftp->delete_file('to');
+--></code>
+
 
 
 </div>
