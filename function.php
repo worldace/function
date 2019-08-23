@@ -78,11 +78,11 @@ class request{
         $files = self::file($name);
 
         if(isset($files['name'])){ //single
-            $files['upload'] = self::upload_move($files, $dir, $whitelist);
+            $files['file'] = self::upload_move($files, $dir, $whitelist);
         }
         else if($files){
              foreach($files as $k => $v){
-                 $files[$k]['upload'] = self::upload_move($v, $dir, $whitelist);
+                 $files[$k]['file'] = self::upload_move($v, $dir, $whitelist);
              }
         }
         return $files;
