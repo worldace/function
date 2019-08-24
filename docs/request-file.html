@@ -34,7 +34,8 @@
 <code class="php" data-title="使用例"><!--
 $upload = request::file('example');
 
-if(!$upload['error']){ // 正常にアップロードされた
+if(!$upload['error']){
+    //アップロードに成功
     move_uploaded_file($upload['tmp_name'], './example.jpg');
 }
 --></code>

@@ -858,22 +858,6 @@ class time{
     }
 
 
-    static function date(string $format = '[年]/[0月]/[0日] [0時]:[0分]', int $time = 0) :string{
-        if(!$time){
-            $time = time();
-        }
-
-        $week   = ['日','月','火','水','木','金','土'][date('w', $time)];
-        $from   = ['[年]','[月]','[0月]','[日]','[0日]','[時]','[0時]','[0分]','[0秒]','[曜日]'];
-        $to     = ['Y'   ,'n'   ,'m'    ,'j'   ,'d'    ,'G'   ,'H'    ,'i'    ,'s'    ,$week];
-        $format = str_replace($from, $to, $format);
-        $format = str_replace('[分]', ltrim(date('i',$time),"0"), $format);
-        $format = str_replace('[秒]', ltrim(date('s',$time),"0"), $format);
-
-        return date($format, $time);
-    }
-
-
     static function past(int $time) :string{
         $diff = time() - $time;
 
