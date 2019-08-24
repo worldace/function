@@ -931,16 +931,6 @@ class random{
     }
 
 
-    static function password_hash(string $password) :string{
-        return password_hash($password, PASSWORD_DEFAULT);
-    }
-
-
-    static function password_check(string $password, string $hash) :bool{
-        return password_verify($password, $hash);
-    }
-
-
     static function crypt(string $str, string $password) :string{
         $iv = openssl_random_pseudo_bytes(16); // openssl_cipher_iv_length('aes-128-cbc') == 16
         return bin2hex($iv) . openssl_encrypt($str, 'aes-128-cbc', $password, 0, $iv); //先頭32バイトがiv
