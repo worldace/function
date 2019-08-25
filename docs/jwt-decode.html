@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>jwt::decode()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>jwt::decode()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>JSON Web Token(署名付きJSON)からデータ部を取り出す</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+JWT文字列
+</td></tr>
+<tr class="option"><td>2</td><td>
+取り出す部分。省略時は"data"<br>
+他には"head"と"sign"が指定できます
+</td></tr>
+<tr class="return"><td>戻</td><td>
+連想配列。"sign"の場合は文字列
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+$jwt  = jwt::encode(['iss'=>'user_id', 'exp'=>1300819380], 'password');
+$data = jwt::decode($jwt);
+
+print $data['iss']; // user_id
+
+--></code>
+
+<p class="info-blue">JWT文字列を作成するには <a href="jwt-encode.html">jwt::encode()</a> をご利用ください</p>
+</div>
+</article>
+
+</body>
+</html>

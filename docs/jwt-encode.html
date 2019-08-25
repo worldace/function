@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>jwt::encode()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>jwt::encode()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>JSON Web Token(署名付きJSON)を作成する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+JWTに含みたいデータを連想配列で<br>
+復号は簡単にできるのでパスワードなどは含めないでください
+</td></tr>
+<tr class="require"><td>2</td><td>
+パスワード
+</td></tr>
+<tr class="option"><td>3</td><td>
+暗号化のアルゴリズム。省略時は"HS256"<br>
+"RS256"も指定できますが認証用に公開鍵が必要です
+</td></tr>
+<tr class="return"><td>戻</td><td>
+JWT文字列
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+$jwt = jwt::encode(['iss'=>'user_id', 'exp'=>1300819380], 'password'); //IDと有効期限を含むJWTを作成
+--></code>
+
+<p class="info-blue">JWT文字列からデータを取り出すには <a href="jwt-decode.html">jwt::decode()</a> をご利用ください</p>
+
+</div>
+</article>
+
+</body>
+</html>

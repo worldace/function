@@ -961,6 +961,53 @@ class random{
 
 
 
+class jwt{
+    static function encode(array $data, string $password, string $algorithm = 'HS256'){
+        $head64 = str::base64_encode_urlsafe(json_encode(['typ'=>'jwt', 'alg'=>$algorithm]));
+        $data64 = str::base64_encode_urlsafe(json_encode($data));
+
+        if($algorithm === 'HS256'){
+            $sign = hash_hmac('sha256', "$head64.$data64", $password, true);
+        }
+        elseif($algorithm === 'RS256'){
+            openssl_sign("$head64.$data64", $sign, $password, 'sha256');
+        }
+
+        return sprintf('%s.%s.%s', $head64, $data64, str::base64_encode_urlsafe($sign));
+    }
+
+
+    static function decode(string $jwt, string $return_type = 'data'){
+        [$head64, $data64, $sign64] = explode('.', $jwt);
+
+        if($return_type === 'data'){
+            return json_decode(str::base64_decode_urlsafe($data64), true);
+        }
+        else if($return_type === 'head'){
+            return json_decode(str::base64_decode_urlsafe($head64), true);
+        }
+        else if($return_type === 'sign'){
+            return str::base64_decode_urlsafe($sign64);
+        }
+    }
+
+
+    static function verify(string $jwt, $password, string $algorithm = 'HS256') :bool{
+        [$head64, $data64, $sign64] = explode('.', $jwt);
+        $sign = str::base64_decode_urlsafe($sign64);
+
+        if($algorithm === 'HS256' and $sign === hash_hmac('sha256', "$head64.$data64", $password, true)){
+            return true;
+        }
+        else if($algorithm === 'RS256' and openssl_verify("$head64.$data64", $sign, $password, 'sha256') === 1){
+            return true;
+        }
+        return false;
+    }
+}
+
+
+
 class page{
     static function number(int $page_number, int $count_all, int $count_per_page) :\stdClass{
         $page = new \stdClass;
