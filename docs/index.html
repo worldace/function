@@ -5,11 +5,14 @@
 <meta name="viewport" content="width=device-width">
 <title>function.php 説明書</title>
 <link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
 </head>
-
 <body id="index">
 
-<script type="table">
+
+<table id="menu">
+<tr><th colspan="6">function.php</th></tr>
+<!--
 dbクラス
 docクラス
 mailクラス
@@ -100,42 +103,16 @@ php::class_toString
 php::benchmark
 os::clipboard
 os::is_windows
-</script>
+--></table>
 
 
 <script>
-var tmpl  = document.querySelector('[type="table"]');
-var table = text2table(tmpl.textContent, function(td, content){
+comment2table(document.querySelector("table"), function(td, content){
     if(content){
         var href = content.replace('クラス', '').replace('::', '-') + '.html';
         td.insertAdjacentHTML('afterbegin', '<a href="' + href + '">' + content + '</a>');
     }
 });
-
-table.id = 'menu';
-table.insertAdjacentHTML('afterbegin', '<tr><th colspan="' + table.rows[0].cells.length + '">function.php</th></tr>');
-tmpl.parentNode.replaceChild(table, tmpl);
-
-
-
-function text2table(text, callback){
-    var array = text.trim().split(/\n{2,}/);
-    var table = document.createElement('table');
-
-    for(var i = 0; i < array.length; i++){
-        array[i] = array[i].split("\n");
-        var max = Math.max(array[i].length, max || 1);
-    }
-
-    for(var i = 0; i < max; i++){
-        var tr = table.insertRow();
-        for(var n = 0; n < array.length; n++){
-            var td = tr.insertCell();
-            callback(td, array[n][i]);
-        }
-    }
-    return table;
-}
 </script>
 
 

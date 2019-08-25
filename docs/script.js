@@ -37,4 +37,39 @@ function table_of_contents(){
 }
 
 
+function comment2table(table, callback){
+    for(var i = 0; i < table.childNodes.length; i++){
+        if(table.childNodes[i].nodeType === Node.COMMENT_NODE){
+            var comment = table.childNodes[i];
+            break;
+        }
+        else if(table.childNodes[i].tagName === 'TBODY'){
+            var tbody = table.childNodes[i];
+        }
+    }
+    if(!comment && tbody){
+        return comment2table(tbody, callback);
+    }
+
+    var array    = comment.textContent.trim().split(/\n{2,}/);
+    var fragment = document.createDocumentFragment();
+
+    for(var i = 0; i < array.length; i++){
+        array[i] = array[i].split("\n");
+        var max = Math.max(array[i].length, max || 1);
+    }
+
+    for(var i = 0; i < max; i++){
+        var tr = document.createElement('tr');
+        fragment.appendChild(tr);
+        for(var n = 0; n < array.length; n++){
+            var td = document.createElement('td');
+            tr.appendChild(td);
+            callback(td, array[n][i]);
+        }
+    }
+    comment.parentNode.replaceChild(fragment, comment);
+}
+
+
 document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', highlight) : highlight();
