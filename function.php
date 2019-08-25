@@ -1,5 +1,5 @@
 <?php
-// https://github.com/worldace/function
+// https://spelunker2.wordpress.com/2019/08/26/function-php/
 
 
 class request{
