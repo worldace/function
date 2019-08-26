@@ -37,18 +37,15 @@ function table_of_contents(){
 }
 
 
-function comment2table(table, callback){
+function columnTable(table, callback){
     for(var i = 0; i < table.childNodes.length; i++){
         if(table.childNodes[i].nodeType === Node.COMMENT_NODE){
             var comment = table.childNodes[i];
             break;
         }
-        else if(table.childNodes[i].tagName === 'TBODY'){
-            var tbody = table.childNodes[i];
+        else if(table.childNodes[i].tagName === 'TBODY' && !comment){
+            return columnTable(table.childNodes[i], callback);
         }
-    }
-    if(!comment && tbody){
-        return comment2table(tbody, callback);
     }
 
     var array    = comment.textContent.trim().split(/\n{2,}/);

@@ -107,7 +107,7 @@ os::is_windows
 
 
 <script>
-comment2table(document.querySelector("table"), function(td, content){
+columnTable(document.querySelector("table"), function(td, content){
     if(content){
         var href = content.replace('クラス', '').replace('::', '-') + '.html';
         td.insertAdjacentHTML('afterbegin', '<a href="' + href + '">' + content + '</a>');
