@@ -654,12 +654,12 @@ class dir{
 
 
 class xml{
-    static function parse(string $xml) :array{
+    static function parse(string $xml, bool $is_array = false){
         $xml = trim($xml);
         $xml = preg_replace("/&(?!([a-zA-Z0-9]{2,8};)|(#[0-9]{2,5};)|(#x[a-fA-F0-9]{2,4};))/", "&amp;" , $xml);
         $SimpleXML = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOBLANKS|LIBXML_NOCDATA|LIBXML_NONET|LIBXML_COMPACT|LIBXML_PARSEHUGE);
 
-        return json_decode(json_encode([$SimpleXML->getName()=>$SimpleXML]), true);
+        return ($is_array) ? json_decode(json_encode([$SimpleXML->getName()=>$SimpleXML]), true) : $SimpleXML;
     }
 }
 
@@ -1278,7 +1278,6 @@ class doc{
         $this->doc = new \DOMDocument(); // https://www.php.net/manual/ja/class.domdocument.php
 
         libxml_use_internal_errors(true);
-        libxml_disable_entity_loader(true);
 
         if($html[1] === '?'){
             $this->doc->type = 'xml';
