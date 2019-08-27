@@ -1565,7 +1565,7 @@ class ftp{
 
         $result = [];
         foreach(file::list($from, false) as $v){
-            $name = str::pop($v, DIRECTORY_SEPARATOR); // basename($v) はバグるから使わない
+            $name = str::pop($v, '/'); // basename($v) はバグるから使わない
             if(!isset($server[$name]) or date('YmdHis', filemtime($v)) > $server[$name]){
                 $this->upload($v, "$to/$name"); // サーバーにない場合と、ローカルの方が新しい場合はアップ
                 $result[] = $v;
