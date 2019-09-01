@@ -90,7 +90,7 @@ class request{
 
 
     private static function upload_move(array $files, string $dir, array $whitelist){
-        $extention = pathinfo($files['tmp_name'], PATHINFO_EXTENSION); //拡張子なしは空文字列
+        $extention = pathinfo($files['name'], PATHINFO_EXTENSION); //拡張子なしは空文字列
         $extention = strtolower($extention);
 
         if($files['error'] === UPLOAD_ERR_NO_FILE){
