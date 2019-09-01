@@ -100,8 +100,8 @@ class request{
             return false;
         }
     
-        $savepath = $dir. DIRECTORY_SEPARATOR . uniqid(bin2hex(random_bytes(2))) . $extention;
-        return (move_uploaded_file($files['tmp_name'], $savepath)) ? $savepath : false;
+        $savepath = sprintf('%s/%s.%s', $dir, uniqid(bin2hex(random_bytes(2))), $extention);
+        return (move_uploaded_file($files['tmp_name'], $savepath)) ? realpath($savepath) : false;
     }
 
 
