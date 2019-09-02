@@ -1009,10 +1009,9 @@ class jwt{
 
 
 class page{
-    static function number(int $page_number, int $count_all, int $count_per_page) :\stdClass{
-        $page = new \stdClass;
-        $page->prev = ($page_number > 1) ? $page_number - 1 : null;
-        $page->next = ($count_all > $page_number * $count_per_page) ? $page_number + 1 : null;
+    static function number(int $page_number, int $count_all, int $count_per_page) :array{
+        $page['prev'] = ($page_number > 1) ? $page_number - 1 : null;
+        $page['next'] = ($count_all > $page_number * $count_per_page) ? $page_number + 1 : null;
         return $page;
     }
 }

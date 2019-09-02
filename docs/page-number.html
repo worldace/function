@@ -31,7 +31,7 @@
 1ページ当たりの件数
 </td></tr>
 <tr class="return"><td>戻</td><td>
-オブジェクト<br>
+連想配列<br>
 <var>prev</var>前のページ番号。存在しない場合はnull<br>
 <var>next</var>次のページ番号。存在しない場合はnull
 </td></tr>
@@ -41,8 +41,8 @@
 <code class="php" data-title="使用例"><!--
 $page = page::number(1, 1000, 100);
 
-print $page->prev; // null
-print $page->next; // 2
+print $page['prev']; // null
+print $page['next']; // 2
 --></code>
 
 
