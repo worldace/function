@@ -142,7 +142,7 @@ class response{
     }
 
 
-    static function download(string $name, string $file, int $timeout = 60*60*6) :void{
+    static function download(string $file, string $name, int $timeout = 60*60*6) :void{
         ini_set('max_execution_time', $timeout);
 
         $size = preg_match('/^data:.*?,/', $file, $m) ? (strlen($file) - strlen($m[0])) : filesize($file);
@@ -790,7 +790,7 @@ class zip{
     }
 
 
-    static function add(string $file, string $path, string $add){
+    static function add(string $file, string $add, string $path){
         $zip = new \ZipArchive();
         $zip->open($file);
 

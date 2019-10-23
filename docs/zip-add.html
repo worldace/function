@@ -26,10 +26,10 @@ zip中に同名のファイルが存在する時は、上書きします</p>
 zipファイルのパス
 </td></tr>
 <tr class="require"><td>2</td><td>
-追加するzip中のパス
+追加するファイルのパス
 </td></tr>
 <tr class="require"><td>3</td><td>
-追加するファイルのパス
+追加するzip中のパス
 </td></tr>
 <tr class="return"><td>戻</td><td>
 なし
@@ -38,7 +38,7 @@ zipファイルのパス
 
 
 <code class="php" data-title="使用例"><!--
-zip::add('./exapmle.zip', 'docs/license.txt', './license');
+zip::add('./exapmle.zip', './license.txt', 'docs/license.txt');
 --></code>
 
 <p class="info-blue">追加するファイルのパスには、リソースや <a href="str-file.html">str::file()</a> が使用できます</p>

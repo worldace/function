@@ -23,7 +23,7 @@
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
 IDとパスワードを認証する関数<br>
-ユーザが入力したIDとパスワードが自動的にセットされます
+関数の引数には、ユーザが入力したIDとパスワードがセットされます
 </td></tr>
 <tr class="option"><td>2</td><td>
 Realm名を英語で。省略時は"members only"
@@ -37,7 +37,7 @@ Realm名を英語で。省略時は"members only"
 <code class="php" data-title="使用例"><!--
 //認証する関数は各自用意する
 function password_check($id, $password){
-    //IDとパスワードが正しければtrueを返し、間違っていればfalseを返してください
+    //IDとパスワードが正しければtrueを返し、間違っていればfalseを返す
 }
 
 $user_id = response::basic('password_check');

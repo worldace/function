@@ -22,10 +22,10 @@
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-ブラウザに表示するファイル名。日本語可
+ダウンロードさせるファイルのパス。
 </td></tr>
 <tr class="require"><td>2</td><td>
-ダウンロードさせるファイルのパス。
+ブラウザに表示するファイル名。日本語可
 </td></tr>
 <tr class="option"><td>3</td><td>
 制限時間(秒)。省略時は6時間
@@ -37,7 +37,7 @@
 
 
 <code class="php" data-title="使用例"><!--
-response::download('example.jpg', '../img/example.jpg');
+response::download('../img/example.jpg', 'example.jpg');
 --></code>
 
 <p class="info-blue">ダウンロードが完了するまでPHPは実行状態になります。<br>
