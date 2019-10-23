@@ -88,15 +88,15 @@ $mail->from('送信者の氏名');
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-メールに表示するファイル名
+添付ファイルのパス
 </td></tr>
 <tr class="require"><td>2</td><td>
-添付ファイルのパス
+メールに表示するファイル名
 </td></tr>
 </table>
 
 <code class="php" data-title="使用例"><!--
-$mail->file('example.pdf', '../sample.pdf');
+$mail->file('../sample.pdf', 'example.pdf');
 --></code>
 
 

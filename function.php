@@ -1600,7 +1600,7 @@ class mail{
     }
 
 
-    function file(string $name, $value){
+    function file(string $value, string $name){
         $this->file[$name] = $value;
         return $this;
     }
