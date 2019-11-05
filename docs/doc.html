@@ -236,16 +236,12 @@ return $doc;
 
 <p class="info-blue">docファイルにデータを渡すには、$DOCオブジェクトを利用するとよいでしょう</p>
 
-<code class="php" data-title="CSSとJavaScriptを大元のHTMLに追加する例"><!--
-$doc = new doc('<h1 id="h1"></h1>');
-
-//h1の本文を設定する
-$doc->h1->textContent = 'タイトル';
-
+<code class="php" data-title="CSSやJavaScriptを大元のHTMLに追加する例"><!--
+$doc = new doc('<h1 id="h1">タイトル</h1>');
 
 //CSSを大元のHTMLに追加する
 $style = <<<'__EOL__'
-h1{
+#h1{
     color:red;
 }
 __EOL__;
