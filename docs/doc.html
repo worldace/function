@@ -200,22 +200,23 @@ $doc->body->appendChild($footer);
 
 <h3>docファイルの作成</h3>
 
-<p>docファイルの名前は必ず<var>doc-</var>から始めます。PHPファイルです。</p>
+<p>docファイルの名前は必ず<var>doc-</var>から始めます。PHPファイルです。<br>
+docファイルでは、docオブジェクトを返してください</p>
 
 
 <code class="php" data-title="doc-footer.php"><!--
 <?php
-// docファイルではdocオブジェクトを返してください
-
 $doc = new doc('<footer></footer>'); // 部品なので<!DOCTYPE>は書かない
 
 // $docを操作してHTMLを作り上げる
 // このファイルはローカルスコープで実行されます
 
+// docオブジェクトを返す
 return $doc;
 --></code>
 
 <p class="info-yellow">new doc()に渡すHTMLは、全体を1つのタグで囲っておく必要があります</p>
+<p class="info-blue">docオブジェクトを返さない場合は、docタグは消えます</p>
 
 <h3>ディレクトリの設定</h3>
 <p>docファイルを置くディレクトリを<var>doc::$dir</var>に設定してください。</p>
@@ -227,12 +228,11 @@ return $doc;
 <p class="info-yellow">docタグは必ず閉じてください</p>
 <p class="info-yellow">docタグの循環読み込みには気を付けてください。無限ループします</p>
 <p class="info-blue">docタグは普通に作成できます。<var>$doc(&apos;&lt;doc-footer&gt;&apos;);</var></p>
-<p class="info-blue">docファイルでdocオブジェクトを返さない場合は、docタグは消えます</p>
 
 <h3>$DOCオブジェクト</h3>
 
 <p>docファイル内では<var>$DOC</var>で、大元の$docオブジェクトにアクセスできます。<br>
-docファイルにデータを渡したり、大元のHTMLにアクセスするには、$DOCオブジェクトを利用します</p>
+docファイルにデータを渡したり、大元のHTMLにアクセスするには、<var>$DOC</var>オブジェクトを利用します</p>
 
 
 <code class="php" data-title="CSSやJavaScriptを大元のHTMLに追加する例"><!--
@@ -241,7 +241,7 @@ $doc = new doc('<h1 id="h1">タイトル</h1>');
 //CSSを大元のHTMLに追加する
 $style = <<<'__EOL__'
 #h1{
-    color:red;
+    color: red;
 }
 __EOL__;
 $DOC->head->appendChild($DOC('<style>', $style));
