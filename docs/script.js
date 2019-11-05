@@ -28,7 +28,7 @@ function table_of_contents(){
     ol.id  = 'table-of-contents';
 
     for(var i = 0; i < el.length; i++){
-        var id = 'table-of-contents-' + i;
+        var id = 'No' + i;
         el[i].id = id;
         ol.insertAdjacentHTML('beforeend', '<li><a href="#' + id + '">' + el[i].textContent + '</a></li>');
     }

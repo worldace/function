@@ -232,9 +232,8 @@ return $doc;
 <h3>$DOCオブジェクト</h3>
 
 <p>docファイル内では<var>$DOC</var>で、大元の$docオブジェクトにアクセスできます。<br>
-また<var>$DOC-&gt;tag</var>で、呼び出し元のdocタグにアクセスできます。</p>
+docファイルにデータを渡したり、大元のHTMLにアクセスするには、$DOCオブジェクトを利用します</p>
 
-<p class="info-blue">docファイルにデータを渡すには、$DOCオブジェクトを利用するとよいでしょう</p>
 
 <code class="php" data-title="CSSやJavaScriptを大元のHTMLに追加する例"><!--
 $doc = new doc('<h1 id="h1">タイトル</h1>');
@@ -260,6 +259,9 @@ $DOC->body->appendChild($DOC('<script>', $script));
 //終了
 return $doc;
 --></code>
+
+<p>また<var>$DOC-&gt;tag</var>で、呼び出し元のdocタグにアクセスできます。</p>
+
 
 <h2>実例サンプル</h2>
 
