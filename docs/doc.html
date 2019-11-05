@@ -236,11 +236,11 @@ docファイルにデータを渡したり、大元のHTMLにアクセスする�
 
 
 <code class="php" data-title="CSSやJavaScriptを大元のHTMLに追加する例"><!--
-$doc = new doc('<h1 id="h1">タイトル</h1>');
+$doc = new doc('<h1 id="doc-h1">タイトル</h1>');
 
 //CSSを大元のHTMLに追加する
 $style = <<<'__EOL__'
-#h1{
+#doc-h1{
     color: red;
 }
 __EOL__;
@@ -249,7 +249,7 @@ $DOC->head->appendChild($DOC('<style>', $style));
 
 //JavaScriptを大元のHTMLに追加する
 $script = <<<'__EOL__'
-document.querySelector('#h1').onclick = function(){
+document.querySelector('#doc-h1').onclick = function(){
     alert(this.textContent);
 };
 __EOL__;

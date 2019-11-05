@@ -303,7 +303,7 @@ class url{
     }
 
 
-    static function top(string $url) :string{
+    static function dir(string $url) :string{
         $url = preg_replace('/\?.*/', '', $url);
         return (substr_count($url, '/') === 2) ? $url.'/' : dirname($url.'a').'/';
     }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title>url::top()</title>
+<title>url::dir()</title>
 <link href="style.css" rel="stylesheet">
 <script src="script.js"></script>
 </head>
@@ -12,7 +12,7 @@
 
 <article>
 <header>
-<h1>url::top()</h1>
+<h1>url::dir()</h1>
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
 <div id="contents">
@@ -32,9 +32,9 @@ URL文字列<br>
 
 
 <code class="php" data-title="使用例"><!--
-print url::top("http://example.jp/sample/test.php?key=value#id"); // http://example.jp/sample/
-print url::top("http://example.jp/sample/"); // http://example.jp/sample/
-print url::top("http://example.jp/sample"); // http://example.jp/
+print url::dir("http://example.jp/sample/test.php?key=value#id"); // http://example.jp/sample/
+print url::dir("http://example.jp/sample/"); // http://example.jp/sample/
+print url::dir("http://example.jp/sample"); // http://example.jp/
 
 --></code>
 <p class="info-blue">この関数は機械的に処理するため、URLが妥当かどうかまでは判断しません。</p>
