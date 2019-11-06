@@ -239,20 +239,20 @@ docファイルにデータを渡したり、大元のHTMLにアクセスする�
 $doc = new doc('<h1 id="doc-h1">タイトル</h1>');
 
 //CSSを大元のHTMLに追加する
-$style = <<<'__EOL__'
+$style = <<<'END'
 #doc-h1{
     color: red;
 }
-__EOL__;
+END;
 $DOC->head->appendChild($DOC('<style>', $style));
 
 
 //JavaScriptを大元のHTMLに追加する
-$script = <<<'__EOL__'
+$script = <<<'END'
 document.querySelector('#doc-h1').onclick = function(){
     alert(this.textContent);
 };
-__EOL__;
+END;
 $DOC->body->appendChild($DOC('<script>', $script));
 
 
