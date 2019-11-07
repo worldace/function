@@ -17,6 +17,7 @@ docクラス
 mailクラス
 ftpクラス
 iarrayクラス
+immutableトレイト
 ソースコード
 
 request::get
@@ -108,7 +109,7 @@ os::is_windows
 <script>
 columnTable(document.querySelector("table"), function(td, content){
     if(content){
-        var href = content.replace('クラス', '').replace('::', '-') + '.html';
+        var href = content.replace('クラス', '').replace('トレイト', '').replace('::', '-') + '.html';
         td.insertAdjacentHTML('afterbegin', '<a href="' + href + '">' + content + '</a>');
     }
 });

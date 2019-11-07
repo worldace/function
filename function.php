@@ -1679,3 +1679,30 @@ class mail{
         return implode("\r\n", $this->header) . "\r\n";
     }
 }
+
+
+
+trait immutable{
+    private $property = [];
+
+    function __get($name){
+        return $this->property[$name];
+    }
+
+    function __set($name, $value){
+        if(isset($this->property[$name])){
+            throw new Exception("Property '$name' is immutable.");
+        }
+        else{
+            $this->property[$name] = $value;
+        }
+    }
+
+    function __isset($name){
+        return isset($this->property[$name]);
+    }
+
+    function __unset($name){
+       throw new Exception("Property '$name' is immutable.");
+    }
+}
