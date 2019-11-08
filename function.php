@@ -855,6 +855,14 @@ class is{
     static function utf8($v) :bool{
         return preg_match('//u', $v);
     }
+
+
+    static function nully($v) :bool{
+        if($v === 0 || $v === "0"){
+            return false;
+        }
+        return empty($v);
+    }
 }
 
 
