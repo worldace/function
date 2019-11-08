@@ -440,6 +440,13 @@ class http{
 }
 
 
+class arr{
+    static function save(array $array, string $file){
+        file_put_contents($file, sprintf('<?php return %s;', var_export($array,true)), LOCK_EX);
+    }
+}
+
+
 
 class file{
     static function edit(string $file, callable $fn, ...$args){

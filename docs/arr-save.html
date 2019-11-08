@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>arr::save()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>arr::save()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>配列をファイルに保存する。<br>
+保存した配列は<var>include</var>で取り出せます</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+保存する配列。復元可能なデータに限る
+</td></tr>
+<tr class="require"><td>2</td><td>
+保存するファイル
+</td></tr>
+<tr class="return"><td>戻</td><td>
+なし
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+arr::save([1,2,3], 'array.php');
+
+$arr = include('array.php'); // [1,2,3]
+--></code>
+
+
+</div>
+</article>
+
+</body>
+</html>
