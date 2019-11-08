@@ -520,8 +520,10 @@ class file{
         foreach(array_diff(scandir($dir), ['.','..']) as $file){
             $path     = "$dir/$file";
             $relative = substr($path, strlen($base)+1);
-            if(is_dir($path) and $recursive){
-                $return = array_merge($return, self::list($path, true, $base));
+            if(is_dir($path)){
+                if($recursive){
+                    $return = array_merge($return, self::list($path, true, $base));
+                }
             }
             else{
                 $return[$relative] = $path;
