@@ -1147,7 +1147,7 @@ class db{
     private $table_class;
 
 
-    function __construct(string $file, string $table){
+    function __construct(string $file, string $table = ''){
         $this->pdo = new \PDO("sqlite:$file", null, null, [
             PDO::ATTR_ERRMODE=> PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE=> PDO::FETCH_ASSOC,
