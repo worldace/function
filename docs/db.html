@@ -53,10 +53,19 @@ $db = new db('./example.db', 'fruit'); //パスとテーブル名を渡す
 <tr class="require"><td>1</td><td>
 テーブル名
 </td></tr>
+<tr class="return"><td>戻</td><td>
+dbオブジェクト
+</td></tr>
 </table>
 
 <code class="php"><!--
 $db->table('fruit');
+--></code>
+
+<p class="info-blue">$dbオブジェクトを直接実行しても、テーブルを変更できます</p>
+
+<code class="php"><!--
+$db('fruit'); // $db->table('fruit') の省略形
 --></code>
 
 

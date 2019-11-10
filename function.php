@@ -23,6 +23,11 @@ class request{
     }
 
 
+    static function time(){
+        return $_SERVER['REQUEST_TIME'];
+    }
+
+
     static function header(string $name){
         $name = strtoupper($name);
         $name = str_replace('-', '_', $name);
@@ -1166,6 +1171,11 @@ class db{
             $this->table_class = "";
         }
         return $this;
+    }
+
+
+    function __invoke($table){
+        return $this->table($table);
     }
 
 
