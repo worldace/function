@@ -201,18 +201,18 @@ print $result; //戻り値は該当セルの値
 <code class="php" data-title="1行取得"><!--
 $result = $db->select(4); //引数が「id番号」のみだと1行取得
 
-//戻り値は連想配列
-print $result['name'];
-print $result['price'];
+//戻り値はオブジェクト
+print $result->name;
+print $result->price;
 --></code>
 
 <code class="php" data-title="複数行取得"><!--
 $result = $db->select(0, 10); //引数が「開始位置」と「取得件数」だと複数行取得。開始位置は0から
 
-//戻り値は「配列＋連想配列」の2重配列
+//戻り値は「配列＋オブジェクト」の2重配列
 foreach($result as $fruit){
-    print $fruit['name'];
-    print $fruit['price'];
+    print $fruit->name;
+    print $fruit->price;
 }
 --></code>
 
@@ -239,7 +239,7 @@ foreach($result as $fruit){
 </td></tr>
 
 <tr class="return"><td>戻</td><td>
-配列＋連想配列の2重配列
+配列＋オブジェクトの2重配列
 </td></tr>
 </table>
 
@@ -247,8 +247,8 @@ foreach($result as $fruit){
 $result = $db->search('バナナ', 'name', 0, 10);
 
 foreach($result as $fruit){
-    print $fruit['name'];
-    print $fruit['price'];
+    print $fruit->name;
+    print $fruit->price;
 }
 --></code>
 
@@ -274,8 +274,8 @@ PDOStatementオブジェクト
 $result = $db->query('select * from fruit');
 
 foreach($result as $fruit){
-    print $fruit['name'];
-    print $fruit['price'];
+    print $fruit->name;
+    print $fruit->price;
 }
 --></code>
 
@@ -335,12 +335,14 @@ $db->transaction(function($db){
 コールバック関数に追加の引数を渡したい場合は、transaction()の第二引数以降に渡してください。</p>
 
 <p>参考情報：<a href="https://www.php.net/manual/ja/language.types.callable.php" target="_blank">PHP callable</a></p>
-<h2>データをオブジェクトで取得する</h2>
-<p>当クラスでの取得データは連想配列となりますが、指定クラスのオブジェクトにすることもできます。</p>
+
+
+<h2>データを指定クラスのオブジェクトとして取得する</h2>
+<p>当クラスの取得データは、標準クラスのオブジェクトとなりますが、クラスを指定することもできます。</p>
 
 <p>テーブル名を指定する所を、クラス名にすると実現できます。<br>
 テーブル名と<b>同名のクラスが存在</b>し、クラス名を<b>\から始まるフルパス</b>で渡すのが条件です。</p>
-<code class="php" data-title="データをオブジェクトで取得する"><!--
+<code class="php" data-title="例"><!--
 class fruit{
    //あらかじめfruitクラスを用意しておく
 }
