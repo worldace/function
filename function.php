@@ -191,35 +191,47 @@ class str{
 
 
     static function match(?string $str, string $needle) :bool{
-        return strpos($str, $needle) !== false;
+        return mb_strpos($str, $needle) !== false;
     }
 
 
     static function match_start(?string $str, string $needle) :bool{
-        return substr($str, 0, strlen($needle)) === $needle;
+        return mb_substr($str, 0, mb_strlen($needle)) === $needle;
     }
 
 
     static function match_end(?string $str, string $needle) :bool{
-        return substr($str, -strlen($needle)) === $needle;
+        return mb_substr($str, -mb_strlen($needle)) === $needle;
     }
 
 
     static function shift(?string $str, string $needle){
-        $result = strstr($str, $needle, true);
+        $result = mb_strstr($str, $needle, true);
         return ($result !== false) ? $result : $str;
     }
 
 
     static function pop(?string $str, string $needle){
-        $result = substr(strrchr($str, $needle), 1);
+        $result = mb_substr(mb_strrchr($str, $needle), 1);
         return ($result !== false) ? $result : '';
     }
 
 
     static function replace_once(?string $str, string $needle, string $replace) :string{
-        $pos = strpos($str, $needle);
-        return ($pos === false) ? $str : substr_replace($str, $replace, $pos, strlen($needle));
+        $needle = preg_quote($needle, '/');
+        return preg_replace("/$needle/u", $replace, $str, 1);
+    }
+
+
+    static function insert_before(?string $str, string $needle, string $insert) :string{
+        $pos = mb_strpos($str, $needle);
+        return ($pos !== false) ? preg_replace("/^.{0,$pos}+\K/us", $insert, $str) : $str;
+    }
+
+
+    static function insert_after(?string $str, string $needle, string $insert) :string{
+        $pos = mb_strpos($str, $needle) + mb_strlen($needle);
+        return ($pos !== false) ? preg_replace("/^.{0,$pos}+\K/us", $insert, $str) : $str;
     }
 
 
@@ -294,8 +306,31 @@ class str{
 
 
 class html{
+    static public $template_dir;
+
     static function e(?string $str) :string{
         return htmlspecialchars($str, ENT_QUOTES, 'UTF-8', false);
+    }
+
+    static function template($str){
+        $heads = [];
+        $bodys = [];
+
+        $html = preg_replace_callback('/{{(.+?)}}/', function($m) use(&$heads, &$bodys){
+            ob_start();
+            include sprintf('%s/%s', html::$template_dir, $m[1]);
+            if(isset($head)){
+                $heads[$m[1]] = $head;
+            }
+            if(isset($body)){
+                $bodys[$m[1]] = $body;
+            }
+            return ob_get_clean();
+        }, $str);
+
+        $html = str::insert_before($html, '</head>', implode("\n", $heads));
+        $html = str::insert_before($html, '</body>', implode("\n", $bodys));
+        return $html;
     }
 }
 

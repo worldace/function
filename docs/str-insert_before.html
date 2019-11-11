@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title>str::replace_once()</title>
+<title>str::insert_before()</title>
 <link href="style.css" rel="stylesheet">
 <script src="script.js"></script>
 </head>
@@ -12,12 +12,12 @@
 
 <article>
 <header>
-<h1>str::replace_once()</h1>
+<h1>str::insert_before()</h1>
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
 <div id="contents">
 
-<p>文字列を1度だけ置換する</p>
+<p>最初に見つかった検索ワードの前に、文字列を挿入する</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
@@ -27,18 +27,20 @@
 <tr class="require"><td>2</td><td>
 検索ワード
 </td></tr>
-<tr class="require"><td>2</td><td>
-置換ワード
+<tr class="require"><td>3</td><td>
+挿入ワード
 </td></tr>
 <tr class="return"><td>戻</td><td>
-変換された文字列
+変換された文字列 
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-print str::replace_once('とんとん', 'ん', '☆'); //と☆とん
+print str::insert_before('とんとん', 'ん', '☆'); //と☆んとん
 --></code>
+
+<p class="info-blue">後ろに挿入したい場合は <a href="str-insert_after.html">str::insert_after()</a> をご利用ください</p>
 
 
 </div>
