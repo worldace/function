@@ -909,10 +909,7 @@ class is{
 
 
     static function empty($v) :bool{
-        if($v === 0 || $v === "0" || is_float($v)){
-            return false;
-        }
-        return empty($v);
+        return ($v === '' || $v === [] || $v === null);
     }
 }
 

@@ -17,7 +17,7 @@
 </header>
 <div id="contents">
 
-<p>値が<var>空文字列</var><var>空配列</var><var>false</var><var>null</var>の場合に真を返す。それ以外は偽を返す</p>
+<p>値が<var>空文字列</var><var>空配列</var><var>null</var>の場合に真を返す。それ以外は偽を返す</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
@@ -34,7 +34,6 @@
 //true
 is::empty('');
 is::empty([]);
-is::empty(false);
 is::empty(null);
 
 //false
@@ -44,6 +43,7 @@ is::empty('0');
 is::empty(0.0);
 is::empty(['']);
 is::empty(true);
+is::empty(false);
 --></code>
 
 
