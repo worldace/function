@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title>is::nully()</title>
+<title>is::empty()</title>
 <link href="style.css" rel="stylesheet">
 <script src="script.js"></script>
 </head>
@@ -12,7 +12,7 @@
 
 <article>
 <header>
-<h1>is::nully()</h1>
+<h1>is::empty()</h1>
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
 <div id="contents">
@@ -32,16 +32,18 @@
 
 <code class="php" data-title="使用例"><!--
 //true
-is::nully('');
-is::nully([]);
-is::nully(false);
-is::nully(null);
+is::empty('');
+is::empty([]);
+is::empty(false);
+is::empty(null);
 
 //false
-is::nully(0);
-is::nully('0');
-is::nully(['']);
-is::nully(true);
+is::empty(0);
+is::empty(-0);
+is::empty('0');
+is::empty(0.0);
+is::empty(['']);
+is::empty(true);
 --></code>
 
 
