@@ -128,6 +128,19 @@ class response{
     }
 
 
+    static function cookie(string $name, string $value = '', array $option = []){
+        setcookie(
+            $name,
+            $value,
+            $option['expire'] ?? time() + 50 * 24 * 60 * 60,
+            $option['path'] ?? '',
+            $option['domain'] ?? '',
+            $option['secure'] ?? false,
+            $option['httponly'] ?? true
+        );
+    }
+
+
     static function text(string $str) :void{
         header('Content-Type: text/plain; charset=utf-8');
         print $str;

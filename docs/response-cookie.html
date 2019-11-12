@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>response::cookie()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>response::cookie()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>クッキーを出力する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+クッキーの名前
+</td></tr>
+<tr class="option"><td>2</td><td>
+クッキーの値<br>
+省略時や空文字時はクッキーを削除する
+</td></tr>
+<tr class="option"><td>3</td><td>
+設定があれば連想配列で(後述)
+</td></tr>
+<tr class="return"><td>戻</td><td>
+なし
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+response::cookie('name', 'value');
+--></code>
+
+
+<h3>クッキーの設定</h3>
+<table>
+<tr>
+  <th>キー</th>
+  <th>値</th>
+</tr>
+<tr>
+  <td>expire</td>
+  <td>クッキーの有効期限。省略時は50日後</td>
+</tr>
+<tr>
+  <td>path</td>
+  <td>クッキーを有効にするパス。省略時はカレントディレクトリ</td>
+</tr>
+<tr>
+  <td>domain</td>
+  <td>クッキーを有効にするドメイン。省略時は同ドメイン</td>
+</tr>
+<tr>
+  <td>secure</td>
+  <td>https時のみクッキーを出力する。省略時はfalse</td>
+</tr>
+<tr>
+  <td>httponly</td>
+  <td>JavaScriptからクッキーにアクセスできなくする。省略時はtrue</td>
+</tr>
+</table>
+
+<p class="info-blue">クッキーの設定は<a href="https://www.php.net/manual/ja/function.setcookie.php" target="_blank">PHPのsetcookie()</a>と同等です</p>
+
+
+</div>
+</article>
+
+</body>
+</html>
