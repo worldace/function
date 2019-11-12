@@ -306,42 +306,8 @@ class str{
 
 
 class html{
-    static public $template_dir;
-
-
     static function e(?string $str) :string{
         return htmlspecialchars($str, ENT_QUOTES, 'UTF-8', false);
-    }
-
-
-    static function template(?string $str, array $table = []) :string{
-        $heads = [];
-        $bodys = [];
-
-        $html = preg_replace_callback('/{{(.+?)}}/', function($m) use($table, &$heads, &$bodys){
-            if(str::match_end($m[1], '.php')){
-                ob_start();
-                include sprintf('%s/%s', html::$template_dir, $m[1]);
-                if(isset($head)){
-                    $heads[$m[1]] = $head;
-                }
-                if(isset($body)){
-                    $bodys[$m[1]] = $body;
-                }
-                return ob_get_clean();
-            }
-            else{
-                return html::e($table[$m[1]]);
-            }
-        }, $str);
-
-        if($heads){
-            $html = str::insert_before($html, '</head>', implode("\n", $heads));
-        }
-        if($bodys){
-            $html = str::insert_before($html, '</body>', implode("\n", $bodys));
-        }
-        return $html;
     }
 }
 
@@ -1505,6 +1471,56 @@ class doc{
     }
 }
 
+
+
+class template{
+    public static $dir;
+    private $html;
+    private $rule;
+    private $head;
+    private $body;
+
+
+    function __construct(string $html, array $rule = []){
+        $this->rule = $rule;
+        $this->html = $this->replace($html);
+
+        if($this->head){
+            $this->html = str::insert_before($this->html, '</head>', implode("\n", $this->head));
+        }
+        if($this->body){
+            $this->html = str::insert_before($this->html, '</body>', implode("\n", $this->body));
+        }
+    }
+
+
+    function __toString(){
+        return $this->html;
+    }
+
+
+    private function replace($str){
+        return preg_replace_callback('/{{(.+?)}}/', [$this, 'callback'], $str);
+    }
+
+
+    private function callback($m){
+        if(preg_match('/\.php$/', $m[1])){
+            ob_start();
+            include sprintf('%s/%s', self::$dir, $m[1]);
+            if(isset($head)){
+                $this->head[$m[1]] = $head;
+            }
+            if(isset($body)){
+                $this->body[$m[1]] = $body;
+            }
+            return $this->replace(ob_get_clean());
+        }
+        else{
+            return html::e($this->rule[$m[1]]);
+        }
+    }
+}
 
 
 
