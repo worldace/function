@@ -1495,19 +1495,19 @@ class template{
 
 
     function __construct(string $html, array $rule = []){
+        $this->html = $html;
         $this->rule = $rule;
-        $this->html = $this->replace($html);
+    }
 
+
+    function __toString(){
+        $this->html = $this->replace($this->html);
         if($this->head){
             $this->html = str::insert_before($this->html, '</head>', implode("\n", $this->head));
         }
         if($this->body){
             $this->html = str::insert_before($this->html, '</body>', implode("\n", $this->body));
         }
-    }
-
-
-    function __toString(){
         return $this->html;
     }
 
