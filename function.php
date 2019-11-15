@@ -105,7 +105,7 @@ class request{
             return false;
         }
     
-        $savepath = sprintf('%s/%s.%s', $dir, uniqid(bin2hex(random_bytes(2))), $extention);
+        $savepath = sprintf('%s/%s.%s', $dir, random::id(), $extention);
         return (move_uploaded_file($files['tmp_name'], $savepath)) ? realpath($savepath) : false;
     }
 
@@ -661,6 +661,19 @@ class dir{
 
     static function permission(string $dir, string $permission = null) :string{
         return file::permission($dir, $permission);
+    }
+
+
+    static function is_empty(string $dir) :bool{
+        $handle = opendir($dir);
+        while(($entry = readdir($handle)) !== false){
+            if($entry !== '.' && $entry !== '..'){
+                closedir($handle);
+                return false;
+            }
+        }
+        closedir($handle);
+        return true;
     }
 
 
@@ -1512,8 +1525,8 @@ class template{
     }
 
 
-    private function replace($str){
-        return preg_replace_callback('/{{(.+?)}}/', [$this, 'callback'], $str);
+    private function replace($html){
+        return preg_replace_callback('/{{(.+?)}}/', [$this, 'callback'], $html);
     }
 
 
