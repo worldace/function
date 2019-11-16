@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>templateクラス</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>templateクラス</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>HTML用の簡易テンプレートエンジン</p>
+
+<h2>new</h2>
+
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+テンプレートとなるHTML。変数の書き方は<var>{{変数名}}</var>
+</td></tr>
+<tr class="option"><td>2</td><td>
+変換表を連想配列で。<var>[変数名=&gt;文字列]</var><br>
+変数はHTMLエスケープされます
+</td></tr>
+<tr class="return"><td>戻</td><td>
+templateオブジェクト<br>
+このオブジェクトは文字列として評価された時に、文字列に変換されます
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+print new template(<<<END
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>{{title}}</title>
+</head>
+<body>
+
+{{h1.php}}
+
+</body>
+</html>
+END, [
+    'title' => 'タイトル',
+]);
+--></code>
+
+<h2>外部ファイル</h2>
+
+<p>外部ファイルを利用すると、HTMLの一部をコンポーネント化することができます。<br>上記の使用例だと<var>{{h1.php}}</var>が外部ファイルに該当します</p>
+<h3>事前準備</h3>
+
+<ol>
+<li>外部ファイルを利用するには、外部ファイルを置くディレクトリを<var>template::$dir</var>に設定してください</li>
+<li>外部ファイルの変数は<var>{{ファイル名}}</var>と書きます。変換表は不要です</li>
+</ol>
+
+<h3>外部ファイルの書き方</h3>
+
+<p>外部ファイルはPHPファイルで、<b>出力したもの</b>が変数を置換します<br>
+外部ファイルに<var>$head</var><var>$body</var>という変数があれば、その内容がテンプレートのhead/bodyに追加されます。<br>
+</p>
+
+<code class="php" data-title="1つの外部ファイルにHTML・CSS・JavaScriptをまとめる例"><!--
+<?php
+
+print '<h1>タイトル</h1>';
+
+$head = <<<'END'
+<style>
+h1{
+    color: red;
+}
+</style>
+END;
+
+$body = <<<'END'
+<script>
+document.querySelector("h1").onclick = function (event){
+    alert(this.textContent);
+}
+</script>
+END;
+--></code>
+
+<p class="info-blue">外部ファイルにデータを渡すにはグローバル変数を利用してください</p>
+</div>
+</article>
+<script>
+table_of_contents()
+</script>
+
+</body>
+</html>
