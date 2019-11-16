@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>time::weekday()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>time::weekday()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>曜日を日本語で求める</p>
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="option"><td>1</td><td>
+年またはUNIXタイム<br>
+省略時は今日
+</td></tr>
+<tr class="option"><td>2</td><td>
+月
+</td></tr>
+<tr class="option"><td>3</td><td>
+日
+</td></tr>
+<tr class="return"><td>戻</td><td>
+曜日
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+//今日の曜日を求める
+print time::weekday(); //日
+
+//UNIXタイムから曜日を求める
+print time::weekday(1573298136); //土
+
+//年月日から曜日を求める
+print time::weekday(2019, 4, 17); //水
+--></code>
+
+
+</div>
+</article>
+
+</body>
+</html>

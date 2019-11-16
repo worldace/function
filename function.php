@@ -956,6 +956,20 @@ class time{
 
         return $return;
     }
+
+
+    static function weekday(int $y = 0, int $m = 0, int $d = 0) :string{
+        $week = ['日', '月', '火', '水', '木', '金', '土'];
+        if(!$y){
+            return $week[date('w')];
+        }
+        else if(!$m){
+            return $week[date('w', $y)];
+        }
+        else{
+            return $week[date('w', mktime(0,0,0,$m,$d,$y))];
+        }
+    }
 }
 
 
