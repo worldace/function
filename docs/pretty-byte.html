@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>pretty::byte()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>pretty::byte()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>バイト数に単位を付ける</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+バイト数
+</td></tr>
+<tr class="return"><td>戻</td><td>
+単位が付いたバイト数。0 KB ～ GB
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+print pretty::byte(2800000); //3 MB
+print pretty::byte(1600);    //2 KB
+print pretty::byte(1500);    //1 KB
+print pretty::byte(10);      //1 KB
+print pretty::byte(0);       //0 KB
+--></code>
+
+
+</div>
+</article>
+
+</body>
+</html>

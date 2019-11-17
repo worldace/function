@@ -1089,6 +1089,28 @@ class page{
 
 
 
+class pretty{
+    static function byte(int $byte) :string{
+        if($byte >= 1073741824){
+            return number_format($byte/1073741824, 1).' GB';
+        }
+        elseif($byte >= 1048576){
+            return number_format($byte/1048576).' MB';
+        }
+        elseif($byte >= 1024){
+            return number_format($byte/1024).' KB';
+        }
+        elseif($byte > 1){
+            return '1 KB';
+        }
+        else {
+            return '0 KB';
+        }
+    }
+}
+
+
+
 class php{
     static function go(string $file, $arg = null, ...$files) :void{
         array_unshift($files, $file);
