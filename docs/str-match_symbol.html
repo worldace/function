@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title>arr::save()</title>
+<title>str::match_symbol()</title>
 <link href="style.css" rel="stylesheet">
 <script src="script.js"></script>
 </head>
@@ -12,32 +12,33 @@
 
 <article>
 <header>
-<h1>arr::save()</h1>
+<h1>str::match_symbol()</h1>
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
 <div id="contents">
 
-<p>配列をファイルに保存する。<br>
-保存した配列は<var>include</var>で取り出せます</p>
+<p>文字列中に半角記号か制御文字を含んでいるか調べる</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-保存する配列。復元可能なデータに限る
-</td></tr>
-<tr class="require"><td>2</td><td>
-保存するファイル。PHPファイルに限る
+文字列
 </td></tr>
 <tr class="return"><td>戻</td><td>
-なし
+半角記号か制御文字を含んでいればtrue、含まなければfalse
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
-arr::save([1,2,3], 'array.php');
+//true
+str::match_symbol("str ");
+str::match_symbol("str\n");
+str::match_symbol("str\0");
+str::match_symbol("str#");
 
-$array = include('array.php'); // [1,2,3]
+//false
+str::match_symbol("str");
 --></code>
 
 

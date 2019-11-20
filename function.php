@@ -218,6 +218,11 @@ class str{
     }
 
 
+    static function match_symbol(?string $str) :bool{
+        preg_match('/[\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]/u', $str);
+    }
+
+
     static function shift(?string $str, string $needle){
         $result = mb_strstr($str, $needle, true);
         return ($result !== false) ? $result : $str;
