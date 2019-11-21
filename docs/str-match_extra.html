@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title>str::match_symbol()</title>
+<title>str::match_extra()</title>
 <link href="style.css" rel="stylesheet">
 <script src="script.js"></script>
 </head>
@@ -12,12 +12,13 @@
 
 <article>
 <header>
-<h1>str::match_symbol()</h1>
+<h1>str::match_extra()</h1>
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
 <div id="contents">
 
-<p>文字列中に半角記号か制御文字を含んでいるか調べる</p>
+<p>文字列中に半角記号か制御文字を含んでいるか調べる<br>
+ASCIIコードで<var>a-zA-Z0-9</var>以外の文字のことです</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
@@ -32,13 +33,13 @@
 
 <code class="php" data-title="使用例"><!--
 //true
-str::match_symbol("str ");
-str::match_symbol("str\n");
-str::match_symbol("str\0");
-str::match_symbol("str#");
+str::match_extra("str ");
+str::match_extra("str\n");
+str::match_extra("str\0");
+str::match_extra("str#");
 
 //false
-str::match_symbol("str");
+str::match_extra("str");
 --></code>
 
 
