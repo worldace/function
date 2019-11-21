@@ -219,7 +219,7 @@ class str{
 
 
     static function match_extra(?string $str) :bool{
-        preg_match('/[\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]/u', $str);
+        return preg_match('/[\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]/u', $str);
     }
 
 
