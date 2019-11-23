@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>str::split_space()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>str::split_space()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>文字列を空白で区切って配列に入れる。<br>
+空文字列は無視され、全角空白にも対応</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+文字列
+</td></tr>
+<tr class="return"><td>戻</td><td>
+配列
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+print str::split_space('a b');    // ['a', 'b']
+print str::split_space('a　b');   // ['a', 'b']
+print str::split_space(' a  b '); // ['a', 'b']
+print str::split_space('');       // []
+--></code>
+
+
+</div>
+</article>
+
+</body>
+</html>

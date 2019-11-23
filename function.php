@@ -263,6 +263,12 @@ class str{
     }
 
 
+    static function split_space(?string $str) :array{
+        $words = preg_split('/[[:space:]]+/u', $str);
+        return array_filter($words, 'strlen');
+    }
+
+
     static function template(?string $str, array $table) :string{
         return preg_replace_callback('/{{(.+?)}}/', function($m) use($table){ return $table[$m[1]]; }, $str);
     }
@@ -1315,7 +1321,7 @@ class db{
     }
 
 
-    function search(string $word, $key, int $start, int $length){
+    function search(string $word, $key, int $start, int $length, string $where = ''){
         $words = preg_split('/[[:space:]　]+/u', $word);
         $words = array_filter($words, 'strlen');
 
@@ -1328,7 +1334,11 @@ class db{
             $sql_like[] = sprintf('((%s) like ?)', implode($keys, '||'));
         }
 
-        $sql = sprintf('select * from "%s" where %s order by id desc limit %s offset %s', $this->table, implode($sql_like, ' or '), $length, $start);
+        if($where){
+            $where .= ' and ';
+        }
+
+        $sql = sprintf('select * from "%s" where %s (%s) order by id desc limit %s offset %s', $this->table, $where, implode($sql_like, ' or '), $length, $start);
         return $this->query($sql, $bind)->fetchAll();
     }
 
