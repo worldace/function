@@ -3,17 +3,17 @@
 
 
 class request{
-    static function get(string $name){
+    static function get(string $name, $default = ''){
         return (!isset($_GET[$name]) or is::empty($_GET[$name])) ? $default : $_GET[$name];
     }
 
 
-    static function post(string $name){
+    static function post(string $name, $default = ''){
         return (!isset($_POST[$name]) or is::empty($_POST[$name])) ? $default : $_POST[$name];
     }
 
 
-    static function cookie(string $name) :string{
+    static function cookie(string $name, $default = ''){
         return (!isset($_COOKIE[$name]) or is::empty($_COOKIE[$name])) ? $default : $_COOKIE[$name];
     }
 
