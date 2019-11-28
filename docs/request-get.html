@@ -24,8 +24,12 @@
 <tr class="require"><td>1</td><td>
 GETのキー名
 </td></tr>
+<tr class="option"><td>2</td><td>
+デフォルト値。キーが存在しないか、値が空の時にこの値が返ります<br>
+省略時は空文字列
+</td></tr>
 <tr class="return"><td>戻</td><td>
-対応するGETの値。キーが存在しない場合はnull
+文字列か配列
 </td></tr>
 </table>
 
@@ -34,7 +38,7 @@ GETのキー名
 print request::get('example');
 --></code>
 
-
+<p class="info-yellow">GETの値が配列の時は、必ず第2引数を指定してください</p>
 </div>
 </article>
 
