@@ -13,45 +13,45 @@ class request{
     }
 
 
-    static function cookie(string $name){
-        return self::input(INPUT_COOKIE, $name);
+    static function cookie(string $name) :string{
+        return $_COOKIE[$name] ?? '';
     }
 
 
-    static function query(){
-        return self::input(INPUT_SERVER, 'QUERY_STRING');
+    static function query() :string{
+        return $_SERVER['QUERY_STRING'] ?? '';
     }
 
 
-    static function time(){
+    static function time() :int{
         return $_SERVER['REQUEST_TIME'];
     }
 
 
-    static function header(string $name){
+    static function header(string $name) :string{
         $name = strtoupper($name);
         $name = str_replace('-', '_', $name);
         $name = sprintf('HTTP_%s', $name);
-        return filter_input(INPUT_SERVER, $name);
+        return $_SERVER[$name] ?? '';
     }
 
 
-    static function method(){
-        return filter_input(INPUT_SERVER, 'REQUEST_METHOD');
+    static function method() :string{
+        return $_SERVER['REQUEST_METHOD'] ?? '';
     }
 
 
     static function is_get() :bool{
-        return filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'GET';
+        return isset($_SERVER['REQUEST_METHOD']) and $_SERVER['REQUEST_METHOD'] === 'GET';
     }
 
 
     static function is_post() :bool{
-        return filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST';
+        return isset($_SERVER['REQUEST_METHOD']) and $_SERVER['REQUEST_METHOD'] === 'POST';
     }
 
 
-    static function url(){
+    static function url() :string{
         $http = filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? 'https' : 'http';
         $host = filter_input(INPUT_SERVER, 'HTTP_HOST');
         $port = filter_input(INPUT_SERVER, 'SERVER_PORT');
@@ -60,6 +60,26 @@ class request{
         $port = (($http === 'http' && $port == 80) or ($http === 'https' && $port == 443)) ? '' : sprintf(':%s', $port);
 
         return sprintf('%s://%s%s%s', $http, $host, $port, $path);
+    }
+
+
+    static function referer() :string{
+        return $_SERVER['HTTP_REFERER'] ?? '';
+    }
+
+
+    static function user_agent() :string{
+        return $_SERVER['HTTP_USER_AGENT'] ?? '';
+    }
+
+
+    static function ip() :string{
+        return $_SERVER['REMOTE_ADDR'] ?? '';
+    }
+
+
+    static function host() :string{
+        return $_SERVER['REMOTE_HOST'] ?? '';
     }
 
 
