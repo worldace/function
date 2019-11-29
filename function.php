@@ -1283,26 +1283,26 @@ class db{
 
     function table_create(array $data){
         foreach($data as $k => $v){
-            $sql_create[] = sprintf('"%s" %s', $k, $v);
+            $sql_create[] = "`$k` $v";
         }
-        $sql = sprintf('create table if not exists "%s" (%s)', $this->table, implode($sql_create, ','));
+        $sql = sprintf('create table if not exists `%s` (%s)', $this->table, implode($sql_create, ','));
         $this->query($sql);
     }
 
 
     function table_keys(){
-        $sql = sprintf('pragma table_info ("%s")', $this->table);
+        $sql = sprintf('pragma table_info (`%s`)', $this->table);
         return array_column($this->query($sql)->fetchAll(), 'name');
     }
 
 
     function insert(array $data){
         foreach(array_keys($data) as $v){
-            $sql_keys[]   = sprintf('"%s"', $v);
+            $sql_keys[]   = "`$v`";
             $sql_holder[] = '?';
         }
 
-        $sql = sprintf('insert into "%s" (%s) values (%s)', $this->table, implode($sql_keys, ','), implode($sql_holder, ','));
+        $sql = sprintf('insert into `%s` (%s) values (%s)', $this->table, implode($sql_keys, ','), implode($sql_holder, ','));
         $this->query($sql, array_values($data));
 
         return $this->pdo->lastInsertId();
@@ -1311,31 +1311,31 @@ class db{
 
     function update(int $id, array $data){
         foreach($data as $k => $v){
-            $sql_set[] = sprintf('"%s" = ?', $k);
+            $sql_set[] = "`$k` = ?";
         }
-        $sql = sprintf('update "%s" set %s where id = %s', $this->table, implode($sql_set, ','), $id);
+        $sql = sprintf('update `%s` set %s where id = %s', $this->table, implode($sql_set, ','), $id);
         $this->query($sql, array_values($data));
     }
 
 
     function delete(int $id){
-        $sql = sprintf('delete from "%s" where id = %s', $this->table, $id);
+        $sql = sprintf('delete from `%s` where id = %s', $this->table, $id);
         $this->query($sql);
     }
 
 
     function select(int $start, $length = 0, bool $reverse = false){
         if(is_string($length)){
-            $sql = sprintf('select "%s" from "%s" where id = %s', $length, $this->table, $start);
+            $sql = sprintf('select `%s` from `%s` where id = %s', $length, $this->table, $start);
             return $this->query($sql)->fetchColumn();
         }
-        else if($length <= 1){
-            $sql = sprintf('select * from "%s" where id = %s', $this->table, $start);
+        else if($length === 0){
+            $sql = sprintf('select * from `%s` where id = %s', $this->table, $start);
             return $this->query($sql)->fetch();
         }
         else{
             $order = ($reverse) ? 'asc' : 'desc';
-            $sql = sprintf('select * from "%s" order by id %s limit %s offset %s', $this->table, $order, $length, $start);
+            $sql = sprintf('select * from `%s` order by id %s limit %s offset %s', $this->table, $order, $length, $start);
             return $this->query($sql)->fetchAll();
         }
     }
@@ -1346,7 +1346,7 @@ class db{
         $words = array_filter($words, 'strlen');
 
         foreach((array)$key as $v){
-            $keys[] = sprintf('"%s"', $v);
+            $keys[] = "`$v`";
         }
 
         foreach($words as $v){
@@ -1354,7 +1354,7 @@ class db{
             $sql_like[] = sprintf('((%s) like ?)', implode($keys, '||'));
         }
 
-        $sql = sprintf('select * from "%s" where %s order by id desc limit %s offset %s', $this->table, implode($sql_like, ' or '), $length, $start);
+        $sql = sprintf('select * from `%s` where %s order by id desc limit %s offset %s', $this->table, implode($sql_like, ' or '), $length, $start);
         return $this->query($sql, $bind)->fetchAll();
     }
 
@@ -1376,7 +1376,7 @@ class db{
 
 
     function count(){
-        $sql = sprintf('select count (*) from "%s"', $this->table);
+        $sql = sprintf('select count (*) from `%s`', $this->table);
         return $this->query($sql)->fetchColumn();
     }
 
