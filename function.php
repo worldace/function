@@ -1297,8 +1297,8 @@ class db{
 
 
     function insert(array $data){
-        foreach(array_keys($data) as $v){
-            $sql_keys[]   = "`$v`";
+        foreach(array_keys($data) as $k){
+            $sql_keys[]   = "`$k`";
             $sql_holder[] = '?';
         }
 
