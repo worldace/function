@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>html::tr()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>html::tr()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>trタグを作成する。tableタグの中身を作成できます</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+列数
+</td></tr>
+<tr class="require"><td>2</td><td>
+行数
+</td></tr>
+<tr class="require"><td>3</td><td>
+td/thタグを返す関数。<br>
+関数はセル毎に実行され、現在の座標(x,y)が渡されます
+</td></tr>
+<tr class="return"><td>戻</td><td>
+trタグ
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+print html::tr(3, 2, function($x, $y){
+    return "  <td>$x-$y</td>\n";
+});
+
+//<tr>
+//  <td>0-0</td>
+//  <td>1-0</td>
+//  <td>2-0</td>
+//</tr>
+//<tr>
+//  <td>0-1</td>
+//  <td>1-1</td>
+//  <td>2-1</td>
+//</tr>
+--></code>
+
+
+</div>
+</article>
+
+</body>
+</html>

@@ -353,6 +353,19 @@ class html{
     static function e(?string $str) :string{
         return htmlspecialchars($str, ENT_QUOTES, 'UTF-8', false);
     }
+
+
+    static function tr(int $x, int $y, callable $fn) :string{
+        $tr = "";
+        for($i = 0; $i < $y; $i++){
+            $tr .= "<tr>\n";
+            for($j = 0; $j < $x; $j++){
+                $tr .= $fn($j, $i);
+            }
+            $tr .= "</tr>\n";
+        }
+        return $tr;
+    }
 }
 
 
