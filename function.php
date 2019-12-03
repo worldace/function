@@ -355,12 +355,12 @@ class html{
     }
 
 
-    static function tr(int $x, int $y, callable $fn) :string{
+    static function td(int $y, int $x, callable $fn) :string{
         $tr = "";
         for($i = 0; $i < $y; $i++){
             $tr .= "<tr>\n";
             for($j = 0; $j < $x; $j++){
-                $tr .= $fn($j, $i);
+                $tr .= $fn($i, $j);
             }
             $tr .= "</tr>\n";
         }
