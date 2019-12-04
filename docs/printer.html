@@ -62,6 +62,17 @@ END;
 
 
 
+<h2>静的プロパティの展開</h2>
+
+<p>クラス定数と同様に展開できます</p>
+<code class="php" data-title="使用例"><!--
+print <<<END
+{$print(example::$sample)}
+END;
+--></code>
+
+
+
 <h2>関数の実行</h2>
 <p>関数は動的メソッドのように実行できます</p>
 
@@ -79,7 +90,7 @@ function exapmle($a, $b){
 
 
 <h2>静的メソッドの実行</h2>
-<p>静的メソッドは、動的メソッドのように実行できます</p>
+<p>静的メソッドも、動的メソッドのように実行できます</p>
 
 <code class="php" data-title="使用例"><!--
 print <<<END
@@ -126,7 +137,7 @@ END;
 </td></tr>
 <tr class="require"><td>2</td><td>
 関数<br>
-関数の引数には「値,キー」の順に渡されます。<br>
+関数の引数には値とキーの2つが渡されます。<br>
 関数から返したものが、すべて出力されます。
 </td></tr>
 </table>
