@@ -49,32 +49,12 @@ END;
 
 <p><small>マジック定数は未対応です</small></p>
 
-<h2>クラス定数の展開</h2>
 
-
-<code class="php" data-title="使用例"><!--
-print <<<END
-{$print(DateTime::ISO8601)}
-END;
-
-// Y-m-d\TH:i:sO
---></code>
-
-
-
-<h2>静的プロパティの展開</h2>
-
-<p>クラス定数と同様に展開できます</p>
-<code class="php" data-title="使用例"><!--
-print <<<END
-{$print(example::$sample)}
-END;
---></code>
 
 
 
 <h2>関数の実行</h2>
-<p>関数は動的メソッドのように実行できます</p>
+<p>関数はメソッドのように実行できます</p>
 
 <code class="php" data-title="使用例"><!--
 print <<<END
@@ -89,8 +69,8 @@ function exapmle($a, $b){
 --></code>
 
 
-<h2>静的メソッドの実行</h2>
-<p>静的メソッドも、動的メソッドのように実行できます</p>
+<h2>クラス関数の実行</h2>
+<p>クラス関数も、メソッドのように実行できます</p>
 
 <code class="php" data-title="使用例"><!--
 print <<<END
@@ -98,6 +78,29 @@ print <<<END
 END;
 
 // lbCQ2MR7077
+--></code>
+
+
+<h2>クラス定数の展開</h2>
+
+
+<code class="php" data-title="使用例"><!--
+print <<<END
+{$print(DateTime::ISO8601)}
+END;
+
+// Y-m-d\TH:i:sO
+--></code>
+
+
+
+<h2>クラス変数の展開</h2>
+
+<p>クラス定数と同様な形で展開できます</p>
+<code class="php" data-title="使用例"><!--
+print <<<END
+{$print(example::$sample)}
+END;
 --></code>
 
 
