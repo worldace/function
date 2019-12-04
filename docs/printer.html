@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>printerクラス</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>printerクラス</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>ヒアドキュメントなどの文字列リテラルの中で、様々な展開を行うオブジェクト</p>
+
+
+<h2>printerの目的</h2>
+
+<p>ヒアドキュメントの中で、PHP標準で実行可能なことは次の4つだけです。</p>
+
+<ul>
+  <li>変数の展開</li>
+  <li>配列要素の展開</li>
+  <li>プロパティの展開</li>
+  <li>メソッドの実行</li>
+</ul>
+
+<p>これ以外の展開をサポートするのが、当オブジェクトの目的です。</p>
+
+
+<h2>定数の展開</h2>
+
+<p>定数はプロパティのようにアクセスできます</p>
+<code class="php" data-title="使用例"><!--
+$print = new printer;
+
+print <<<END
+$print->PHP_VERSION
+END;
+
+// 7.3.8
+--></code>
+
+<p><small>マジック定数は未対応です</small></p>
+
+<h2>クラス定数の展開</h2>
+
+
+<code class="php" data-title="使用例"><!--
+print <<<END
+{$print(DateTime::ISO8601)}
+END;
+
+// Y-m-d\TH:i:sO
+--></code>
+
+
+
+<h2>関数の実行</h2>
+<p>関数は動的メソッドのように実行できます</p>
+
+<code class="php" data-title="使用例"><!--
+print <<<END
+{$print->example(1,2)}
+END;
+
+function exapmle($a, $b){
+    return "$a:$b";
+}
+
+// 1:2
+--></code>
+
+
+<h2>静的メソッドの実行</h2>
+<p>静的メソッドは、動的メソッドのように実行できます</p>
+
+<code class="php" data-title="使用例"><!--
+print <<<END
+{$print->random::id()}
+END;
+
+// lbCQ2MR7077
+--></code>
+
+
+<h2>if</h2>
+
+<p>条件分岐の結果を出力する</p>
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+条件
+</td></tr>
+<tr class="option"><td>2</td><td>
+条件が真の場合に出力する文字列
+</td></tr>
+<tr class="option"><td>3</td><td>
+条件が偽の場合に出力する文字列
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+print <<<END
+{$print->if(PHP_SAPI === 'cli', 'ok', 'ng')}
+END;
+
+// ok
+--></code>
+
+
+
+<h2>for</h2>
+
+<p>繰り返し結果を出力する</p>
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+配列・オブジェクト
+</td></tr>
+<tr class="require"><td>2</td><td>
+関数<br>
+関数の引数には「値,キー」の順に渡されます。<br>
+関数から返したものが、すべて出力されます。
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+print <<<END
+{$print->for([1,2,3], fn($v) => "<li>$v</li>\n")}
+END;
+
+// <li>1</li>
+// <li>2</li>
+// <li>3</li>
+--></code>
+
+
+<p>またforメソッドは、繰り返し回数を指定して実行することもできます。</p>
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+繰り返す回数
+</td></tr>
+<tr class="require"><td>2</td><td>
+関数<br>
+関数の引数には0から始まる番号が渡されます。<br>
+関数から返したものが、すべて出力されます。
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+print <<<END
+{$print->for(3, fn($i) => "<li>$i</li>\n")}
+END;
+
+// <li>0</li>
+// <li>1</li>
+// <li>2</li>
+--></code>
+
+
+
+
+<h2>file</h2>
+
+<p>ファイルの内容を出力する</p>
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+ファイルパス
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+print <<<END
+{$print->file('./example.txt')}
+END;
+--></code>
+
+
+<h2>e</h2>
+
+<p>文字列をHTMLエスケープする</p>
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+文字列
+</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+print <<<END
+{$print->e('<br>')}
+END;
+
+// &lt;br&gt;
+--></code>
+
+
+<h2>HTMLエスケープ</h2>
+
+<p>当オブジェクトの結果に<var>-&gt;e()</var>を加えると、HTMLエスケープができます</p>
+
+<code class="php" data-title="使用例"><!--
+print <<<END
+
+//定数をエスケープ
+{$print->PHP_VERSION->e()}
+
+//クラス定数をエスケープ
+{$print(DateTime::ISO8601)->e()}
+
+//関数の実行結果をエスケープ
+{$print->example(1,2)->e()}
+
+//ファイルをエスケープ
+{$print->file('./example.txt')->e()}
+
+END;
+--></code>
+</div>
+</article>
+<script>
+table_of_contents();
+</script>
+
+</body>
+</html>

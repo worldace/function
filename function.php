@@ -1874,6 +1874,89 @@ class mail{
 
 
 
+class printer{
+    function const($const){
+        return new printer_item($const);
+    }
+
+
+    function if($bool, ?string $true, ?string $false){
+        return $bool ? new printer_item($true) : new printer_item($false);
+    }
+
+
+    function for($it, callable $fn){
+        $result = '';
+        if(is_iterable($it)){
+            foreach($it as $k => $v){
+                $result .= $fn($v, $k);
+            }
+        }
+        else{
+            for($i=0; $i<$it; $i++){
+                $result .= $fn($i);
+            }
+        }
+        return new printer_item($result);
+    }
+
+
+    function fn(callable $fn, ...$args){
+        return new printer_item($fn(...$args));
+    }
+
+
+    function file(string $file){
+        return new printer_item(file_get_contents($file));
+    }
+
+
+    function e(?string $str) :string{
+        return new printer_item($str);
+    }
+
+
+    function __get(string $name){
+        if(defined($name)){
+            return new printer_item(constant($name));
+        }
+        else{
+            return new printer_item($name);
+        }
+    }
+
+
+    function __call(string $name, $args){
+        return new printer_item($name(...$args));
+    }
+
+
+    function __invoke($v){
+        return new printer_item($v);
+    }
+}
+
+
+
+class printer_item{
+    private $str = '';
+
+    function __construct(string $str){
+        $this->str = $str;
+    }
+
+    function e(){
+        $this->str = html::e($this->str);
+        return $this;
+    }
+
+    function __toString(){
+        return $this->str;
+    }
+}
+
+
+
 trait immutable{
     private $property = [];
 
