@@ -53,7 +53,8 @@ print new template(<<<END
 </body>
 </html>
 END, [
-    'title' => 'タイトル',
+    'title'  => 'タイトル',
+    'h1.php' => compact('a', 'b'),
 ]);
 --></code>
 
@@ -64,14 +65,16 @@ END, [
 
 <ol>
 <li>外部ファイルを利用するには、外部ファイルを置くディレクトリを<var>template::$dir</var>に設定してください</li>
-<li>外部ファイルの変数は<var>{{ファイル名}}</var>と書きます。変換表は不要です</li>
+<li>外部ファイルの変数は<var>{{ファイル名}}</var>と書きます</li>
+<li>外部ファイルに渡したいデータは、変換表に連想配列で渡してください</li>
 </ol>
 
 <h3>外部ファイルの書き方</h3>
 
-<p>外部ファイルはPHPファイルで、<b>出力したもの</b>が変数を置換します<br>
-外部ファイルに<var>$head</var><var>$body</var>という変数があれば、その内容がテンプレートのhead/bodyに追加されます。<br>
-</p>
+<p>外部ファイルはPHPファイルで、<b>出力したもの</b>が変数を置換します。<br>
+変換表から渡されたデータは<var>$self-&gt;名前</var>として利用できます。</p>
+
+<p>外部ファイルに<var>$head</var><var>$body</var>という変数があれば、その内容がテンプレートのhead/bodyに追加されます</p>
 
 <code class="php" data-title="1つの外部ファイルにHTML・CSS・JavaScriptをまとめる例"><!--
 <?php
@@ -95,7 +98,6 @@ document.querySelector("h1").onclick = function (event){
 END;
 --></code>
 
-<p class="info-blue">外部ファイルにデータを渡すにはグローバル変数を利用してください</p>
 </div>
 </article>
 <script>

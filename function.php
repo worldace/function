@@ -1612,6 +1612,7 @@ class template{
 
     private function callback($m){
         if(preg_match('/\.php$/', $m[1])){
+            $self = isset($this->rule[$m[1]]) ? (object)$this->rule[$m[1]] : null;
             ob_start();
             include sprintf('%s/%s', self::$dir, $m[1]);
             if(isset($head)){
