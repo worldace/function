@@ -1587,9 +1587,9 @@ class template{
     private $body;
 
 
-    function __construct(string $html, array $rule = []){
+    function __construct(string $html, $rule = []){
         $this->html = $html;
-        $this->rule = $rule;
+        $this->rule = (array)$rule;
     }
 
 
