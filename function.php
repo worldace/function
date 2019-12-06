@@ -1612,14 +1612,19 @@ class template{
 
     private function callback($m){
         if(preg_match('/\.php$/', $m[1])){
-            $self = isset($this->rule[$m[1]]) ? (object)$this->rule[$m[1]] : null;
+            $file = $m[1];
+
+            if(isset($this->rule[$file])){
+                $self = is_object($this->rule[$file]) ? $this->rule[$file] : (object)$this->rule[$file];
+            }
+
             ob_start();
-            include sprintf('%s/%s', self::$dir, $m[1]);
+            include sprintf('%s/%s', self::$dir, $file);
             if(isset($head)){
-                $this->head[$m[1]] = $head;
+                $this->head[$file] = $head;
             }
             if(isset($body)){
-                $this->body[$m[1]] = $body;
+                $this->body[$file] = $body;
             }
             return $this->replace(ob_get_clean());
         }

@@ -53,33 +53,38 @@ print new template(<<<END
 </body>
 </html>
 END, [
-    'title'  => 'タイトル',
-    'h1.php' => compact('a', 'b'),
+    'title'  => $title,
+    'h1.php' => compact('title'),
 ]);
 --></code>
 
-<h2>外部ファイル</h2>
+<h2>ガジェット</h2>
 
-<p>外部ファイルを利用すると、HTMLの一部をコンポーネント化することができます。<br>上記の使用例だと<var>{{h1.php}}</var>が外部ファイルに該当します</p>
-<h3>事前準備</h3>
+<p>ガジェットを利用すると、HTMLの一部をコンポーネント化することができます。<br>
+HTMLだけでなく、CSSとJavaScriptにも対応しているのがガジェットの特徴です。</p>
+
+<p>上記の使用例だと<var>{{h1.php}}</var>がガジェットに該当します</p>
+<h3>利用方法</h3>
 
 <ol>
-<li>外部ファイルを利用するには、外部ファイルを置くディレクトリを<var>template::$dir</var>に設定してください</li>
-<li>外部ファイルの変数は<var>{{ファイル名}}</var>と書きます</li>
-<li>外部ファイルに渡したいデータは、変換表に連想配列で渡してください</li>
+<li><var>template::$dir</var>にガジェットファイルを設置するディレクトリを設定してください</li>
+<li>ガジェットの変数は<var>{{PHPファイル名}}</var>と書きます</li>
+<li>ガジェットに渡したいデータは、変換表に連想配列かオブジェクトで渡してください</li>
 </ol>
 
-<h3>外部ファイルの書き方</h3>
+<h3>ガジェットファイルの書き方</h3>
 
-<p>外部ファイルはPHPファイルで、<b>出力したもの</b>が変数を置換します。<br>
-変換表から渡されたデータは<var>$self-&gt;名前</var>として利用できます。</p>
+<ul>
+  <li>ガジェットファイルはPHPです</li>
+  <li>ガジェット内から<b>出力したもの</b>が変数を置換します</li>
+  <li>変換表から渡されたデータは、ガジェット内では<var>$self-&gt;名前</var>として利用できます</li>
+  <li>ガジェット内に<var>$head</var><var>$body</var>という変数があれば、その内容がテンプレートのhead/bodyに1回だけ追加されます</li>
+</ul>
 
-<p>外部ファイルに<var>$head</var><var>$body</var>という変数があれば、その内容がテンプレートのhead/bodyに追加されます</p>
-
-<code class="php" data-title="1つの外部ファイルにHTML・CSS・JavaScriptをまとめる例"><!--
+<code class="php" data-title="ガジェットファイル記述例"><!--
 <?php
 
-print '<h1>タイトル</h1>';
+print '<h1>$self->title</h1>';
 
 $head = <<<'END'
 <style>
