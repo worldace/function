@@ -36,6 +36,11 @@ class request{
     }
 
 
+    static function body() :string{
+        return file_get_contents('php://input');
+    }
+
+
     static function method() :string{
         return $_SERVER['REQUEST_METHOD'] ?? '';
     }
@@ -168,13 +173,20 @@ class response{
     }
 
 
-    static function json($value, array $origin = []) :void{
-        $json   = json_encode($value, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PARTIAL_OUTPUT_ON_ERROR);
-        $origin = ($origin) ? implode(' ', $origin) : '*';
+    static function json($value, array $option = []) :void{
+        $json = json_encode($value, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PARTIAL_OUTPUT_ON_ERROR);
 
-        header("Access-Control-Allow-Origin: $origin");
-        header('Access-Control-Allow-Credentials: true');
-        header('Content-Type: application/json; charset=utf-8');
+        $origin      = $option['origin'] ?? request::header('origin');
+        $credentials = $option['credentials'] ?? true;
+
+        header('Content-Type: application/json');
+        if($origin){
+            header("Access-Control-Allow-Origin: $origin");
+        }
+        if($credentials){
+            header('Access-Control-Allow-Credentials: true');
+        }
+
         print $json;
         exit;
     }
@@ -210,8 +222,28 @@ class response{
     }
 
 
-    static function nocache(){
+    static function nocache() :void{
         header('Cache-Control: no-store');
+    }
+
+
+    static function api($className, array $option = []) :void{
+        $json = request::post('json');
+        $jrpc = json_decode($json);
+
+        if(!method_exists($className, $jrpc->method)){
+            response::json(['error'=>"api error: method '{$jrpc->method}' is missing"], $option);
+        }
+        if(!is_array($jrpc->args)){
+            response::json(['error'=>'api error: invalid arguments'], $option);
+        }
+
+        try{
+            response::json(['result'=>$className::{$jrpc->method}(...$jrpc->args)], $option);
+        }
+        catch(\Throwable $e){
+            response::json(['error'=>"api error: {$e->getMessage()}"], $option);
+        }
     }
 }
 
