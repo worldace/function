@@ -398,7 +398,7 @@ class js{
         }
 
         try{
-            response::json(['result'=>$object->{$jrpc->method}(...$jrpc->args)], $option);
+            response::json(['result'=>[$object, $jrpc->method](...$jrpc->args)], $option);
         }
         catch(\Throwable $e){
             response::json(['error'=>"api error: {$e->getMessage()}"], $option);
@@ -1648,24 +1648,24 @@ class template{
 
 
     private function callback($m, $rule){
-        if(str::match_end($m, '.php')){
-            if(isset($rule->$m)){
-                $self = (object)$rule->$m;
-            }
-
-            ob_start();
-            $this_rule = include sprintf('%s/%s', self::$dir, $m);
-            if(isset($head)){
-                $this->head[$m] = $head;
-            }
-            if(isset($body)){
-                $this->body[$m] = $body;
-            }
-            return is_iterable($this_rule) ? $this->replace(ob_get_clean(), (object)$this_rule) : ob_get_clean();
-        }
-        else{
+        if(!str::match_end($m, '.php')){
             return html::e($rule->$m);
         }
+
+        if(isset($rule->$m)){
+            $self = (object)$rule->$m;
+        }
+        ob_start();
+
+        $this_rule = include sprintf('%s/%s', self::$dir, $m);
+
+        if(isset($head)){
+            $this->head[$m] = $head;
+        }
+        if(isset($body)){
+            $this->body[$m] = $body;
+        }
+        return is_iterable($this_rule) ? $this->replace(ob_get_clean(), (object)$this_rule) : ob_get_clean();
     }
 }
 
