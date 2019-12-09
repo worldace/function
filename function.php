@@ -383,19 +383,22 @@ class html{
 
 
 class js{
-    static function api($className, array $option = []) :void{
+    static function api(object $object, array $option = []) :void{
         $json = request::post('json');
         $jrpc = json_decode($json);
 
-        if(!method_exists($className, $jrpc->method)){
+        if(!method_exists($object, $jrpc->method)){
             response::json(['error'=>"api error: method '{$jrpc->method}' is missing"], $option);
+        }
+        if(str::match_start($jrpc->method, '__')){
+            response::json(['error'=>"api error: magic method"], $option);
         }
         if(!is_array($jrpc->args)){
             response::json(['error'=>'api error: invalid arguments'], $option);
         }
 
         try{
-            response::json(['result'=>$className::{$jrpc->method}(...$jrpc->args)], $option);
+            response::json(['result'=>$object->{$jrpc->method}(...$jrpc->args)], $option);
         }
         catch(\Throwable $e){
             response::json(['error'=>"api error: {$e->getMessage()}"], $option);

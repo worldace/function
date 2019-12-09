@@ -18,13 +18,13 @@
 <div id="contents">
 
 <p>JavaScriptに適したAPIを提供する。<br>
-JavaScriptからPHPの関数を実行するようなイメージのAPIです</p>
+JavaScriptからPHPのメソッドを実行する感覚のAPIです</p>
 
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-クラス/オブジェクト<br>
-このクラスにある関数がAPIとして提供されます
+オブジェクト<br>
+このオブジェクトのメソッドがAPIとして提供されます
 </td></tr>
 <tr class="option"><td>2</td><td>
 JSONの設定があれば連想配列で<br>
@@ -37,27 +37,28 @@ JSONの設定があれば連想配列で<br>
 
 <h3>PHP側</h3>
 
-<p>APIとして提供する関数をクラスに記述します。メソッドではないので<var>static</var>を忘れずに
+<p>APIとして提供するメソッドをクラスに記述します
 </p>
 <code class="php" data-title="PHP側"><!--
 class exapmle{
-    static function plus($a, $b){
+    function plus($a, $b){
         return $a + $b;
     }
 }
 
-js::api(new exapmle); // 引数は 'exapmle' や exapmle::class でもOK
+js::api(new exapmle);
 --></code>
 
+<p class="info-blue">プライベートメソッドとマジックメソッドはAPIから実行できません</p>
 <h3>JavaScript側</h3>
 
 <p>JavaScript側では事前準備として <a href="api.js">api.js</a> モジュールが必要です。<br>
-またapi.jsファイル内で、js::api()を実行できるURLを設定しておいてください。</p>
+またモジュールファイル内で、js::api()を実行できるURLを設定しておきます。</p>
 
 <code class="js" data-title="JavaScript側"><!--
 import example from './api.js';
 
-example.plus(1, 2) // PHPの関数を実行するように。戻り値はPromise
+example.plus(1, 2) // PHPのメソッドを実行するように。戻り値はPromise
 .then(result => console.log(result)); // 3
 --></code>
 
