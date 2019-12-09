@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>js::api()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>js::api()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>JavaScriptに適したAPIを提供する。<br>
+JavaScriptからPHPの関数を実行するようなイメージのAPIです</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+クラス/オブジェクト<br>
+このクラスにある関数がAPIとして提供されます
+</td></tr>
+<tr class="option"><td>2</td><td>
+JSONの設定があれば連想配列で<br>
+<a href="response-json.html">response::json</a>の第二引数と同じ内容
+</td></tr>
+<tr class="return"><td>戻</td><td>
+なし
+</td></tr>
+</table>
+
+<h3>PHP側</h3>
+
+<p>APIとして提供する関数をクラスに記述します。メソッドではないので<var>static</var>を忘れずに
+</p>
+<code class="php" data-title="PHP側"><!--
+class exapmle{
+    static function plus($a, $b){
+        return $a + $b;
+    }
+}
+
+js::api(new exapmle); // 引数は 'exapmle' や exapmle::class でもOK
+--></code>
+
+<h3>JavaScript側</h3>
+
+<p>JavaScript側では事前準備として <a href="api.js">api.js</a> モジュールが必要です。<br>
+またapi.jsファイル内で、js::api()を実行できるURLを設定しておいてください。</p>
+
+<code class="js" data-title="JavaScript側"><!--
+import example from './api.js';
+
+example.plus(1, 2) // PHPの関数を実行するように。戻り値はPromise
+.then(result => console.log(result)); // 3
+--></code>
+
+<p class="info-yellow">api.js は Internet Explorer には対応していません</p>
+</div>
+</article>
+
+</body>
+</html>

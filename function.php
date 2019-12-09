@@ -225,26 +225,6 @@ class response{
     static function nocache() :void{
         header('Cache-Control: no-store');
     }
-
-
-    static function api($className, array $option = []) :void{
-        $json = request::post('json');
-        $jrpc = json_decode($json);
-
-        if(!method_exists($className, $jrpc->method)){
-            response::json(['error'=>"api error: method '{$jrpc->method}' is missing"], $option);
-        }
-        if(!is_array($jrpc->args)){
-            response::json(['error'=>'api error: invalid arguments'], $option);
-        }
-
-        try{
-            response::json(['result'=>$className::{$jrpc->method}(...$jrpc->args)], $option);
-        }
-        catch(\Throwable $e){
-            response::json(['error'=>"api error: {$e->getMessage()}"], $option);
-        }
-    }
 }
 
 
@@ -400,6 +380,28 @@ class html{
     }
 }
 
+
+
+class js{
+    static function api($className, array $option = []) :void{
+        $json = request::post('json');
+        $jrpc = json_decode($json);
+
+        if(!method_exists($className, $jrpc->method)){
+            response::json(['error'=>"api error: method '{$jrpc->method}' is missing"], $option);
+        }
+        if(!is_array($jrpc->args)){
+            response::json(['error'=>'api error: invalid arguments'], $option);
+        }
+
+        try{
+            response::json(['result'=>$className::{$jrpc->method}(...$jrpc->args)], $option);
+        }
+        catch(\Throwable $e){
+            response::json(['error'=>"api error: {$e->getMessage()}"], $option);
+        }
+    }
+}
 
 
 class url{
