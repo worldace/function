@@ -1624,49 +1624,47 @@ class template{
     private $body;
 
 
-    function __construct(string $html, $rule = []){
+    function __construct(string $html, iterable $rule = []){
         $this->html = $html;
-        $this->rule = (array)$rule;
+        $this->rule = (object)$rule;
     }
 
 
     function __toString(){
-        $this->html = $this->replace($this->html);
+        $html = $this->replace($this->html, $this->rule);
         if($this->head){
-            $this->html = str::insert_before($this->html, '</head>', implode("\n", $this->head));
+            $html = str::insert_before($html, '</head>', implode("\n", $this->head));
         }
         if($this->body){
-            $this->html = str::insert_before($this->html, '</body>', implode("\n", $this->body));
+            $html = str::insert_before($html, '</body>', implode("\n", $this->body));
         }
-        return $this->html;
+        return $html;
     }
 
 
-    private function replace($html){
-        return preg_replace_callback('/{{(.+?)}}/', [$this, 'callback'], $html);
+    private function replace($html, $rule){
+        return preg_replace_callback('/{{(.+?)}}/', function($m) use($rule){ return $this->callback($m[1], $rule); }, $html);
     }
 
 
-    private function callback($m){
-        if(preg_match('/\.php$/', $m[1])){
-            $file = $m[1];
-
-            if(isset($this->rule[$file])){
-                $self = is_object($this->rule[$file]) ? $this->rule[$file] : (object)$this->rule[$file];
+    private function callback($m, $rule){
+        if(str::match_end($m, '.php')){
+            if(isset($rule->$m)){
+                $self = (object)$rule->$m;
             }
 
             ob_start();
-            include sprintf('%s/%s', self::$dir, $file);
+            $this_rule = include sprintf('%s/%s', self::$dir, $m);
             if(isset($head)){
-                $this->head[$file] = $head;
+                $this->head[$m] = $head;
             }
             if(isset($body)){
-                $this->body[$file] = $body;
+                $this->body[$m] = $body;
             }
-            return $this->replace(ob_get_clean());
+            return is_iterable($this_rule) ? $this->replace(ob_get_clean(), (object)$this_rule) : ob_get_clean();
         }
         else{
-            return html::e($this->rule[$m[1]]);
+            return html::e($rule->$m);
         }
     }
 }
