@@ -345,10 +345,12 @@ class str{
 
 
     static function f(string $format, ...$replace){
+        if(is_iterable($replace[0])){
+            return arr::f($replace[0], $format, $replace[1] ?? false);
+        }
         return preg_replace_callback('/%(%|n|r|s|h|u|b|j)/', function($m) use(&$replace){
             if    ($m[0] === '%%'){ return '%'; }
             elseif($m[0] === '%n'){ return "\n"; }
-            elseif($m[0] === '%r'){ return "\r"; }
             $v = array_shift($replace);
             if    ($m[0] === '%s'){ return $v; }
             elseif($m[0] === '%h'){ return htmlspecialchars($v, ENT_QUOTES, 'UTF-8', false); }
@@ -554,6 +556,19 @@ class http{
 class arr{
     static function save(array $array, string $file){
         file_put_contents($file, sprintf('<?php return %s;', var_export($array,true)), LOCK_EX);
+    }
+
+
+    static function f(iterable $ite, string $format, bool $is_escape = false){
+        $result = '';
+        foreach($ite as $k => $v){
+            if($is_escape){
+                $k = htmlspecialchars($k, ENT_QUOTES, 'UTF-8', false);
+                $v = htmlspecialchars($v, ENT_QUOTES, 'UTF-8', false);
+            }
+            $result .= str_replace(['%k', '%v', '%n', '%%'], [$k, $v, "\n", '%'], $format);
+        }
+        return $result;
     }
 }
 

@@ -46,11 +46,30 @@ print str::f('http://%s/?key=%u&name=%u', $host, $key, $name);
 <tr><td>%b</td><td>Base64エンコード</td></tr>
 <tr><td>%j</td><td>JSONエンコード</td></tr>
 <tr><td>%n</td><td>\nに変換。これは引数不要です</td></tr>
-<tr><td>%r</td><td>\rに変換。これは引数不要です</td></tr>
 <tr><td>%%</td><td>%に変換。%のエスケープ。これは引数不要です</td></tr>
 </table>
 
+<h3>配列を渡したときの動作</h3>
 
+<p>第二引数に配列を渡したときは、次のような変換ルールが採用され、全要素に対して処理されます。</p>
+
+<table>
+<caption>変換ルール</caption>
+<tr><th>記号</th><th>説明</th></tr>
+<tr><td>%k</td><td>キー</td></tr>
+<tr><td>%v</td><td>値</td></tr>
+<tr><td>%n</td><td>\nに変換</td></tr>
+<tr><td>%%</td><td>%に変換</td></tr>
+</table>
+
+<code class="php" data-title="使用例"><!--
+print str::f('<li>%k:%v</li>%n', [10, 20]);
+
+// <li>0:10</li>
+// <li>1:20</li>
+--></code>
+
+<p class="info-blue">配列を渡したときにキーと値をエスケープしたい場合は、第三引数にtrueを指定してください</p>
 
 </div>
 </article>
