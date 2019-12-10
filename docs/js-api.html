@@ -37,8 +37,7 @@ JSONの設定があれば連想配列で<br>
 
 <h3>PHP側</h3>
 
-<p>APIとして提供するクラスを作成します
-</p>
+<p>事前準備としてAPIとして提供するクラスを作成します。このメソッドがAPIとなります。</p>
 <code class="php" data-title="PHP側"><!--
 class exapmle{
     function plus($a, $b){
@@ -53,13 +52,14 @@ js::api(new exapmle);
 <p class="info-blue">プライベートメソッドとマジックメソッドはAPIから実行できません</p>
 <h3>JavaScript側</h3>
 
-<p>JavaScript側では事前準備として <a href="api.js">api.js</a> モジュールが必要です。<br>
+<p>事前準備として <a href="api.js">api.js</a> モジュールが必要です。<br>
 またモジュールファイル内で、js::api()を実行できるURLを設定しておきます。</p>
 
+<p>JavaScript側ではPHPのメソッドを実行するだけです。戻り値は常に<var>Promise</var>です</p>
 <code class="js" data-title="JavaScript側"><!--
 import example from './api.js';
 
-example.plus(1, 2) // PHPのメソッドを実行するように。戻り値はPromise
+example.plus(1, 2)
 .then(result => console.log(result)); // 3
 --></code>
 
@@ -68,14 +68,14 @@ example.plus(1, 2) // PHPのメソッドを実行するように。戻り値はP
 
 <h3>ファイル送信</h3>
 <p>JavaScriptのFile/Blobオブジェクトに対応しているので、ファイルはそのまま送信できます</p>
-<code class="html" data-title="ファイル送信例 HTML側"><!--
+<code class="html" data-title="ファイル送信例"><!--
 <input id="userfile" type="file">
 
 <script type="module">
 import api from './api.js';
 
 userfile.onchange = function(){
-    const file = this.files[0]; // Fileオブジェクト
+    const file = this.files[0];  // Fileオブジェクト
     api.upload(file.name, file); // 受信するPHP側でもファイルはそのまま保存できます
 };
 </script>
