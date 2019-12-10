@@ -48,6 +48,7 @@ class exapmle{
 
 js::api(new exapmle);
 --></code>
+<p class="info-red">PHP側の引数は外部からの入力となるため、セキュリティには注意を払う必要があります</p>
 
 <p class="info-blue">プライベートメソッドとマジックメソッドはAPIから実行できません</p>
 <h3>JavaScript側</h3>
@@ -66,7 +67,7 @@ example.plus(1, 2) // PHPのメソッドを実行するように。戻り値はP
 
 
 <h3>ファイル送信</h3>
-<p>JavaScriptのFile/Blobオブジェクトは、そのままAPIに渡すことができます。</p>
+<p>JavaScriptのFile/Blobオブジェクトに対応しているので、ファイルはそのまま送信できます</p>
 <code class="html" data-title="ファイル送信例 HTML側"><!--
 <input id="userfile" type="file">
 
@@ -74,22 +75,11 @@ example.plus(1, 2) // PHPのメソッドを実行するように。戻り値はP
 import api from './api.js';
 
 userfile.onchange = function(){
-    const file = this.files[0];
-    api.upload(file.name, file);
+    const file = this.files[0]; // Fileオブジェクト
+    api.upload(file.name, file); // 受信するPHP側でも、ファイルはそのまま保存できます
 };
 </script>
 --></code>
-
-<code class="php" data-title="ファイル受信例 PHP側"><!--
-class api{
-    function upload($filename, $data){
-        file_put_contents($filename, $data);
-    }
-}
-
-js::api(new api);
---></code>
-
 
 </div>
 </article>
