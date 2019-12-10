@@ -68,19 +68,19 @@ example.plus(1, 2) // PHPのメソッドを実行するように。戻り値はP
 <h3>ファイル送信</h3>
 <p>JavaScriptのFile/Blobオブジェクトは、そのままAPIに渡すことができます。</p>
 <code class="html" data-title="ファイル送信例 HTML側"><!--
-<input id="inputfile" type="file">
+<input id="userfile" type="file">
 
 <script type="module">
 import api from './api.js';
 
-inputfile.onchange = function(){
+userfile.onchange = function(){
     const file = this.files[0];
     api.upload(file.name, file);
 };
 </script>
 --></code>
 
-<code class="php" data-title="ファイル送信例 PHP側"><!--
+<code class="php" data-title="ファイル受信例 PHP側"><!--
 class api{
     function upload($filename, $data){
         file_put_contents($filename, $data);
