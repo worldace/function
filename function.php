@@ -1655,9 +1655,9 @@ class template{
         if(isset($rule->$m)){
             $self = (object)$rule->$m;
         }
-        ob_start();
 
-        $this_rule = include sprintf('%s/%s', self::$dir, $m);
+        ob_start();
+        $gadget_rule = include sprintf('%s/%s', self::$dir, $m);
 
         if(isset($head)){
             $this->head[$m] = $head;
@@ -1665,7 +1665,8 @@ class template{
         if(isset($body)){
             $this->body[$m] = $body;
         }
-        return is_iterable($this_rule) ? $this->replace(ob_get_clean(), (object)$this_rule) : ob_get_clean();
+
+        return is_iterable($gadget_rule) ? $this->replace(ob_get_clean(), (object)$gadget_rule) : ob_get_clean();
     }
 }
 
