@@ -76,7 +76,7 @@ import api from './api.js';
 
 userfile.onchange = function(){
     const file = this.files[0];  // Fileオブジェクト
-    api.upload(file.name, file); // PHP側でもファイルはそのまま保存できます
+    api.file_put_contents(file.name, file); // PHP側でもファイルはそのまま保存できます
 };
 </script>
 --></code>
