@@ -1,5 +1,5 @@
 
-// js::api()を実行できるURL
+// PHP側のURLの設定。js::api()を実行できること
 const url = 'http://127.0.0.1/api.php';
 
 
@@ -28,11 +28,18 @@ async function methodMissing(...args){
         mode: 'cors',
         credentials: 'include',
     });
+
     const result = await response.json();
     if(result.error){
         throw result.error;
     }
     return result.result;
+}
+
+
+function isFile(v){
+    const type = Object.prototype.toString.call(v).slice(8, -1).toLowerCase();
+    return (type === 'file' || type === 'blob');
 }
 
 
@@ -43,12 +50,6 @@ function readFile(file){
         reader.readAsDataURL(file);
     }
     return new Promise(async);
-}
-
-
-function isFile(v){
-    const type = Object.prototype.toString.call(v).slice(8, -1).toLowerCase();
-    return (type === 'file' || type === 'blob');
 }
 
 
