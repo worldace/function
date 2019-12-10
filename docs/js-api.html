@@ -37,7 +37,7 @@ JSONの設定があれば連想配列で<br>
 
 <h3>PHP側</h3>
 
-<p>クラスにAPIとして提供するメソッドを記述します
+<p>APIとして提供するクラスを作成します
 </p>
 <code class="php" data-title="PHP側"><!--
 class exapmle{
@@ -63,6 +63,34 @@ example.plus(1, 2) // PHPのメソッドを実行するように。戻り値はP
 --></code>
 
 <p class="info-yellow">api.js は IE に対応していません</p>
+
+
+<h3>ファイル送信</h3>
+<p>JavaScriptのFile/Blobオブジェクトは、そのままAPIに渡すことができます。</p>
+<code class="html" data-title="ファイル送信例 HTML側"><!--
+<input id="inputfile" type="file">
+
+<script type="module">
+import api from './api.js';
+
+inputfile.onchange = function(){
+    const file = this.files[0];
+    api.upload(file.name, file);
+};
+</script>
+--></code>
+
+<code class="php" data-title="ファイル送信例 PHP側"><!--
+class api{
+    function upload($filename, $data){
+        file_put_contents($filename, $data);
+    }
+}
+
+js::api(new api);
+--></code>
+
+
 </div>
 </article>
 

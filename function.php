@@ -399,6 +399,10 @@ class js{
             response::json(['error'=>'api error: invalid arguments'], $option);
         }
 
+        foreach($jrpc->base64 as $i){
+            $jrpc->args[$i] = base64_decode($jrpc->args[$i]);
+        }
+
         try{
             response::json(['result'=>[$object, $jrpc->method](...$jrpc->args)], $option);
         }

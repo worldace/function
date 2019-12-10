@@ -9,8 +9,19 @@ const api = new Proxy({}, {
     }
 });
 
+
 async function methodMissing(...args){
-    const json = JSON.stringify({method: this, args: args});
+    const method = this;
+    const base64 = [];
+
+    for(let i = 0; i < args.length; i++){
+        if(isFile(args[i])){
+            args[i] = await readFile(args[i]);
+            base64.push(i);
+        }
+    }
+
+    const json = JSON.stringify({method, args, base64});
     const response = await fetch(url, {
         method: 'POST',
         body: new URLSearchParams({json}),
@@ -23,5 +34,22 @@ async function methodMissing(...args){
     }
     return result.result;
 }
+
+
+function readFile(file){
+    function async(ok, ng){
+        const reader = new FileReader();
+        reader.onload = () => ok(reader.result.replace(/^.+?,/, ''));
+        reader.readAsDataURL(file);
+    }
+    return new Promise(async);
+}
+
+
+function isFile(v){
+    const type = Object.prototype.toString.call(v).slice(8, -1).toLowerCase();
+    return (type === 'file' || type === 'blob');
+}
+
 
 export default api;
