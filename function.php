@@ -1529,22 +1529,9 @@ class doc{
 
             return $el;
         }
-        else if($selector[0] === '.'){
-            $query = sprintf('//*[contains(@class, "%s")]', substr($selector, 1));
-            return (new \DOMXPath($this->doc))->query($query);
-        }
-        else if($selector[0] === '['){
-            $query = sprintf('//*[@%s', substr($selector, 1));
-            return (new \DOMXPath($this->doc))->query($query);
-        }
-        else if($selector[0] === '#'){
-            return $this->doc->getElementById(substr($selector, 1));
-        }
-        else if($selector === '*'){
-            return (new \DOMXPath($this->doc))->query('//*');
-        }
         else{
-            return $this->doc->getElementsByTagName($selector);
+            $xpath = new \DOMXPath($this->doc);
+            return $xpath->query(self::selector2xpath($selector));
         }
     }
 
@@ -1630,6 +1617,98 @@ class doc{
             $doc->replace_doctag($DOC);
             return $this->doc->importNode($doc->doc->documentElement, true);
         }
+    }
+
+
+    // HTML_CSS_Selector2XPath.php MIT License Copyright (c) 2008 Daichi Kamemoto <daikame@gmail.com>
+    static function selector2xpath($input_selector){
+        $selector = trim($input_selector);
+        $parts[]  = '//';
+        $last     = '';
+        $element  = true;
+        $regex    = [
+            'element'    => '/^(\*|[a-z_][a-z0-9_-]*|(?=[#:.\[]))/i',
+            'id_class'   => '/^([#.])([a-z0-9*_-]*)/i',
+            'attribute'  => '/^\[\s*([^~|=\s]+)\s*([~|]?=)\s*"([^"]+)"\s*\]/',
+            'attr_box'   => '/^\[([^\]]*)\]/',
+            'combinator' => '/^(\s*[>+~\s,])/i',
+        ];
+
+        $pregMatchDelete = function ($pattern, &$subject, &$matches){ // 正規表現でマッチをしつつ、マッチ部分を削除
+            if (preg_match($pattern, $subject, $matches)) {
+                $subject = substr($subject, strlen($matches[0]));
+                return true;
+            }
+        };
+
+        while (strlen(trim($selector)) && ($last !== $selector)){
+            $selector = $last = trim($selector);
+
+            // Elementを取得
+            if($element){
+                if ($pregMatchDelete($regex['element'], $selector, $e)){
+                    $parts[] = ($e[1] === '') ? '*' : $e[1];
+                }
+                $element = false;
+            }
+
+            // IDとClassの指定を取得
+            if($pregMatchDelete($regex['id_class'], $selector, $e)) {
+                switch ($e[1]){
+                    case '.':
+                        $parts[] = '[contains(concat( " ", @class, " "), " ' . $e[2] . ' ")]';
+                        break;
+                    case '#':
+                        $parts[] = '[@id="' . $e[2] . '"]';
+                        break;
+                }
+            }
+
+            // atribauteを取得
+            if($pregMatchDelete($regex['attribute'], $selector, $e)) {
+                switch ($e[2]){ // 二項(比較)
+                    case '!=':
+                        $parts[] = '[@' . $e[1] . '!=' . $e[3] . ']';
+                        break;
+                    case '~=':
+                        $parts[] = '[contains(concat( " ", @' . $e[1] . ', " "), " ' . $e[3] . ' ")]';
+                        break;
+                    case '|=':
+                        $parts[] = '[@' . $e[1] . '="' . $e[3] . '" or starts-with(@' . $e[1] . ', concat( "' . $e[3] . '", "-"))]';
+                        break;
+                    default:
+                        $parts[] = '[@' . $e[1] . '="' . $e[3] . '"]';
+                        break;
+                }
+            }
+            else if ($pregMatchDelete($regex['attr_box'], $selector, $e)) {
+                $parts[] = '[@' . $e[1] . ']';  // 単項(存在性)
+            }
+
+             // combinatorとカンマがあったら、区切りを追加。また、次は型選択子又は汎用選択子でなければならない
+            if ($pregMatchDelete($regex['combinator'], $selector, $e)) {
+                switch (trim($e[1])) {
+                    case ',':
+                        $parts[] = ' | //*';
+                        break;
+                    case '>':
+                        $parts[] = '/';
+                        break;
+                    case '+':
+                        $parts[] = '/following-sibling::*[1]/self::';
+                        break;
+                    case '~': // CSS3
+                        $parts[] = '/following-sibling::';
+                        break;
+                    default:
+                        $parts[] = '//';
+                        break;
+                }
+                $element = true;
+            }
+        }
+
+        return implode('', $parts);
     }
 }
 

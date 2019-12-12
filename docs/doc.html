@@ -75,20 +75,9 @@ $div = $doc->ex_apmle; //ハイフンをアンダーバーに置き換え
 
 
 <h3>セレクタで選択</h3>
-<p>docオブジェクトでは簡易的なセレクタが利用できます。</p>
 
-<table>
-<tr><th>セレクタ一覧</th></tr>
-<tr><td>.クラス名</td></tr>
-<tr><td>[属性名]</td></tr>
-<tr><td>[属性名="属性値"]</td></tr>
-<tr><td>タグ名</td></tr>
-<tr><td>*</td></tr>
-</table>
-
-
-<p>セレクタを利用するには<var>$doc('セレクタ')</var>とします。jQuery風。<br>
-戻り値はいずれも配列風オブジェクトです。<var>foreach</var>で回すか、<var>[n]</var>で各要素にアクセスできます。</p>
+<p>docオブジェクトではセレクタで選択ができます。<var>$doc('セレクタ')</var>とします。<br>
+戻り値は配列風オブジェクトです。<var>foreach</var>で回すか、<var>[n]</var>で各要素にアクセスできます。</p>
 
 <code class="php" data-title="セレクタで選択"><!--
 // dummyクラスを持つ要素を全削除
@@ -97,9 +86,21 @@ foreach($doc('.dummy') as $el) {
 }
 
 //metaタグが選択されるであろう
-$meta_description = $doc('[name="description"]')[0]; 
+$meta_description = $doc('[name="description"]')[0];
 --></code>
-<p class="info-yellow">セレクタを複数組み合わせることはできません。</p>
+
+<table>
+<caption>対応セレクタ</caption>
+<tr><th>要素</th><td>a</td></tr>
+<tr><th>ID</th><td>#a</td></tr>
+<tr><th>クラス</th><td>.a</td></tr>
+<tr><th>属性</th><td>[a] [a="b"]</td></tr>
+<tr><th>子孫</th><td>a b</td></tr>
+<tr><th>子</th><td>a > b</td></tr>
+<tr><th>弟</th><td>a + b</td></tr>
+<tr><th>弟全て</th><td>a ~ b</td></tr>
+<tr><th>全て</th><td>*</td></tr>
+</table>
 
 <h3>特別な選択</h3>
 

@@ -1,5 +1,5 @@
 
-// PHP側のURLの設定。js::api()を実行できること
+// PHP側のURLの設定。js::api()を実行できるURL
 const url = 'http://127.0.0.1/api.php';
 
 
@@ -22,18 +22,18 @@ async function methodMissing(...args){
     }
 
     const json = JSON.stringify({method, args, base64});
-    const response = await fetch(url, {
+    const http = await fetch(url, {
         method: 'POST',
         body: new URLSearchParams({json}),
         mode: 'cors',
         credentials: 'include',
     });
 
-    const result = await response.json();
-    if(result.error){
-        throw result.error;
+    const response = await http.json();
+    if(response.error){
+        throw response.error;
     }
-    return result.result;
+    return response.result;
 }
 
 
