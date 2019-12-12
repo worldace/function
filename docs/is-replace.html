@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>is::replace()</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>is::replace()</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>文字列を正規表現で置換し、成否を返す</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+正規表現
+</td></tr>
+<tr class="require"><td>2</td><td>
+置き換える文字列
+</td></tr>
+<tr class="require"><td>3</td><td>
+対象文字列。変数であること。<br>
+置換されたら、この変数が変化します
+</td></tr>
+<tr class="option"><td>4</td><td>
+置換する回数。初期値は無制限
+</td></tr>
+<tr class="return"><td>戻</td><td>
+置換に成功するとtrue、失敗するとfalse
+</td></tr>
+</table>
+
+
+<code class="php" data-title="使用例"><!--
+$str = 'banana';
+
+if(is::replace('/a/', '_', $str)){
+    print $str; // b_n_n
+}
+--></code>
+
+<p class="info-blue"><var>preg_replace()</var>と機能が似ていますが、戻り値が異なります</p>
+</div>
+</article>
+
+</body>
+</html>

@@ -1003,6 +1003,13 @@ class is{
     static function empty($v) :bool{
         return ($v === '' || $v === [] || $v === null);
     }
+
+
+    static function replace(string $pattern, string $replace, &$after, int $limit = -1) :bool{
+        $before = $after;
+        $after  = preg_replace($pattern, $replace, $after, $limit);
+        return $before !== $after;
+    }
 }
 
 
@@ -1630,7 +1637,7 @@ class doc{
         $last     = '';
         $element  = true;
         $regex    = [
-            'element'    => '/^(\*|[a-z_][a-z0-9_-]*|(?=[#:.\[]))/i',
+            'element'    => '/^(\*|[a-z_][a-z0-9_-]*|(?=[#.\[]))/i',
             'id_class'   => '/^([#.])([a-z0-9*_-]*)/i',
             'attribute'  => '/^\[\s*([^~|=\s]+)\s*([~|]?=)\s*"([^"]+)"\s*\]/',
             'attr_box'   => '/^\[([^\]]*)\]/',
