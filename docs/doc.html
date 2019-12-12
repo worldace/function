@@ -52,49 +52,69 @@ $str = "$doc"; //文字列としてコピーされる
 --></code>
 
 
-<h2>要素の選択</h2>
+<h2>ID選択</h2>
 
-<h3>ID名から選択</h3>
 
-<p>docオブジェクトでは、ID名から要素を選択するのが基本となります。<var>$doc-&gt;ID名</var></p>
-<p class="info-blue">操作したいタグには、あらかじめID属性を付けておくのがポイントです。</p>
+<p>docオブジェクトでは、ID名から簡単に要素を選択できます。<var>$doc-&gt;ID名</var><br>
+戻り値は、存在すればDOM要素になり、存在しなければnullです。</p>
 
 
 <code class="php" data-title="idで選択"><!--
 $doc = new doc('<div id="example"><div>');
+
 $doc->exapmle->textContent = '本文';
 --></code>
 
 
-<p>ID名に「ハイフン」を含む場合は「アンダーバー」に置き換えてもアクセスできます</p>
+<p class="info-blue">操作したいタグにはあらかじめID属性を付けておくと、綺麗なコードが書けます。</p>
 
-<code class="php" data-title="ハイフンを含むid"><!--
-$doc = new doc('<div id="ex-ample"><div>'); //id名にハイフンを含む
-$div = $doc->ex_apmle; //ハイフンをアンダーバーに置き換え
+<h2>特別選択</h2>
+
+<p><var>&lt;html&gt;</var><var>&lt;head&gt;</var><var>&lt;body&gt;</var><var>&lt;title&gt;</var>の4つのタグは、特別に<var>$doc-&gt;タグ名</var>でアクセスできます</p>
+
+<code class="php" data-title="タイトルを設定する"><!--
+$doc = new doc();
+
+$doc->title->textContent = 'タイトル'; 
 --></code>
 
 
-<h3>セレクタで選択</h3>
+<h2>セレクタ選択</h2>
 
-<p>docオブジェクトではセレクタで選択ができます。<var>$doc('セレクタ')</var>とします。<br>
-戻り値は配列風オブジェクトです。<var>foreach</var>で回すか、<var>[n]</var>で各要素にアクセスできます。</p>
+<p>JavaScriptの<var>querySelector()</var>のように、CSSセレクタから要素を選択できます。</p>
+<h3>単数選択</h3>
 
-<code class="php" data-title="セレクタで選択"><!--
+<p>セレクタ選択を行うと、1つだけ要素を選択できます。<var>$doc('セレクタ')</var><br>
+戻り値は、存在すればDOM要素になり、存在しなければnullです。</p>
+
+<code class="php" data-title="セレクタ選択"><!--
+$doc = new doc('<div class="example"><div>');
+
+$doc('.example')->textContent = 'str';
+--></code>
+
+
+<h3>複数選択</h3>
+
+<p>セレクタ選択で複数を選択するには、セレクタの頭に*を付けます。<var>$doc('*セレクタ')</var><br>
+条件にマッチしたものが全て選択され、戻り値は常に配列です。</p>
+
+<code class="php" data-title="セレクタ選択"><!--
 // dummyクラスを持つ要素を全削除
-foreach($doc('.dummy') as $el) {
+foreach($doc('*.dummy') as $el) {
     $el->parentNode->removeChild($el);
 }
-
-//metaタグが選択されるであろう
-$meta_description = $doc('[name="description"]')[0];
 --></code>
 
+
+<h3>対応セレクタ</h3>
+
 <table>
-<caption>対応セレクタ</caption>
 <tr><th>要素</th><td>a</td></tr>
 <tr><th>ID</th><td>#a</td></tr>
 <tr><th>クラス</th><td>.a</td></tr>
-<tr><th>属性</th><td>[a] [a="b"]</td></tr>
+<tr><th>属性名</th><td>[a]</td></tr>
+<tr><th>属性名と値</th><td>[a="b"]</td></tr>
 <tr><th>子孫</th><td>a b</td></tr>
 <tr><th>子</th><td>a > b</td></tr>
 <tr><th>弟</th><td>a + b</td></tr>
@@ -102,14 +122,6 @@ $meta_description = $doc('[name="description"]')[0];
 <tr><th>全て</th><td>*</td></tr>
 </table>
 
-<h3>特別な選択</h3>
-
-<p><var>&lt;html&gt;</var><var>&lt;head&gt;</var><var>&lt;body&gt;</var><var>&lt;title&gt;</var>の4つのタグは、特別に<var>$doc-&gt;タグ名</var>でアクセスできます</p>
-
-<code class="php" data-title="特別な選択"><!--
-$doc = new doc();
-$doc->title->textContent = 'タイトル'; 
---></code>
 
 <h2>要素を1つ作成する</h2>
 <p>要素を1つ作成するには、次のように行います。<var>$doc(&lt;タグ名&gt;, 本文, [属性名=&gt;属性値])</var><br>

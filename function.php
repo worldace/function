@@ -1483,18 +1483,22 @@ class doc{
         else if($html[1] === '!'){
             $this->doc->type = 'html';
             $this->doc->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
-            $this->html  = $this->doc->getElementsByTagName('html')[0];
-            $this->head  = $this->doc->getElementsByTagName('head')[0];
-            $this->body  = $this->doc->getElementsByTagName('body')[0];
-            $this->title = $this->doc->getElementsByTagName('title')[0];
         }
         else{
             $this->doc->type = 'fragment';
             $html = '<?xml encoding="utf-8">' . $html;
             $this->doc->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
         }
+    }
 
-        $this->set_id();
+
+    function __get($name){
+        if(in_array($name, ['html','head','body','title'], true)){
+            return $this->doc->getElementsByTagName($name)[0];
+        }
+        else{
+            return $this->doc->getElementById($name);
+        }
     }
 
 
@@ -1529,9 +1533,20 @@ class doc{
 
             return $el;
         }
+        else if($selector[0] === '*'){
+            if(strlen($selector) > 1){
+                $selector = substr($selector, 1);
+            }
+            $result = [];
+            $xpath  = new \DOMXPath($this->doc);
+            foreach($xpath->query(self::selector2xpath($selector)) as $v){
+                $result[] = $v;
+            }
+            return $result;
+        }
         else{
             $xpath = new \DOMXPath($this->doc);
-            return $xpath->query(self::selector2xpath($selector));
+            return $xpath->query(self::selector2xpath($selector))[0];
         }
     }
 
@@ -1551,18 +1566,6 @@ class doc{
         }
         else{
             return $this->doc->saveHTML($this->doc->documentElement);
-        }
-    }
-
-
-    private function set_id(){
-        foreach((new \DOMXPath($this->doc))->query('//*[@id]') as $v){
-            $id = $v->getAttribute('id');
-            $this->$id = $v;
-            if(preg_match('/-/', $id)){
-                $id = str_replace('-', '_', $id);
-                $this->$id = $v;
-            }
         }
     }
 
