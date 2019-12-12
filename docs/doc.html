@@ -84,7 +84,7 @@ $doc->title->textContent = 'タイトル';
 <p>JavaScriptの<var>querySelector()</var>のように、CSSセレクタから要素を選択できます。</p>
 <h3>単数選択</h3>
 
-<p>セレクタ選択を行うと、1つだけ要素を選択できます。<var>$doc('セレクタ')</var><br>
+<p>セレクタ選択を行うと、要素を1つだけ選択できます。<var>$doc('セレクタ')</var><br>
 戻り値は、存在すればDOM要素になり、存在しなければnullです。</p>
 
 <code class="php" data-title="セレクタ選択"><!--
@@ -96,7 +96,7 @@ $doc('.example')->textContent = 'str';
 
 <h3>複数選択</h3>
 
-<p>セレクタ選択で複数を選択するには、セレクタの頭に*を付けます。<var>$doc('*セレクタ')</var><br>
+<p>セレクタ選択で複数を選択するには、セレクタの頭に<var>*</var>を付けます。<var>$doc('*セレクタ')</var><br>
 条件にマッチしたものが全て選択され、戻り値は常に配列です。</p>
 
 <code class="php" data-title="セレクタ選択"><!--
@@ -316,11 +316,14 @@ print $doc; //完成
 
 <h2>[付録] DOM操作の早見表</h2>
 
-<p>DOMを知らない人でも、次の8つの操作を覚えておけば大丈夫。</p>
+<p>DOMを知らない人でも、次の9つの操作を覚えておけば大丈夫。</p>
 
 <code class="php"><!--
 //本文を設定する(タグはエスケープされる)
 $el->textContent = '本文';
+
+//属性を取得する(戻り値が値)
+$el->setAttribute('属性名');
 
 //属性を設定する
 $el->setAttribute('属性名', '属性値');
@@ -331,11 +334,11 @@ $el->removeAttribute('属性名');
 //要素を子の最後に追加する
 $el->appendChild($new_el);
 
-//要素をコピーする(戻り値がコピーされた要素)
-$el->cloneNode(true);
-
 //要素を置換する
 $el->parentNode->replaceChild($new_el, $el);
+
+//要素をコピーする(戻り値がコピーされた要素)
+$el->cloneNode(true);
 
 //要素を削除する
 $el->parentNode->removeChild($el);
