@@ -1480,6 +1480,7 @@ class doc{
     function __construct($html = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
         $html = trim($html);
         $this->document = new \DOMDocument(); // https://www.php.net/manual/ja/class.domdocument.php
+        $this->document->registerNodeClass('DOMElement','HTMLElement');
 
         libxml_use_internal_errors(true);
 
@@ -1659,20 +1660,6 @@ class doc{
     }
 
 
-    static function innerHTML(\DOMNode $el) :string{
-        $result = '';
-        foreach($el->childNodes as $child){
-            $result .= $el->ownerDocument->saveHTML($child);
-        }
-        return $result;
-    }
-
-
-    static function outerHTML(\DOMNode $el) :string{
-       return $el->ownerDocument->saveHTML($el);
-    }
-
-
     // HTML_CSS_Selector2XPath.php MIT License Copyright (c) 2008 Daichi Kamemoto <daikame@gmail.com>
     static function selector2xpath($input_selector){
         $selector = trim($input_selector);
@@ -1762,6 +1749,34 @@ class doc{
         }
 
         return implode('', $parts);
+    }
+}
+
+
+
+class HTMLElement extends DOMElement{
+
+    function __construct() {
+        parent::__construct();
+    }
+
+
+    function __get($name){
+        if($name === 'innerHTML'){
+            $result = '';
+            foreach($this->childNodes as $child){
+                $result .= $this->ownerDocument->saveHTML($child);
+            }
+            return $result;
+        }
+        else if($name === 'outerHTML'){
+            return $this->ownerDocument->saveHTML($this);
+        }
+    }
+
+
+    function __toString(){
+        return $this->ownerDocument->saveHTML($this);
     }
 }
 
