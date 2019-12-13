@@ -1483,13 +1483,13 @@ class doc{
 
         libxml_use_internal_errors(true);
 
-        if($html[1] === '?'){
-            $this->doc->type = 'xml';
-            $this->doc->loadXML($html, LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE); // https://www.php.net/manual/ja/libxml.constants.php
-        }
-        else if($html[1] === '!'){
+        if($html[0] === '<' and $html[1] === '!'){
             $this->doc->type = 'html';
             $this->doc->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
+        }
+        else if($html[0] === '<' and $html[1] === '?'){
+            $this->doc->type = 'xml';
+            $this->doc->loadXML($html, LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE); // https://www.php.net/manual/ja/libxml.constants.php
         }
         else{
             $this->doc->type = 'fragment';
@@ -1516,29 +1516,20 @@ class doc{
         else if($selector instanceof \DOMElement){
             return $this->doc->importNode($selector, true);
         }
-        else if($selector[0] === '<'){
-            $tagName = str_replace(['<','>'], '', $selector);
-            $el = $this->doc->createElement($tagName);
-            foreach($attr as $k => $v){
-                $el->setAttribute($k, $v);
-            }
-
-            if(is_array($text)){
-                if($tagName === 'table'){
-                    $el = $this->createTableElement($el, $text);
-                }
-                else if($tagName === 'select'){
-                    $el = $this->createSelectElement($el, $text);
-                }
-                else if($tagName === 'ol' or $tagName === 'ul'){
-                    $el = $this->createListElement($el, $text);
-                }
+        else if(preg_match('/</', $selector)){
+            if(preg_match('/^<[\w\-]+>$/', $selector)){
+                $tagName = substr($selector, 1, -1);
+                return $this->createElement($tagName, $text, $attr);
             }
             else{
-                $el->textContent = $text;
+                $dummy    = new self("<dummy>$selector</dummy>");
+                $dummy    = $dummy->doc->documentElement;
+                $fragment = $this->doc->createDocumentFragment();
+                foreach($dummy->childNodes as $child){
+                    $fragment->appendChild($this->doc->importNode($child, true));
+                }
+                return $fragment;
             }
-
-            return $el;
         }
         else if($selector[0] === '*'){
             if(strlen($selector) > 1){
@@ -1574,6 +1565,31 @@ class doc{
         else{
             return $this->doc->saveHTML($this->doc->documentElement);
         }
+    }
+
+
+    private function createElement($tagName, $text = '', $attr = []){
+        $el = $this->doc->createElement($tagName);
+        foreach($attr as $k => $v){
+            $el->setAttribute($k, $v);
+        }
+
+        if(is_array($text)){
+            if($tagName === 'table'){
+                $el = $this->createTableElement($el, $text);
+            }
+            else if($tagName === 'select'){
+                $el = $this->createSelectElement($el, $text);
+            }
+            else if($tagName === 'ol' or $tagName === 'ul'){
+                $el = $this->createListElement($el, $text);
+            }
+        }
+        else{
+            $el->textContent = $text;
+        }
+
+        return $el;
     }
 
 

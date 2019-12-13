@@ -176,39 +176,16 @@ $doc('<table>', [[1,2], [3,4]]);
 //  <tr><td>3</td><td>4</td></tr>
 //</table>
 --></code>
-<h2>外部ファイルのインポート</h2>
+<h2>HTML文字列のDOM化</h2>
 
+<p>任意のHTML文字列をDOM化するには <var>$doc('HTML文字列')</var> とします。<br>
+戻り値は<var>DocumentFragment</var>です。<var>appendChild()</var>などに渡して挿入してください</p>
 
-<p>外部ファイルを読み込むには、もう一つdocオブジェクトを作成して、そこからインポートします。<br>
-<var>$doc(別docの要素 or 別doc)</var>でインポートできます。戻り値はインポートされた要素です</p>
-
-
-<code class="php" data-title="外部ファイルを読み込む1"><!--
-$doc = new doc();
-//外部ファイル化したフッタを読み込む
-$exdoc = new doc('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body><footer id="footer"></footer></body></html>');
-
-$footer = $doc($exdoc->footer); //要素を1つインポート
-$doc->body->appendChild($footer);
-
-
---></code>
-<p>上記は、次のように省略して書くこともできます。</p>
-<code class="php" data-title="外部ファイルを読み込む2"><!--
-$doc = new doc();
-//外部ファイル化したフッタを読み込む
-$exdoc = new doc('<footer id="footer"></footer>');
-
-$footer = $doc($exdoc); //全体をインポート
-$doc->body->appendChild($footer);
-
-
---></code>
 
 
 <h2>docファイル</h2>
 
-<p>外部ファイルを読み込む別の方法として、docファイルがあります。</p>
+<p>外部ファイルを読み込む方法として、docファイルがあります。</p>
 
 
 <h3>docファイルの作成</h3>
