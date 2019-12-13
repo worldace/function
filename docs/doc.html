@@ -106,6 +106,9 @@ foreach($doc('*.dummy') as $el) {
 }
 --></code>
 
+<h3>基点</h3>
+
+<p>セレクタ選択において第二引数にDOM要素を渡すと、その要素を基点に検索を行うことができます。</p>
 
 <h3>対応セレクタ</h3>
 
@@ -176,11 +179,15 @@ $doc('<table>', [[1,2], [3,4]]);
 //  <tr><td>3</td><td>4</td></tr>
 //</table>
 --></code>
-<h2>HTML文字列のDOM化</h2>
+<h2>HTML文字列の扱い</h2>
 
-<p>任意のHTML文字列をDOM化するには <var>$doc('HTML文字列')</var> とします。<br>
-戻り値は<var>DocumentFragment</var>です。<var>appendChild()</var>などに渡して挿入してください</p>
+<h3>DOM化</h3>
+<p>HTML文字列をDOM化するには<var>$doc('HTML文字列')</var> が使えます。<br>
+戻り値は<var>DocumentFragment</var>です。<var>appendChild()</var>などに渡すと挿入できます。</p>
 
+<h3>HTML化</h3>
+<p>DOMを文字列化するには<var>doc::innerHTML($el)</var>と<var>doc::outerHTML($el)</var>が使えます。<br>
+innerHTMLはタグの中身を文字列化し、outerHTMLは自身のタグを含んで文字列化します。</p>
 
 
 <h2>docファイル</h2>
