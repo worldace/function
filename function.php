@@ -1474,47 +1474,47 @@ class db{
 
 
 class doc{
-    public $doc;
+    public $document;
     public static $dir;
 
     function __construct($html = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
         $html = trim($html);
-        $this->doc = new \DOMDocument(); // https://www.php.net/manual/ja/class.domdocument.php
+        $this->document = new \DOMDocument(); // https://www.php.net/manual/ja/class.domdocument.php
 
         libxml_use_internal_errors(true);
 
         if($html[0] === '<' and $html[1] === '!'){
-            $this->doc->type = 'html';
-            $this->doc->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
+            $this->document->type = 'html';
+            $this->document->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
         }
         else if($html[0] === '<' and $html[1] === '?'){
-            $this->doc->type = 'xml';
-            $this->doc->loadXML($html, LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE); // https://www.php.net/manual/ja/libxml.constants.php
+            $this->document->type = 'xml';
+            $this->document->loadXML($html, LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE); // https://www.php.net/manual/ja/libxml.constants.php
         }
         else{
-            $this->doc->type = 'fragment';
             $html = '<?xml encoding="utf-8">' . $html;
-            $this->doc->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
+            $this->document->type = 'fragment';
+            $this->document->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
         }
     }
 
 
     function __get($name){
         if(in_array($name, ['html','head','body','title'], true)){
-            return $this->doc->getElementsByTagName($name)[0];
+            return $this->document->getElementsByTagName($name)[0];
         }
         else{
-            return $this->doc->getElementById($name);
+            return $this->document->getElementById($name);
         }
     }
 
 
     function __invoke($selector, $text = null, $attr = []){
         if($selector instanceof self){
-            return $this->doc->importNode($selector->doc->documentElement, true);
+            return $this->document->importNode($selector->document->documentElement, true);
         }
         else if($selector instanceof \DOMElement){
-            return $this->doc->importNode($selector, true);
+            return $this->document->importNode($selector, true);
         }
         else if(preg_match('/</', $selector)){
             if(preg_match('/^<([\w\-]+)>$/', $selector, $m)){
@@ -1537,20 +1537,20 @@ class doc{
 
 
     function __toString(){
-        $this->doc->formatOutput = true;
+        $this->document->formatOutput = true;
 
         if(self::$dir){
             $this->replace_doctag($this);
         }
 
-        if($this->doc->type === 'html'){
-            return $this->doc->saveXML($this->doc->doctype) . "\n" . $this->doc->saveHTML($this->doc->documentElement);
+        if($this->document->type === 'html'){
+            return $this->document->saveXML($this->document->doctype) . "\n" . $this->document->saveHTML($this->document->documentElement);
         }
-        else if($this->doc->type === 'xml'){
-            return $this->doc->saveXML($this->doc->documentElement);
+        else if($this->document->type === 'xml'){
+            return $this->document->saveXML($this->document->documentElement);
         }
         else{
-            return $this->doc->saveHTML($this->doc->documentElement);
+            return $this->document->saveHTML($this->document->documentElement);
         }
     }
 
@@ -1561,7 +1561,7 @@ class doc{
             $selector = substr($selector, 2);
         }
 
-        $xpath  = new \DOMXPath($this->doc);
+        $xpath  = new \DOMXPath($this->document);
         $result = [];
         foreach($xpath->query($selector, $relative) as $el){
             $result[] = $el;
@@ -1571,7 +1571,7 @@ class doc{
 
 
     private function createElement($tagName, $text = '', $attr = []){
-        $el = $this->doc->createElement($tagName);
+        $el = $this->document->createElement($tagName);
         foreach($attr as $k => $v){
             $el->setAttribute($k, $v);
         }
@@ -1597,10 +1597,10 @@ class doc{
 
     private function createFragment($str){
         $dummy    = new self("<dummy>$str</dummy>");
-        $dummy    = $dummy->doc->documentElement;
-        $fragment = $this->doc->createDocumentFragment();
+        $dummy    = $dummy->document->documentElement;
+        $fragment = $this->document->createDocumentFragment();
         foreach($dummy->childNodes as $child){
-            $fragment->appendChild($this->doc->importNode($child, true));
+            $fragment->appendChild($this->document->importNode($child, true));
         }
         return $fragment;
     }
@@ -1608,7 +1608,7 @@ class doc{
 
     private function createListElement($el, array $contents){
         foreach($contents as $v){
-            $child = $this->doc->createElement('li', $v);
+            $child = $this->document->createElement('li', $v);
             $el->appendChild($child);
         }
         return $el;
@@ -1617,7 +1617,7 @@ class doc{
 
     private function createSelectElement($el, array $contents){
         foreach($contents as $v){
-            $child = $this->doc->createElement('option', $v);
+            $child = $this->document->createElement('option', $v);
             $child->setAttribute('value', $v);
             $el->appendChild($child);
         }
@@ -1627,10 +1627,10 @@ class doc{
 
     private function createTableElement($el, array $contents){
         foreach($contents as $row){
-            $tr = $this->doc->createElement('tr');
+            $tr = $this->document->createElement('tr');
             $el->appendChild($tr);
             foreach((array)$row as $cell){
-                $td = $this->doc->createElement('td', $cell);
+                $td = $this->document->createElement('td', $cell);
                 $tr->appendChild($td);
             }
         }
@@ -1654,7 +1654,7 @@ class doc{
         $doc = require($docfile);
         if($doc instanceof self){
             $doc->replace_doctag($DOC);
-            return $this->doc->importNode($doc->doc->documentElement, true);
+            return $this->document->importNode($doc->document->documentElement, true);
         }
     }
 
