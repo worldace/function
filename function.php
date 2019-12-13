@@ -1509,7 +1509,7 @@ class doc{
     }
 
 
-    function __invoke($selector, $text = '', $attr = []){
+    function __invoke($selector, $text = null, $attr = []){
         if($selector instanceof self){
             return $this->doc->importNode($selector->doc->documentElement, true);
         }
@@ -1517,34 +1517,21 @@ class doc{
             return $this->doc->importNode($selector, true);
         }
         else if(preg_match('/</', $selector)){
-            if(preg_match('/^<[\w\-]+>$/', $selector)){
-                $tagName = substr($selector, 1, -1);
-                return $this->createElement($tagName, $text, $attr);
+            if(preg_match('/^<([\w\-]+)>$/', $selector, $m)){
+                return $this->createElement($m[1], $text, $attr);
             }
             else{
-                $dummy    = new self("<dummy>$selector</dummy>");
-                $dummy    = $dummy->doc->documentElement;
-                $fragment = $this->doc->createDocumentFragment();
-                foreach($dummy->childNodes as $child){
-                    $fragment->appendChild($this->doc->importNode($child, true));
-                }
-                return $fragment;
+                return $this->createFragment($selector);
             }
         }
         else if($selector[0] === '*'){
             if(strlen($selector) > 1){
                 $selector = substr($selector, 1);
             }
-            $result = [];
-            $xpath  = new \DOMXPath($this->doc);
-            foreach($xpath->query(self::selector2xpath($selector)) as $v){
-                $result[] = $v;
-            }
-            return $result;
+            return $this->querySelectorAll($selector, $text);
         }
         else{
-            $xpath = new \DOMXPath($this->doc);
-            return $xpath->query(self::selector2xpath($selector))[0];
+            return $this->querySelectorAll($selector, $text)[0];
         }
     }
 
@@ -1565,6 +1552,21 @@ class doc{
         else{
             return $this->doc->saveHTML($this->doc->documentElement);
         }
+    }
+
+
+    private function querySelectorAll($selector, $relative = null){
+        $selector = self::selector2xpath($selector);
+        if($relative){
+            $selector = substr($selector, 2);
+        }
+
+        $xpath  = new \DOMXPath($this->doc);
+        $result = [];
+        foreach($xpath->query($selector, $relative) as $el){
+            $result[] = $el;
+        }
+        return $result;
     }
 
 
@@ -1590,6 +1592,17 @@ class doc{
         }
 
         return $el;
+    }
+
+
+    private function createFragment($str){
+        $dummy    = new self("<dummy>$str</dummy>");
+        $dummy    = $dummy->doc->documentElement;
+        $fragment = $this->doc->createDocumentFragment();
+        foreach($dummy->childNodes as $child){
+            $fragment->appendChild($this->doc->importNode($child, true));
+        }
+        return $fragment;
     }
 
 
@@ -1643,6 +1656,20 @@ class doc{
             $doc->replace_doctag($DOC);
             return $this->doc->importNode($doc->doc->documentElement, true);
         }
+    }
+
+
+    static function innerHTML(\DOMNode $el) :string{
+        $result = '';
+        foreach($el->childNodes as $child){
+            $result .= $el->ownerDocument->saveHTML($child);
+        }
+        return $result;
+    }
+
+
+    static function outerHTML(\DOMNode $el) :string{
+       return $el->ownerDocument->saveHTML($el);
     }
 
 
