@@ -263,23 +263,23 @@ return $doc;
 
 <code class="php"><!--
 //中身を取得する
-$el->textContent; //戻り値はタグを含まないテキスト
+$el->textContent; //戻り値はタグを含まない文字列
 
 //中身を取得する
-$el->innerHTML;   //戻り値はタグを含むテキスト
+$el->innerHTML;   //戻り値はタグを含む文字列
 
 //中身を設定する
-$el->textContent = '本文はエスケープされる';
+$el->textContent = '文字列はエスケープされる';
 
 //中身を設定する
-$el->innerHTML   = '本文はエスケープされない';
+$el->innerHTML   = '文字列はエスケープされない';
 
 //中身を全て削除する
 $el->textContent = '';
 
 
 //属性を取得する
-$el->getAttribute('属性名'); //戻り値はテキスト
+$el->getAttribute('属性名'); //戻り値は文字列
 
 //属性を設定する
 $el->setAttribute('属性名', '属性値');
@@ -302,7 +302,7 @@ $el->parentNode->insertBefore($new_el, $el->nextSibling);
 
 
 //要素をコピーする
-$el->cloneNode(true); //戻り値はコピーされた要素
+$el->cloneNode(true); //戻り値はDOM要素
 
 //要素を置換する
 $el->parentNode->replaceChild($new_el, $el);

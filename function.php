@@ -1512,7 +1512,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
         if($selector instanceof self){
             return $this->importNode($selector->document->documentElement, true);
         }
-        else if($selector instanceof \DOMElement){
+        else if($selector instanceof \DOMNode){
             return $this->importNode($selector, true);
         }
         else if(preg_match('/</', $selector)){
@@ -1554,7 +1554,12 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
     }
 
 
-    private function querySelectorAll($selector, $relative = null){
+    function querySelector($selector, $relative = null){
+        return $this->querySelectorAll($selector, $relative)[0];
+    }
+
+
+    function querySelectorAll($selector, $relative = null){
         $selector = self::selector2xpath($selector, $relative);
 
         $xpath  = new \DOMXPath($this);
