@@ -1473,49 +1473,47 @@ class db{
 
 
 
-class doc{
-    public $document;
+class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domdocument.php
     public static $dir;
 
     function __construct($html = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
-        $html = trim($html);
-        $this->document = new \DOMDocument(); // https://www.php.net/manual/ja/class.domdocument.php
-        $this->document->registerNodeClass('\DOMElement','HTMLElement');
-
+        parent::__construct();
+        $this->registerNodeClass('\DOMElement','HTMLElement');
         libxml_use_internal_errors(true);
 
+        $html = trim($html);
         if($html[0] === '<' and $html[1] === '!'){
-            $this->document->type = 'html';
-            $this->document->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
+            $this->type = 'html';
+            $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
         }
         else if($html[0] === '<' and $html[1] === '?'){
-            $this->document->type = 'xml';
-            $this->document->loadXML($html, LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE); // https://www.php.net/manual/ja/libxml.constants.php
+            $this->type = 'xml';
+            $this->loadXML($html, LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE); // https://www.php.net/manual/ja/libxml.constants.php
         }
         else{
             $html = '<?xml encoding="utf-8">' . $html;
-            $this->document->type = 'fragment';
-            $this->document->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
+            $this->type = 'fragment';
+            $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
         }
     }
 
 
     function __get($name){
         if(in_array($name, ['html','head','body','title'], true)){
-            return $this->document->getElementsByTagName($name)[0];
+            return $this->getElementsByTagName($name)[0];
         }
         else{
-            return $this->document->getElementById($name);
+            return $this->getElementById($name);
         }
     }
 
 
     function __invoke($selector, $text = null, $attr = []){
         if($selector instanceof self){
-            return $this->document->importNode($selector->document->documentElement, true);
+            return $this->importNode($selector->document->documentElement, true);
         }
         else if($selector instanceof \DOMElement){
-            return $this->document->importNode($selector, true);
+            return $this->importNode($selector, true);
         }
         else if(preg_match('/</', $selector)){
             if(preg_match('/^<([\w\-]+)>$/', $selector, $m)){
@@ -1538,20 +1536,20 @@ class doc{
 
 
     function __toString(){
-        $this->document->formatOutput = true;
+        $this->formatOutput = true;
 
         if(self::$dir){
             $this->replace_doctag($this);
         }
 
-        if($this->document->type === 'html'){
-            return $this->document->saveXML($this->document->doctype) . "\n" . $this->document->saveHTML($this->document->documentElement);
+        if($this->type === 'html'){
+            return $this->saveXML($this->doctype) . "\n" . $this->saveHTML($this->documentElement);
         }
-        else if($this->document->type === 'xml'){
-            return $this->document->saveXML($this->document->documentElement);
+        else if($this->type === 'xml'){
+            return $this->saveXML($this->documentElement);
         }
         else{
-            return $this->document->saveHTML($this->document->documentElement);
+            return $this->saveHTML($this->documentElement);
         }
     }
 
@@ -1559,7 +1557,7 @@ class doc{
     private function querySelectorAll($selector, $relative = null){
         $selector = self::selector2xpath($selector, $relative);
 
-        $xpath  = new \DOMXPath($this->document);
+        $xpath  = new \DOMXPath($this);
         $result = [];
         foreach($xpath->query($selector, $relative) as $el){
             $result[] = $el;
@@ -1569,7 +1567,7 @@ class doc{
 
 
     private function createHTMLElement($tagName, $text = '', $attr = []){
-        $el = $this->document->createElement($tagName);
+        $el = $this->createElement($tagName);
         foreach($attr as $k => $v){
             $el->setAttribute($k, $v);
         }
@@ -1596,9 +1594,9 @@ class doc{
     private function createFragment($str){
         $dummy    = new self("<dummy>$str</dummy>");
         $dummy    = $dummy->document->documentElement;
-        $fragment = $this->document->createDocumentFragment();
+        $fragment = $this->createDocumentFragment();
         foreach($dummy->childNodes as $child){
-            $fragment->appendChild($this->document->importNode($child, true));
+            $fragment->appendChild($this->importNode($child, true));
         }
         return $fragment;
     }
@@ -1606,7 +1604,7 @@ class doc{
 
     private function createListElement($el, array $contents){
         foreach($contents as $v){
-            $child = $this->document->createElement('li', $v);
+            $child = $this->createElement('li', $v);
             $el->appendChild($child);
         }
         return $el;
@@ -1615,7 +1613,7 @@ class doc{
 
     private function createSelectElement($el, array $contents){
         foreach($contents as $v){
-            $child = $this->document->createElement('option', $v);
+            $child = $this->createElement('option', $v);
             $child->setAttribute('value', $v);
             $el->appendChild($child);
         }
@@ -1625,10 +1623,10 @@ class doc{
 
     private function createTableElement($el, array $contents){
         foreach($contents as $row){
-            $tr = $this->document->createElement('tr');
+            $tr = $this->createElement('tr');
             $el->appendChild($tr);
             foreach((array)$row as $cell){
-                $td = $this->document->createElement('td', $cell);
+                $td = $this->createElement('td', $cell);
                 $tr->appendChild($td);
             }
         }
@@ -1652,7 +1650,7 @@ class doc{
         $doc = require($docfile);
         if($doc instanceof self){
             $doc->replace_doctag($DOC);
-            return $this->document->importNode($doc->document->documentElement, true);
+            return $this->importNode($doc->document->documentElement, true);
         }
     }
 
@@ -1751,7 +1749,7 @@ class doc{
 
 
 
-class HTMLElement extends \DOMElement{
+class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.domelement.php
 
     function __construct() {
         parent::__construct();
@@ -1774,8 +1772,8 @@ class HTMLElement extends \DOMElement{
 
     function __set($name, $value){
         if($name === 'innerHTML'){
-            $dummy = new doc("<dummy>$value</dummy>");
-            $dummy = $dummy->document->documentElement;
+            $dummy = new document("<dummy>$value</dummy>");
+            $dummy = $dummy->documentElement;
 
             $this->textContent = '';
             foreach($dummy->childNodes as $child){

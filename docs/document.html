@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title>docクラス</title>
+<title>documentクラス</title>
 <link href="style.css" rel="stylesheet">
 <script src="script.js"></script>
 </head>
@@ -12,7 +12,7 @@
 
 <article>
 <header>
-<h1>docクラス</h1>
+<h1>documentクラス</h1>
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
 
@@ -21,7 +21,7 @@
 <p>PHPのDOMを使いやすくするクラス。HTMLの出力用に</p>
 
 <h2>new</h2>
-<p>docオブジェクトを作成する</p>
+<p>documentオブジェクトを作成する</p>
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="option"><td>1</td><td>
@@ -29,40 +29,40 @@ HTML文字列<br>
 省略時は内蔵テンプレートが使用されます。下記サンプルと同じHTMLです
 </td></tr>
 <tr class="return"><td>戻</td><td>
-docオブジェクト
+documentオブジェクト
 </td></tr>
 </table>
 
 <code class="php"><!--
-$doc = new doc('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>');
+$document = new document('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>');
 --></code>
 <p class="info-yellow">new doc()に渡すHTMLは、全体を1つのタグで囲っておく必要があります</p>
 <p class="info-yellow">ベースとなるHTMLには<var>&lt;!DOCTYPE&gt;</var>を忘れずに記述してください</p>
 
 <h2>HTMLの出力</h2>
 
-<p>docオブジェクトは<var>print</var>するだけでHTMLを表示できます。<br>
+<p>documentオブジェクトは<var>print</var>するだけでHTMLを表示できます。<br>
 このオブジェクトは、文字列として評価されると自動的に文字列に変換されます。</p>
 
 <code class="php" data-title="HTMLの出力"><!--
-$doc = new doc();
-print $doc; //HTMLが表示される
+$document = new document();
+print $document; //HTMLが表示される
 
-$str = "$doc"; //文字列としてコピーされる
+$str = "$document"; //文字列としてコピーされる
 --></code>
 
 
 <h2>ID選択</h2>
 
 
-<p>docオブジェクトでは、ID名から簡単に要素を選択できます。<var>$doc-&gt;ID名</var><br>
+<p>documentオブジェクトでは、ID名から簡単に要素を選択できます。<var>$document-&gt;ID名</var><br>
 戻り値は、存在すればDOM要素になり、存在しなければnullです。</p>
 
 
 <code class="php" data-title="idで選択"><!--
-$doc = new doc('<div id="example"><div>');
+$document = new document('<div id="example"><div>');
 
-$doc->exapmle->textContent = '本文';
+$document->exapmle->textContent = '本文';
 --></code>
 
 
@@ -70,12 +70,12 @@ $doc->exapmle->textContent = '本文';
 
 <h2>特別選択</h2>
 
-<p><var>document</var><var>&lt;html&gt;</var><var>&lt;head&gt;</var><var>&lt;body&gt;</var><var>&lt;title&gt;</var>の5つは、特別に<var>$doc-&gt;名前</var>でアクセスできます</p>
+<p><var>&lt;html&gt;</var><var>&lt;head&gt;</var><var>&lt;body&gt;</var><var>&lt;title&gt;</var>の4つは、特別に<var>$document-&gt;名前</var>でアクセスできます</p>
 
 <code class="php" data-title="タイトルを設定する"><!--
-$doc = new doc();
+$document = new document();
 
-$doc->title->textContent = 'タイトル'; 
+$document->title->textContent = 'タイトル'; 
 --></code>
 
 
@@ -84,24 +84,24 @@ $doc->title->textContent = 'タイトル';
 <p>JavaScriptの<var>querySelector()</var>のように、CSSセレクタから要素を選択できます。</p>
 <h3>単数選択</h3>
 
-<p>セレクタ選択を行うと、要素を1つだけ選択できます。<var>$doc('セレクタ')</var><br>
+<p>セレクタ選択を行うと、要素を1つだけ選択できます。<var>$document('セレクタ')</var><br>
 戻り値は、存在すればDOM要素になり、存在しなければnullです。</p>
 
 <code class="php" data-title="セレクタ選択"><!--
-$doc = new doc('<div class="example"><div>');
+$document = new document('<div class="example"><div>');
 
-$doc('.example')->textContent = 'str';
+$document('.example')->textContent = 'str';
 --></code>
 
 
 <h3>複数選択</h3>
 
-<p>セレクタ選択で複数を選択するには、セレクタの頭に<var>*</var>を付けます。<var>$doc('*セレクタ')</var><br>
+<p>セレクタ選択で複数を選択するには、セレクタの頭に<var>*</var>を付けます。<var>$document('*セレクタ')</var><br>
 条件にマッチしたものが全て選択され、戻り値は常に配列です。</p>
 
 <code class="php" data-title="セレクタ選択"><!--
 // dummyクラスを持つ要素を全削除
-foreach($doc('*.dummy') as $el) {
+foreach($document('*.dummy') as $el) {
     $el->parentNode->removeChild($el);
 }
 --></code>
@@ -127,14 +127,14 @@ foreach($doc('*.dummy') as $el) {
 
 
 <h2>要素を1つ作成する</h2>
-<p>要素を1つ作成するには、次のように行います。<var>$doc(&lt;タグ名&gt;, 本文, [属性名=&gt;属性値])</var><br>
+<p>要素を1つ作成するには、次のように行います。<var>$document(&lt;タグ名&gt;, 本文, [属性名=&gt;属性値])</var><br>
 戻り値は作成された要素です</p>
 <code class="php" data-title="要素を1つ作成する"><!--
 // <div class="example">本文</div> を作成する
 
-$doc = new doc();
-$div = $doc('<div>', '本文', ['class'=>'example']);
-$doc->body->appendChild($div); 
+$document = new document();
+$div = $document('<div>', '本文', ['class'=>'example']);
+$document->body->appendChild($div); 
 
 --></code>
 <ul>
@@ -146,7 +146,7 @@ $doc->body->appendChild($div);
 <p><var>ul</var><var>ol</var><var>select</var><var>table</var>のタグは、本文を配列で渡すと、子タグを一括して作成できます。</p>
 
 <code class="php" data-title="ul"><!--
-$doc('<ul>', [1,2], ['id'=>'example']);
+$document('<ul>', [1,2], ['id'=>'example']);
 
 //<ul id="example">
 //  <li>1</li>
@@ -155,7 +155,7 @@ $doc('<ul>', [1,2], ['id'=>'example']);
 --></code>
 
 <code class="php" data-title="select"><!--
-$doc('<select>', [1,2]);
+$document('<select>', [1,2]);
 
 //<select>
 //  <option value="1">1</option>
@@ -165,14 +165,14 @@ $doc('<select>', [1,2]);
 
 
 <code class="php" data-title="table"><!--
-$doc('<table>', [1,2]);
+$document('<table>', [1,2]);
 
 //<table>
 //  <tr><td>1</td></tr>
 //  <tr><td>2</td></tr>
 //</table>
 
-$doc('<table>', [[1,2], [3,4]]);
+$document('<table>', [[1,2], [3,4]]);
 
 //<table>
 //  <tr><td>1</td><td>2</td></tr>
@@ -181,7 +181,7 @@ $doc('<table>', [[1,2], [3,4]]);
 --></code>
 <h2>HTML文字列をDOM化</h2>
 
-<p>HTML文字列をDOM化するには<var>$doc('HTML文字列')</var> が使えます。<br>
+<p>HTML文字列をDOM化するには<var>$document('HTML文字列')</var> が使えます。<br>
 戻り値は<var>DocumentFragment</var>で、<var>appendChild()</var>などに渡すと挿入できます。</p>
 
 
@@ -193,25 +193,25 @@ $doc('<table>', [[1,2], [3,4]]);
 <h3>docファイルの作成</h3>
 
 <p>docファイルの名前は必ず<var>doc-</var>から始めます。PHPファイルです。<br>
-docファイルでは、docオブジェクトを返してください</p>
+docファイルでは、documentオブジェクトを返してください</p>
 
 
 <code class="php" data-title="doc-footer.php"><!--
 <?php
-$doc = new doc('<footer></footer>'); // 部品なので<!DOCTYPE>は書かない
+$doc = new document('<footer></footer>'); // 部品なので<!DOCTYPE>は書かない
 
 // $docを操作してHTMLを作り上げる
 // このファイルはローカルスコープで実行されます
 
-// docオブジェクトを返す
+// documentオブジェクトを返す
 return $doc;
 --></code>
 
-<p class="info-yellow">new doc()に渡すHTMLは、全体を1つのタグで囲っておく必要があります</p>
-<p class="info-blue">docオブジェクトを返さない場合は、docタグは消えます</p>
+<p class="info-yellow">new document()に渡すHTMLは、全体を1つのタグで囲っておく必要があります</p>
+<p class="info-blue">documentオブジェクトを返さない場合は、docタグは消えます</p>
 
 <h3>ディレクトリの設定</h3>
-<p>docファイルを置くディレクトリを<var>doc::$dir</var>に設定してください。</p>
+<p>docファイルを置くディレクトリを<var>document::$dir</var>に設定してください。</p>
 
 <h3>docタグの使用</h3>
 <p>以上の準備が揃うと、docタグが使用できるようになります。<var>&lt;doc-footer&gt;&lt;/doc-footer&gt;</var><br>
@@ -223,12 +223,12 @@ return $doc;
 
 <h3>$DOCオブジェクト</h3>
 
-<p>docファイル内では<var>$DOC</var>で、大元の$docオブジェクトにアクセスできます。<br>
+<p>docファイル内では<var>$DOC</var>で、大元のdocumentオブジェクトにアクセスできます。<br>
 docファイルにデータを渡したり、大元のHTMLにアクセスするには、<var>$DOC</var>オブジェクトを利用します</p>
 
 
 <code class="php" data-title="CSSやJavaScriptを大元のHTMLに追加する例"><!--
-$doc = new doc('<h1 id="doc-h1">タイトル</h1>');
+$doc = new document('<h1 id="doc-h1">タイトル</h1>');
 
 //CSSを大元のHTMLに追加する
 $style = <<<'END'
