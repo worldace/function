@@ -1510,7 +1510,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
 
     function __invoke($selector, $text = null, $attr = []){
         if($selector instanceof self){
-            return $this->importNode($selector->document->documentElement, true);
+            return $this->importNode($selector->documentElement, true);
         }
         else if($selector instanceof \DOMNode){
             return $this->importNode($selector, true);
@@ -1520,7 +1520,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
                 return $this->createHTMLElement($m[1], $text, $attr);
             }
             else{
-                return $this->createFragment($selector);
+                return self::createFragment($this, $selector);
             }
         }
         else if($selector[0] === '*'){
@@ -1596,17 +1596,6 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
     }
 
 
-    private function createFragment($str){
-        $dummy    = new self("<dummy>$str</dummy>");
-        $dummy    = $dummy->document->documentElement;
-        $fragment = $this->createDocumentFragment();
-        foreach($dummy->childNodes as $child){
-            $fragment->appendChild($this->importNode($child, true));
-        }
-        return $fragment;
-    }
-
-
     private function createListElement($el, array $contents){
         foreach($contents as $v){
             $child = $this->createElement('li', $v);
@@ -1655,8 +1644,18 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
         $doc = require($docfile);
         if($doc instanceof self){
             $doc->replace_doctag($DOC);
-            return $this->importNode($doc->document->documentElement, true);
+            return $this->importNode($doc->documentElement, true);
         }
+    }
+
+
+    static function createFragment($document, $str){
+        $fragment = $document->createDocumentFragment();
+        $dummy    = new self("<dummy>$str</dummy>");
+        foreach($dummy->documentElement->childNodes as $child){
+            $fragment->appendChild($document->importNode($child, true));
+        }
+        return $fragment;
     }
 
 
@@ -1777,13 +1776,13 @@ class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.do
 
     function __set($name, $value){
         if($name === 'innerHTML'){
-            $dummy = new document("<dummy>$value</dummy>");
-            $dummy = $dummy->documentElement;
-
+            $fragment = document::createFragment($this->ownerDocument, $value);
             $this->textContent = '';
-            foreach($dummy->childNodes as $child){
-                $this->appendChild($this->ownerDocument->importNode($child, true));
-            }
+            $this->appendChild($fragment);
+        }
+        else if($name === 'outerHTML'){
+            $fragment = document::createFragment($this->ownerDocument, $value);
+            $this->parentNode->replaceChild($fragment, $this);
         }
     }
 
@@ -1799,10 +1798,9 @@ class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.do
 
 
     function querySelectorAll($selector){
-        $selector = doc::selector2xpath($selector, $this);
-
-        $xpath  = new \DOMXPath($this->ownerDocument);
-        $result = [];
+        $selector = document::selector2xpath($selector, $this);
+        $xpath    = new \DOMXPath($this->ownerDocument);
+        $result   = [];
         foreach($xpath->query($selector, $this) as $el){
             $result[] = $el;
         }
