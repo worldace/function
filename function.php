@@ -1474,7 +1474,6 @@ class db{
 
 
 class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domdocument.php
-    public static $dir;
 
     function __construct($html = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
         parent::__construct();
@@ -1537,10 +1536,6 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
 
     function __toString(){
         $this->formatOutput = true;
-
-        if(self::$dir){
-            $this->replace_doctag($this);
-        }
 
         if($this->contents_type === 'html'){
             return $this->saveXML($this->doctype) . "\n" . $this->saveHTML($this->documentElement);
@@ -1625,27 +1620,6 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
             }
         }
         return $el;
-    }
-
-
-    private function replace_doctag($DOC){
-        foreach($this('*') as $doctag){
-            if(strpos($doctag->tagName, 'doc-') === 0){
-                $DOC->tag = $doctag;
-                $docfile  = sprintf('%s/%s.php', self::$dir, $doctag->tagName);
-                $doc      = $this->require_docfile($docfile, $DOC);
-                ($doc) ? $doctag->parentNode->replaceChild($doc, $doctag) : $doctag->parentNode->removeChild($doctag);
-            }
-        }
-    }
-
-
-    private function require_docfile($docfile, $DOC){
-        $doc = require($docfile);
-        if($doc instanceof self){
-            $doc->replace_doctag($DOC);
-            return $this->importNode($doc->documentElement, true);
-        }
     }
 
 
@@ -1746,7 +1720,6 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
                 $element = true;
             }
         }
-
         return implode('', $parts);
     }
 }
