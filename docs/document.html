@@ -33,10 +33,10 @@ documentオブジェクト
 </td></tr>
 </table>
 
-<code class="php"><!--
+<code class="php" data-title="サンプル"><!--
 $document = new document('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>');
 --></code>
-<p class="info-yellow">new doc()に渡すHTMLは、全体を1つのタグで囲っておく必要があります</p>
+<p class="info-yellow">引数のHTMLは、全体を1つのタグで囲っておく必要があります</p>
 <p class="info-yellow">ベースとなるHTMLには<var>&lt;!DOCTYPE&gt;</var>を忘れずに記述してください</p>
 
 <h2>HTMLの出力</h2>
@@ -45,24 +45,28 @@ $document = new document('<!DOCTYPE html><html lang="ja"><head><meta charset="ut
 このオブジェクトは、文字列として評価されると自動的に文字列に変換されます。</p>
 
 <code class="php" data-title="HTMLの出力"><!--
-$document = new document();
 print $document; //HTMLが表示される
 
 $str = "$document"; //文字列としてコピーされる
 --></code>
 
+<p>DOM要素も同様に、自動的に文字列に変換されます</p>
+
+<code class="php" data-title="DOM要素の出力"><!--
+print $document->body; // <body></body>
+--></code>
 
 <h2>ID選択</h2>
 
 
-<p>documentオブジェクトでは、ID名から簡単に要素を選択できます。<var>$document-&gt;ID名</var><br>
-戻り値は、存在すればDOM要素になり、存在しなければnullです。</p>
+<p>documentオブジェクトは、プロパティにID名を指定すると要素を簡単に選択できます。<var>$document-&gt;ID名</var><br>
+戻り値はDOM要素です。存在しなければnull</p>
 
 
 <code class="php" data-title="idで選択"><!--
-$document = new document('<div id="example"><div>');
+$document->exapmle
 
-$document->exapmle->textContent = '本文';
+// $document->getElementById('example') と同じ
 --></code>
 
 
@@ -70,27 +74,28 @@ $document->exapmle->textContent = '本文';
 
 <h2>特別選択</h2>
 
-<p><var>&lt;html&gt;</var><var>&lt;head&gt;</var><var>&lt;body&gt;</var><var>&lt;title&gt;</var>の4つは、特別に<var>$document-&gt;名前</var>でアクセスできます</p>
+<p><var>&lt;html&gt;</var><var>&lt;head&gt;</var><var>&lt;body&gt;</var><var>&lt;title&gt;</var>の4つは、特別に<var>$document-&gt;名前</var>でアクセスできます。<br>
+戻り値はDOM要素です。</p>
 
-<code class="php" data-title="タイトルを設定する"><!--
-$document = new document();
+<code class="php" data-title="特別選択"><!--
+$document->title
 
-$document->title->textContent = 'タイトル'; 
+// $document->querySelector('title') と同じ
 --></code>
 
 
 <h2>セレクタ選択</h2>
 
-<p>JavaScriptの<var>querySelector()</var>のように、CSSセレクタから要素を選択できます。</p>
+<p>jQueryのような短縮構文で、CSSセレクタから要素を選択できます。</p>
 <h3>単数選択</h3>
 
 <p>セレクタ選択を行うと、要素を1つだけ選択できます。<var>$document('セレクタ')</var><br>
-戻り値は、存在すればDOM要素になり、存在しなければnullです。</p>
+戻り値はDOM要素です。存在しなければnull</p>
 
 <code class="php" data-title="セレクタ選択"><!--
-$document = new document('<div class="example"><div>');
+$document('.example');
 
-$document('.example')->textContent = 'str';
+// $document->querySelector('.example'); と同じ
 --></code>
 
 
@@ -100,15 +105,12 @@ $document('.example')->textContent = 'str';
 条件にマッチしたものが全て選択され、戻り値は常に配列です。</p>
 
 <code class="php" data-title="セレクタ選択"><!--
-// dummyクラスを持つ要素を全削除
-foreach($document('*.dummy') as $el) {
-    $el->parentNode->removeChild($el);
-}
+$document('*.example');
+
+// $document->querySelectorAll('.example'); と同じ
 --></code>
 
-<h3>基点</h3>
 
-<p>セレクタ選択において第二引数にDOM要素を渡すと、その要素を基点に検索を行うことができます。</p>
 
 <h3>対応セレクタ</h3>
 
@@ -125,20 +127,17 @@ foreach($document('*.dummy') as $el) {
 <tr><th>全て</th><td>*</td></tr>
 </table>
 
+<p class="info-green">セレクタ選択において第二引数にDOM要素を渡すと、その要素を基点に検索できますが、
+通常は<var>$el-&gt;querySelector()</var>を使用します。</p>
 
 <h2>要素を1つ作成する</h2>
 <p>要素を1つ作成するには、次のように行います。<var>$document(&lt;タグ名&gt;, 本文, [属性名=&gt;属性値])</var><br>
-戻り値は作成された要素です</p>
+戻り値はDOM要素です</p>
 <code class="php" data-title="要素を1つ作成する"><!--
-// <div class="example">本文</div> を作成する
-
-$document = new document();
-$div = $document('<div>', '本文', ['class'=>'example']);
-$document->body->appendChild($div); 
-
+print $document('<div>', '本文', ['class'=>'example']); // <div class="example">本文</div>
 --></code>
 <ul>
-<li>本文は省略可。本文に含まれる特殊文字はエスケープされますが、scriptタグとstyleタグの場合はエスケープしません</li>
+<li>本文は省略可。エスケープされます。(scriptタグとstyleタグの場合は除く)</li>
 <li>属性は省略可。エスケープされます</li>
 </ul>
 <h3>子タグの一括作成</h3>
@@ -259,20 +258,20 @@ return $doc;
 
 <h2>[付録] DOM操作の早見表</h2>
 
-<p>DOMを知らない人でも、次の操作を覚えておけば大丈夫。</p>
+<p>DOMを知らない人でも、次の早見表を覚えておけば大丈夫。<var>$el</var>はDOM要素のことです。</p>
 
 <code class="php"><!--
-//中身を取得する。タグは含まれない
-$el->textContent; //戻り値はテキスト
+//中身を取得する
+$el->textContent; //戻り値はタグを含まないテキスト
 
-//中身を取得する。タグを含む
-$el->innerHTML; //戻り値はテキスト
+//中身を取得する
+$el->innerHTML;   //戻り値はタグを含むテキスト
 
-//中身を設定する。エスケープされる
-$el->textContent = '本文';
+//中身を設定する
+$el->textContent = '本文はエスケープされる';
 
-//中身を設定する。エスケープされない
-$el->innerHTML = '本文';
+//中身を設定する
+$el->innerHTML   = '本文はエスケープされない';
 
 //中身を全て削除する
 $el->textContent = '';
@@ -291,23 +290,6 @@ $el->removeAttribute('属性名');
 //要素を子の最後に追加する
 $el->appendChild($new_el);
 
-//要素を置換する
-$el->parentNode->replaceChild($new_el, $el);
-
-//要素をコピーする
-$el->cloneNode(true); //戻り値はコピーされた要素
-
-//要素を削除する
-$el->parentNode->removeChild($el);
---></code>
-
-
-
-
-
-<p>次の3つは覚えるのは難しいので、必要になった時に参考にしてください</p>
-
-<code class="php"><!--
 //要素を子の最初に追加する
 $el->insertBefore($new_el, $el->firstChild);
 
@@ -316,7 +298,26 @@ $el->parentNode->insertBefore($new_el, $el);
 
 //要素を後ろに追加する
 $el->parentNode->insertBefore($new_el, $el->nextSibling);
+
+
+//要素をコピーする
+$el->cloneNode(true); //戻り値はコピーされた要素
+
+//要素を置換する
+$el->parentNode->replaceChild($new_el, $el);
+
+//要素を削除する
+$el->parentNode->removeChild($el);
+
+
+//要素の子孫から要素を検索する
+$el->querySelector('セレクタ');    //戻り値はDOM要素
+$el->querySelectorAll('セレクタ'); //戻り値は配列
+
 --></code>
+
+
+
 
 </div>
 </article>
