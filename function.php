@@ -1483,16 +1483,16 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
 
         $html = trim($html);
         if($html[0] === '<' and $html[1] === '!'){
-            $this->type = 'html';
+            $this->contents_type = 'html';
             $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
         }
         else if($html[0] === '<' and $html[1] === '?'){
-            $this->type = 'xml';
+            $this->contents_type = 'xml';
             $this->loadXML($html, LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE); // https://www.php.net/manual/ja/libxml.constants.php
         }
         else{
             $html = '<?xml encoding="utf-8">' . $html;
-            $this->type = 'fragment';
+            $this->contents_type = 'fragment';
             $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
         }
     }
@@ -1542,11 +1542,11 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
             $this->replace_doctag($this);
         }
 
-        if($this->type === 'html'){
+        if($this->contents_type === 'html'){
             return $this->saveXML($this->doctype) . "\n" . $this->saveHTML($this->documentElement);
         }
-        else if($this->type === 'xml'){
-            return $this->saveXML($this->documentElement);
+        else if($this->contents_type === 'xml'){
+            return $this->saveXML($this->doctype) . "\n" . $this->saveXML($this->documentElement);
         }
         else{
             return $this->saveHTML($this->documentElement);
