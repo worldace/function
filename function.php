@@ -1520,7 +1520,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
                 return $this->createHTMLElement($m[1], $text, $attr);
             }
             else{
-                return self::createFragment($this, $selector);
+                return self::createHTMLFragment($this, $selector);
             }
         }
         else if($selector[0] === '*'){
@@ -1649,7 +1649,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
     }
 
 
-    static function createFragment($document, $str){
+    static function createHTMLFragment($document, $str){
         $fragment = $document->createDocumentFragment();
         $dummy    = new self("<dummy>$str</dummy>");
         foreach($dummy->documentElement->childNodes as $child){
@@ -1776,12 +1776,12 @@ class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.do
 
     function __set($name, $value){
         if($name === 'innerHTML'){
-            $fragment = document::createFragment($this->ownerDocument, $value);
+            $fragment = document::createHTMLFragment($this->ownerDocument, $value);
             $this->textContent = '';
             $this->appendChild($fragment);
         }
         else if($name === 'outerHTML'){
-            $fragment = document::createFragment($this->ownerDocument, $value);
+            $fragment = document::createHTMLFragment($this->ownerDocument, $value);
             $this->parentNode->replaceChild($fragment, $this);
         }
     }
