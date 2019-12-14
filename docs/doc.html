@@ -70,7 +70,7 @@ $doc->exapmle->textContent = '本文';
 
 <h2>特別選択</h2>
 
-<p><var>&lt;html&gt;</var><var>&lt;head&gt;</var><var>&lt;body&gt;</var><var>&lt;title&gt;</var>の4つのタグは、特別に<var>$doc-&gt;タグ名</var>でアクセスできます</p>
+<p><var>document</var><var>&lt;html&gt;</var><var>&lt;head&gt;</var><var>&lt;body&gt;</var><var>&lt;title&gt;</var>の5つは、特別に<var>$doc-&gt;名前</var>でアクセスできます</p>
 
 <code class="php" data-title="タイトルを設定する"><!--
 $doc = new doc();
@@ -179,15 +179,10 @@ $doc('<table>', [[1,2], [3,4]]);
 //  <tr><td>3</td><td>4</td></tr>
 //</table>
 --></code>
-<h2>HTML文字列の扱い</h2>
+<h2>HTML文字列をDOM化</h2>
 
-<h3>DOM化</h3>
 <p>HTML文字列をDOM化するには<var>$doc('HTML文字列')</var> が使えます。<br>
-戻り値は<var>DocumentFragment</var>です。<var>appendChild()</var>などに渡すと挿入できます。</p>
-
-<h3>HTML化</h3>
-<p>DOMを文字列化するには<var>$el-&gt;innerHTML</var>と<var>$el-&gt;outerHTML</var>が使えます。<br>
-innerHTMLはタグの中身を文字列化し、outerHTMLは自身のタグを含んで文字列化します。</p>
+戻り値は<var>DocumentFragment</var>で、<var>appendChild()</var>などに渡すと挿入できます。</p>
 
 
 <h2>docファイル</h2>
@@ -260,54 +255,31 @@ return $doc;
 <p>また<var>$DOC-&gt;tag</var>で、呼び出し元のdocタグにアクセスできます。</p>
 
 
-<h2>実例サンプル</h2>
-
-<code class="php" data-title="リストを作ってみよう"><!--
-//テンプレート側で空のulを用意しておこう。もちろんID付きで
-$doc = new doc('<ul id="list"></ul>');
-
-foreach([1,2,3] as $v) {
-    //li要素を作成しよう
-    $li = $doc('<li>', $v);
-    //ulに追加しよう
-    $doc->list->appendChild($li);
-}
-
-print $doc; //完成
-
-
---></code>
-
-<code class="php" data-title="テーブルを作ってみよう"><!--
-//電話機のボタン配列。これをtableタグにする
-$button = [[1,2,3], [4,5,6], [7,8,9], ['*',0,'#']];
-
-//テンプレート側で空のtableを用意しておく
-$doc = new doc('<table id="phone-button"></table>');
-
-foreach($button as $row) {
-    $tr = $doc->phone_button->appendChild($doc('<tr>')); //行毎にtr要素を作ってtableに追加
-    foreach($row as $v){
-        $tr->appendChild($doc('<td>', $v));  //セル毎にtd要素を作ってtrに追加
-    }
-}
-
-print $doc; //完成
-
-
---></code>
 
 
 <h2>[付録] DOM操作の早見表</h2>
 
-<p>DOMを知らない人でも、次の9つの操作を覚えておけば大丈夫。</p>
+<p>DOMを知らない人でも、次の操作を覚えておけば大丈夫。</p>
 
 <code class="php"><!--
-//本文を設定する(タグはエスケープされる)
+//中身を取得する。タグは含まれない
+$el->textContent; //戻り値はテキスト
+
+//中身を取得する。タグを含む
+$el->innerHTML; //戻り値はテキスト
+
+//中身を設定する。エスケープされる
 $el->textContent = '本文';
 
-//属性を取得する(戻り値が値)
-$el->setAttribute('属性名');
+//中身を設定する。エスケープされない
+$el->innerHTML = '本文';
+
+//中身を全て削除する
+$el->textContent = '';
+
+
+//属性を取得する
+$el->getAttribute('属性名'); //戻り値はテキスト
 
 //属性を設定する
 $el->setAttribute('属性名', '属性値');
@@ -315,23 +287,23 @@ $el->setAttribute('属性名', '属性値');
 //属性を削除する
 $el->removeAttribute('属性名');
 
+
 //要素を子の最後に追加する
 $el->appendChild($new_el);
 
 //要素を置換する
 $el->parentNode->replaceChild($new_el, $el);
 
-//要素をコピーする(戻り値がコピーされた要素)
-$el->cloneNode(true);
+//要素をコピーする
+$el->cloneNode(true); //戻り値はコピーされた要素
 
 //要素を削除する
 $el->parentNode->removeChild($el);
-
-//中身を全て削除する
-$el->textContent = '';
-
-
 --></code>
+
+
+
+
 
 <p>次の3つは覚えるのは難しいので、必要になった時に参考にしてください</p>
 

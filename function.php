@@ -1480,7 +1480,7 @@ class doc{
     function __construct($html = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
         $html = trim($html);
         $this->document = new \DOMDocument(); // https://www.php.net/manual/ja/class.domdocument.php
-        $this->document->registerNodeClass('DOMElement','HTMLElement');
+        $this->document->registerNodeClass('\DOMElement','HTMLElement');
 
         libxml_use_internal_errors(true);
 
@@ -1519,7 +1519,7 @@ class doc{
         }
         else if(preg_match('/</', $selector)){
             if(preg_match('/^<([\w\-]+)>$/', $selector, $m)){
-                return $this->createElement($m[1], $text, $attr);
+                return $this->createHTMLElement($m[1], $text, $attr);
             }
             else{
                 return $this->createFragment($selector);
@@ -1557,10 +1557,7 @@ class doc{
 
 
     private function querySelectorAll($selector, $relative = null){
-        $selector = self::selector2xpath($selector);
-        if($relative){
-            $selector = substr($selector, 2);
-        }
+        $selector = self::selector2xpath($selector, $relative);
 
         $xpath  = new \DOMXPath($this->document);
         $result = [];
@@ -1571,7 +1568,7 @@ class doc{
     }
 
 
-    private function createElement($tagName, $text = '', $attr = []){
+    private function createHTMLElement($tagName, $text = '', $attr = []){
         $el = $this->document->createElement($tagName);
         foreach($attr as $k => $v){
             $el->setAttribute($k, $v);
@@ -1661,11 +1658,11 @@ class doc{
 
 
     // HTML_CSS_Selector2XPath.php MIT License Copyright (c) 2008 Daichi Kamemoto <daikame@gmail.com>
-    static function selector2xpath($input_selector){
+    static function selector2xpath($input_selector, $relative = null){
         $selector = trim($input_selector);
-        $parts[]  = '//';
         $last     = '';
         $element  = true;
+        $parts[]  = $relative ? '' : '//';
         $regex    = [
             'element'    => '/^(\*|[a-z_][a-z0-9_-]*|(?=[#.\[]))/i',
             'id_class'   => '/^([#.])([a-z0-9*_-]*)/i',
@@ -1754,7 +1751,7 @@ class doc{
 
 
 
-class HTMLElement extends DOMElement{
+class HTMLElement extends \DOMElement{
 
     function __construct() {
         parent::__construct();
@@ -1775,8 +1772,38 @@ class HTMLElement extends DOMElement{
     }
 
 
+    function __set($name, $value){
+        if($name === 'innerHTML'){
+            $dummy = new doc("<dummy>$value</dummy>");
+            $dummy = $dummy->document->documentElement;
+
+            $this->textContent = '';
+            foreach($dummy->childNodes as $child){
+                $this->appendChild($this->ownerDocument->importNode($child, true));
+            }
+        }
+    }
+
+
     function __toString(){
         return $this->ownerDocument->saveHTML($this);
+    }
+
+
+    function querySelector($selector){
+        return $this->querySelectorAll($selector)[0];
+    }
+
+
+    function querySelectorAll($selector){
+        $selector = doc::selector2xpath($selector, $this);
+
+        $xpath  = new \DOMXPath($this->ownerDocument);
+        $result = [];
+        foreach($xpath->query($selector, $this) as $el){
+            $result[] = $el;
+        }
+        return $result;
     }
 }
 
