@@ -1475,22 +1475,22 @@ class db{
 
 class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domdocument.php
 
-    function __construct($html = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
+    function __construct($str = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
         parent::__construct();
         $this->registerNodeClass('\DOMElement','HTMLElement');
         libxml_use_internal_errors(true);
 
-        $html = trim($html);
-        if($html[0] === '<' and $html[1] === '!'){
+        $html = substr($str, strpos($str, '<'));
+        if($html[1] === '!'){
             $this->contents_type = 'html';
             $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
         }
-        else if($html[0] === '<' and $html[1] === '?'){
+        else if($html[1] === '?'){
             $this->contents_type = 'xml';
             $this->loadXML($html, LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE); // https://www.php.net/manual/ja/libxml.constants.php
         }
         else{
-            $html = '<?xml encoding="utf-8">' . $html;
+            $html = '<?xml encoding="utf-8">' . $str;
             $this->contents_type = 'fragment';
             $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
         }
@@ -1519,7 +1519,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
                 return $this->createHTMLElement($m[1], $text, $attr);
             }
             else{
-                return self::createHTMLFragment($this, $selector);
+                return self::createFragment($this, $selector);
             }
         }
         else if($selector[0] === '*'){
@@ -1549,17 +1549,17 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
     }
 
 
-    function querySelector($selector, $relative = null){
-        return $this->querySelectorAll($selector, $relative)[0];
+    function querySelector($selector, $context = null){
+        return $this->querySelectorAll($selector, $context)[0];
     }
 
 
-    function querySelectorAll($selector, $relative = null){
-        $selector = self::selector2xpath($selector, $relative);
+    function querySelectorAll($selector, $context = null){
+        $selector = self::selector2xpath($selector, $context);
 
         $xpath  = new \DOMXPath($this);
         $result = [];
-        foreach($xpath->query($selector, $relative) as $el){
+        foreach($xpath->query($selector, $context) as $el){
             $result[] = $el;
         }
         return $result;
@@ -1623,7 +1623,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
     }
 
 
-    static function createHTMLFragment($document, $str){
+    static function createFragment($document, $str){
         $fragment = $document->createDocumentFragment();
         $dummy    = new self("<dummy>$str</dummy>");
         foreach($dummy->documentElement->childNodes as $child){
@@ -1634,11 +1634,11 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
 
 
     // HTML_CSS_Selector2XPath.php MIT License Copyright (c) 2008 Daichi Kamemoto <daikame@gmail.com>
-    static function selector2xpath($input_selector, $relative = null){
+    static function selector2xpath($input_selector, $context = null){
         $selector = trim($input_selector);
         $last     = '';
         $element  = true;
-        $parts[]  = $relative ? '' : '//';
+        $parts[]  = $context ? '' : '//';
         $regex    = [
             'element'    => '/^(\*|[a-z_][a-z0-9_-]*|(?=[#.\[]))/i',
             'id_class'   => '/^([#.])([a-z0-9*_-]*)/i',
@@ -1749,12 +1749,12 @@ class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.do
 
     function __set($name, $value){
         if($name === 'innerHTML'){
-            $fragment = document::createHTMLFragment($this->ownerDocument, $value);
+            $fragment = document::createFragment($this->ownerDocument, $value);
             $this->textContent = '';
             $this->appendChild($fragment);
         }
         else if($name === 'outerHTML'){
-            $fragment = document::createHTMLFragment($this->ownerDocument, $value);
+            $fragment = document::createFragment($this->ownerDocument, $value);
             $this->parentNode->replaceChild($fragment, $this);
         }
     }
