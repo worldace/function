@@ -37,7 +37,7 @@ documentオブジェクト
 $document = new document('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>');
 --></code>
 <p class="info-yellow">引数のHTMLは、全体を1つのタグで囲っておく必要があります</p>
-<p class="info-yellow">ベースとなるHTMLには<var>&lt;!DOCTYPE&gt;</var>を忘れずに記述してください</p>
+<p class="info-yellow">ベースとなるHTMLには<var>&lt;!DOCTYPE&gt;</var>が必要です</p>
 
 <h2>HTMLの出力</h2>
 
@@ -59,7 +59,7 @@ print $document->body; // <body></body>
 <h2>ID選択</h2>
 
 
-<p>documentオブジェクトは、プロパティにID名を指定すると要素を簡単に選択できます。<var>$document-&gt;ID名</var><br>
+<p>documentオブジェクトは、プロパティにID名を指定すると簡単に要素を選択できます。<var>$document-&gt;ID名</var><br>
 戻り値はDOM要素です。存在しなければnull</p>
 
 
@@ -74,7 +74,7 @@ $document->exapmle
 
 <h2>特別選択</h2>
 
-<p><var>&lt;html&gt;</var><var>&lt;head&gt;</var><var>&lt;body&gt;</var><var>&lt;title&gt;</var>の4つは、特別に<var>$document-&gt;名前</var>でアクセスできます。<br>
+<p><var>&lt;html&gt;</var><var>&lt;head&gt;</var><var>&lt;body&gt;</var><var>&lt;title&gt;</var>の4つも、特別にプロパティでアクセスできます。<br>
 戻り値はDOM要素です。</p>
 
 <code class="php" data-title="特別選択"><!--
@@ -120,6 +120,7 @@ $document('*.example');
 <tr><th>クラス</th><td>.a</td></tr>
 <tr><th>属性名</th><td>[a]</td></tr>
 <tr><th>属性名と値</th><td>[a="b"]</td></tr>
+<tr><th>and</th><td>ab</td></tr>
 <tr><th>子孫</th><td>a b</td></tr>
 <tr><th>子</th><td>a > b</td></tr>
 <tr><th>弟</th><td>a + b</td></tr>

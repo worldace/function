@@ -1555,14 +1555,9 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
 
 
     function querySelectorAll($selector, $context = null){
+        $xpath    = new \DOMXPath($this);
         $selector = self::selector2xpath($selector, $context);
-
-        $xpath  = new \DOMXPath($this);
-        $result = [];
-        foreach($xpath->query($selector, $context) as $el){
-            $result[] = $el;
-        }
-        return $result;
+        return iterator_to_array($xpath->query($selector, $context));
     }
 
 
@@ -1771,13 +1766,9 @@ class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.do
 
 
     function querySelectorAll($selector){
-        $selector = document::selector2xpath($selector, $this);
         $xpath    = new \DOMXPath($this->ownerDocument);
-        $result   = [];
-        foreach($xpath->query($selector, $this) as $el){
-            $result[] = $el;
-        }
-        return $result;
+        $selector = document::selector2xpath($selector, $this);
+        return iterator_to_array($xpath->query($selector, $this));
     }
 }
 
