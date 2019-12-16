@@ -1483,16 +1483,16 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
         $html = substr($str, strpos($str, '<'));
         if($html[1] === '!'){
             $this->contents_type = 'html';
-            $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
+            $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT);
         }
         else if($html[1] === '?'){
             $this->contents_type = 'xml';
-            $this->loadXML($html, LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE); // https://www.php.net/manual/ja/libxml.constants.php
+            $this->loadXML($html, LIBXML_NONET | LIBXML_COMPACT); // https://www.php.net/manual/ja/libxml.constants.php
         }
         else{
             $html = '<?xml encoding="utf-8">' . $str;
             $this->contents_type = 'fragment';
-            $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT | LIBXML_PARSEHUGE);
+            $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT);
         }
     }
 

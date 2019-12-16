@@ -66,7 +66,7 @@ print $document->body; // <body></body>
 <code class="php" data-title="idで選択"><!--
 $document->exapmle
 
-// $document->getElementById('example') と同じ
+// $document->getElementById('example') の短縮形
 --></code>
 
 
@@ -80,7 +80,7 @@ $document->exapmle
 <code class="php" data-title="特別選択"><!--
 $document->title
 
-// $document->getElementsByTagName('title')[0] と同じ
+// $document->getElementsByTagName('title')[0] の短縮形
 --></code>
 
 
@@ -95,7 +95,7 @@ $document->title
 <code class="php" data-title="セレクタ選択"><!--
 $document('.example');
 
-// $document->querySelector('.example'); と同じ
+// $document->querySelector('.example'); の短縮形
 --></code>
 
 
@@ -107,7 +107,7 @@ $document('.example');
 <code class="php" data-title="セレクタ選択"><!--
 $document('*.example');
 
-// $document->querySelectorAll('.example'); と同じ
+// $document->querySelectorAll('.example'); の短縮形
 --></code>
 
 
@@ -136,6 +136,11 @@ $document('*.example');
 戻り値はDOM要素です</p>
 <code class="php" data-title="要素を1つ作成する"><!--
 print $document('<div>', '本文', ['class'=>'example']); // <div class="example">本文</div>
+
+// 次のコードの短縮形
+// $div = $document->createElement('div');
+// $div->textContent = '本文';
+// $div->setAttribute('class', 'example');
 --></code>
 <ul>
 <li>本文は省略可。エスケープされます。(scriptタグとstyleタグの場合は除く)</li>
@@ -189,7 +194,7 @@ $document('<table>', [[1,2], [3,4]]);
 
 <h2>[付録] DOM操作の早見表</h2>
 
-<p>DOMを知らない人でも、次の早見表を覚えておけば大丈夫。<var>$el</var>はDOM要素のことです。</p>
+<p>当クラスはDOMに慣れている人向けに作られていますが、DOMを知らない人でも次の早見表を使えば大丈夫。</p>
 
 <code class="php"><!--
 //中身を取得する
@@ -257,7 +262,7 @@ $el->querySelectorAll('セレクタ'); //戻り値は配列
 
 --></code>
 
-
+<p class="info-blue"><var>$el</var>はDOM要素のことです</p>
 
 
 </div>
