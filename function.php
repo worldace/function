@@ -586,6 +586,7 @@ class file{
         }
         flock($fp, LOCK_EX);
 
+        $contents = [];
         while(($line = fgets($fp)) !== false){
             $contents[] = $line;
         }
