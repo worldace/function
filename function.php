@@ -1325,7 +1325,7 @@ class os{
 }
 
 
-class db{
+class SQLite{
     public  $pdo;
     private $table;
     private $table_class;
