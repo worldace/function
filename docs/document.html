@@ -18,7 +18,7 @@
 
 <div id="contents">
 
-<p>PHPのDOMを使いやすくするクラス。HTMLの出力用に</p>
+<p>PHPのDOMを使いやすくするクラス。HTMLの出力用やスクレイピングに</p>
 
 <h2>new</h2>
 <p>documentオブジェクトを作成する</p>
@@ -56,31 +56,45 @@ $str = "$document"; //文字列としてコピーされる
 print $document->body; // <body></body>
 --></code>
 
-<h2>ID選択</h2>
+<h2>idタグの短縮構文</h2>
 
 
-<p>documentオブジェクトは、プロパティにID名を指定すると簡単に要素を選択できます。<var>$document-&gt;ID名</var><br>
+<p>id属性が付いているタグには<var>$document-&gt;id名</var>でアクセスできます。<br>
 戻り値はDOM要素です。存在しなければnull</p>
 
 
-<code class="php" data-title="idで選択"><!--
+<code class="php" data-title="idタグの短縮構文"><!--
 $document->exapmle
 
 // $document->getElementById('example') の短縮形
 --></code>
 
 
-<p class="info-blue">操作したいタグにはあらかじめID属性を付けておくと、綺麗なコードが書けます。</p>
+<p class="info-blue">操作したいタグにはあらかじめid属性を付けておくと、綺麗なコードが書けます。</p>
 
-<h2>特別選択</h2>
+<h2>主要タグの短縮構文</h2>
 
-<p><var>&lt;html&gt;</var><var>&lt;head&gt;</var><var>&lt;body&gt;</var><var>&lt;title&gt;</var>の4つも、特別にプロパティでアクセスできます。<br>
+<p><var>&lt;html&gt;</var><var>&lt;head&gt;</var><var>&lt;body&gt;</var><var>&lt;title&gt;</var>の4つタグには、特別に<var>$document-&gt;タグ名</var>でアクセスできます。<br>
 戻り値はDOM要素です。</p>
 
-<code class="php" data-title="特別選択"><!--
+<code class="php" data-title="主要タグの短縮構文"><!--
 $document->title
 
 // $document->getElementsByTagName('title')[0] の短縮形
+--></code>
+
+
+<h2>属性アクセスの短縮構文</h2>
+
+<p>属性へのアクセスは短縮構文があり<var>$el-&gt;属性名</var>と書けます。</p>
+<code class="php" data-title="属性アクセスの短縮構文"><!--
+$document->title->id
+
+// $document->title->getAttribute('id') の短縮形
+
+$document->title->id = 'value'
+
+// $document->title->setAttribute('id', 'value') の短縮形
 --></code>
 
 
@@ -264,6 +278,7 @@ $el->querySelectorAll('セレクタ'); //戻り値は配列
 
 <p class="info-blue"><var>$el</var>はDOM要素のことです</p>
 
+<p class="info-blue">PHP8から最新のDOMが使えるようになります。<a href="https://wiki.php.net/rfc/dom_living_standard_api" target="_blank">参考</a></p>
 
 </div>
 </article>
