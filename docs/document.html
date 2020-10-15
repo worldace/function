@@ -41,20 +41,20 @@ $document = new document('<!DOCTYPE html><html lang="ja"><head><meta charset="ut
 
 <h2>HTMLの出力</h2>
 
-<p>documentオブジェクトは、文字列として評価されると自動的に文字列に変換されるので、出力するだけでHTMLを表示できます。</p>
+<p>documentオブジェクトは自動的に文字列に変換されるので、出力するだけでHTMLを表示できます。</p>
 
 <code class="php" data-title="HTMLの出力"><!--
 $document = new document();
 
-print $document; //HTMLが表示される
+print $document; // HTMLが表示される
 
-$html = "$document"; //文字列としてコピーされる
+$html = "$document"; // 文字列としてコピーされる
 --></code>
 
 <p>DOM要素も同様に、自動的に文字列に変換されます</p>
 
 <code class="php" data-title="DOM要素の出力"><!--
-print $document->body; // <body></body>
+print $document->body; // <body></body> が表示される
 --></code>
 
 <h2>id付タグの短縮構文</h2>
@@ -66,9 +66,9 @@ print $document->body; // <body></body>
 
 
 <code class="php" data-title="id付タグの短縮構文"><!--
-$document->exapmle  //$document->getElementById('example') の短縮形
+$document->exapmle  // $document->getElementById('example') の短縮形
 --></code>
-<p>戻り値はDOM要素です。存在しなければnull</p>
+<p>この値はDOM要素です。存在しなければnull</p>
 
 
 <h2>主要タグの短縮構文</h2>
@@ -76,11 +76,11 @@ $document->exapmle  //$document->getElementById('example') の短縮形
 <p><var>html</var><var>head</var><var>title</var><var>body</var>の4つタグには短縮構文があり<var>$document-&gt;タグ名</var>でアクセスできます。</p>
 
 <code class="php" data-title="主要タグの短縮構文"><!--
-$document->body  //$document->getElementsByTagName('body')[0] の短縮形
+$document->body  // $document->getElementsByTagName('body')[0] の短縮形
 
-$document->title->textContent = 'タイトル名'; //titleはweb標準と異なるので注意
+$document->title->textContent = 'タイトル名'; // titleはweb標準と異なるので注意
 --></code>
-<p>戻り値はDOM要素です。存在しなければnull</p>
+<p>この値はDOM要素です。存在しなければnull</p>
 
 
 <h2>属性アクセスの短縮構文</h2>
@@ -89,11 +89,9 @@ $document->title->textContent = 'タイトル名'; //titleはweb標準と異な�
 <code class="php" data-title="属性アクセスの短縮構文"><!--
 $body = $document->body;
 
-$body->id            //$body->getAttribute('id') の短縮形
-
-$body->id = 'value'  //$body->setAttribute('id', 'value') の短縮形
-
-unset($body->id)     //$body->removeAttribute('id') の短縮形
+$body->id            // $body->getAttribute('id') の短縮形
+$body->id = 'value'  // $body->setAttribute('id', 'value') の短縮形
+unset($body->id)     // $body->removeAttribute('id') の短縮形
 --></code>
 
 
@@ -104,20 +102,20 @@ unset($body->id)     //$body->removeAttribute('id') の短縮形
 CSSセレクタを使用して、ドキュメント全体からタグを検索できます。</p>
 
 <code class="php" data-title="タグの検索"><!--
-//単数検索
-$document->querySelector('CSSセレクタ'); //戻り値はDOM要素またはnull
+//単数検索。戻り値はDOM要素またはnull
+$document->querySelector('CSSセレクタ');
 
-//複数検索
-$document->querySelectorAll('CSSセレクタ'); //戻り値は常に配列
+//複数検索。戻り値は常に配列
+$document->querySelectorAll('CSSセレクタ');
 --></code>
 
 <p class="info-green">querySelector()の第二引数にDOM要素を渡すと、その要素を基点に検索できますが、
 通常は<var>$el-&gt;querySelector()</var>を使用します。</p>
 
-<h3>対応CSSセレクタ</h3>
+<h3>対応セレクタ</h3>
 
 <table>
-<tr><th>要素</th><td>a</td></tr>
+<tr><th>タグ名</th><td>a</td></tr>
 <tr><th>ID</th><td>#a</td></tr>
 <tr><th>クラス</th><td>.a</td></tr>
 <tr><th>属性名</th><td>[a]</td></tr>
@@ -133,7 +131,7 @@ $document->querySelectorAll('CSSセレクタ'); //戻り値は常に配列
 
 <h3>querySelector()の短縮構文</h3>
 
-<p><var>querySelector()</var>には短縮構文が用意されていて、jQuery風に書けるようになります。<var>$document('セレクタ')</var></p>
+<p><var>querySelector()</var>には短縮構文が用意されていて、jQuery風に書けます。<var>$document('セレクタ')</var></p>
 
 <code class="php" data-title="querySelector()の短縮構文"><!--
 $document('.example') // $document->querySelector('.example') の短縮形
@@ -141,8 +139,8 @@ $document('.example') // $document->querySelector('.example') の短縮形
 $document('*.example') // $document->querySelectorAll('.example') の短縮形
 --></code>
 
-<p>この短縮構文のデフォルトは<b>単数検索</b>です。<br>
-複数検索にするには、セレクタの頭に<var>*</var>に付けます。</p>
+<p>この短縮構文のデフォルト動作は<b>単数検索</b>です。<br>
+複数検索するには、セレクタの頭に<var>*</var>を付けます。</p>
 
 
 <h2>タグの作成</h2>
@@ -152,7 +150,7 @@ $document('*.example') // $document->querySelectorAll('.example') の短縮形
 戻り値はDOM要素で、本文と属性は省略できます。</p>
 
 <code class="php" data-title="タグを1つ作成する短縮構文"><!--
-print $document('<div>', '本文', ['class'=>'example']); // <div class="example">本文</div>
+print $document('<div>', '本文', ['class'=>'example']); // <div class="example">本文</div> 
 
 // 次のコードの短縮形
 // $div = $document->createElement('div');
@@ -216,11 +214,11 @@ $document->body->appendChild($fragment); // <body>の最後に<footer>が挿入�
 
 <code class="php"><!--
 //タグを検索する
-$document->querySelector('セレクタ');    //戻り値はDOM要素またはnull
-$document->querySelectorAll('セレクタ'); //戻り値は配列
+$document->querySelector('セレクタ');    // 戻り値はDOM要素またはnull
+$document->querySelectorAll('セレクタ'); // 戻り値は配列
 
 //タグを作成する
-$el = $document->createElement('タグ名');//戻り値はDOM要素
+$el = $document->createElement('タグ名');// 戻り値はDOM要素
 
 
 //中身を取得する
@@ -228,6 +226,7 @@ $el->textContent; //戻り値はタグを含まない文字列
 
 //中身を取得する
 $el->innerHTML;   //戻り値はタグを含む文字列
+
 
 //中身を変更する
 $el->textContent = '文字列はエスケープされる';

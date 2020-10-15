@@ -1630,7 +1630,6 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
     }
 
 
-    // HTML_CSS_Selector2XPath.php MIT License Copyright (c) 2008 Daichi Kamemoto <daikame@gmail.com>
     static function selector2xpath($input_selector, $context = null){
         $selector = trim($input_selector);
         $last     = '';
@@ -1740,6 +1739,15 @@ class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.do
         }
         else if($name === 'outerHTML'){
             return $this->ownerDocument->saveHTML($this);
+        }
+        else if($name === 'children'){
+            $children = [];
+            foreach($this->childNodes as $v){
+                if($v->nodeType === XML_ELEMENT_NODE){
+                    $children[] = $v;
+                }
+            }
+            return $children;
         }
         else{
             return $this->getAttribute($name);
