@@ -18,7 +18,7 @@
 
 <div id="contents">
 
-<p>PHPのDOMを使いやすくするクラス。HTMLの出力やスクレイピング用に</p>
+<p>PHPのDOMを使いやすくするクラス。HTMLの作成やスクレイピング用に</p>
 
 <h2>new</h2>
 <p>documentオブジェクトを作成する</p>
@@ -87,18 +87,20 @@ $document->title->textContent = 'タイトル名'; //titleはweb標準と異な�
 
 <p>属性へのアクセスは短縮構文があり<var>$el-&gt;属性名</var>と書けます。</p>
 <code class="php" data-title="属性アクセスの短縮構文"><!--
-$document->body->id  //$document->body->getAttribute('id') の短縮形
+$body = $document->body;
 
-$document->body->id = 'value'  //$document->body->setAttribute('id', 'value') の短縮形
+$body->id            //$body->getAttribute('id') の短縮形
 
-unset($document->body->id)  //$document->body->removeAttribute('id') の短縮形
+$body->id = 'value'  //$body->setAttribute('id', 'value') の短縮形
+
+unset($body->id)     //$body->removeAttribute('id') の短縮形
 --></code>
 
 
 <h2>タグの検索</h2>
 
 <h3>セレクタで検索</h3>
-<p>documentオブジェクトには、お馴染みの<var>querySelector</var>があります。<br>
+<p>documentオブジェクトには、JavaScriptでお馴染みの<var>querySelector</var>があります。<br>
 CSSセレクタを使用して、ドキュメント全体からタグを検索できます。</p>
 
 <code class="php" data-title="タグの検索"><!--
@@ -106,7 +108,7 @@ CSSセレクタを使用して、ドキュメント全体からタグを検索�
 $document->querySelector('CSSセレクタ'); //戻り値はDOM要素またはnull
 
 //複数検索
-$document->querySelectorAll('CSSセレクタ'); //戻り値は配列
+$document->querySelectorAll('CSSセレクタ'); //戻り値は常に配列
 --></code>
 
 <p class="info-green">querySelector()の第二引数にDOM要素を渡すと、その要素を基点に検索できますが、
@@ -140,7 +142,7 @@ $document('*.example') // $document->querySelectorAll('.example') の短縮形
 --></code>
 
 <p>この短縮構文のデフォルトは<b>単数検索</b>です。<br>
-セレクタの頭に<var>*</var>に付けると複数検索になります。</p>
+複数検索にするには、セレクタの頭に<var>*</var>に付けます。</p>
 
 
 <h2>タグの作成</h2>
