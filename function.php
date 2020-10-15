@@ -1763,6 +1763,16 @@ class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.do
     }
 
 
+    function __unset($name){
+        $this->removeAttribute($name);
+    }
+
+
+    function __isset($name){
+        return $this->hasAttribute($name);
+    }
+
+
     function __toString(){
         return $this->ownerDocument->saveHTML($this);
     }
