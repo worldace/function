@@ -1477,6 +1477,7 @@ class SQLite{
 
 class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domdocument.php
 
+
     function __construct($str = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
         parent::__construct();
         $this->registerNodeClass('\DOMElement','HTMLElement');
@@ -1528,10 +1529,10 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
             if(strlen($selector) > 1){
                 $selector = substr($selector, 1);
             }
-            return $this->querySelectorAll($selector, $text);
+            return self::searchElement($selector, $text, $this, true);
         }
         else{
-            return $this->querySelectorAll($selector, $text)[0];
+            return self::searchElement($selector, $text, $this);
         }
     }
 
@@ -1552,14 +1553,12 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
 
 
     function querySelector($selector, $context = null){
-        return $this->querySelectorAll($selector, $context)[0];
+        return self::searchElement($selector, $context, $this);
     }
 
 
     function querySelectorAll($selector, $context = null){
-        $xpath    = new \DOMXPath($this);
-        $selector = self::selector2xpath($selector, $context);
-        return iterator_to_array($xpath->query($selector, $context));
+        return self::searchElement($selector, $context, $this, true);
     }
 
 
@@ -1627,6 +1626,18 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
             $fragment->appendChild($document->importNode($child, true));
         }
         return $fragment;
+    }
+
+
+    static function searchElement($selector, $context, $document, $all = false){
+        $selector = self::selector2xpath($selector, $context);
+        $result   = (new \DOMXPath($document))->query($selector, $context);
+        if($all){
+            return iterator_to_array($result);
+        }
+        else{
+            return $result ? $result[0] : null;
+        }
     }
 
 
@@ -1724,6 +1735,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
 
 class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.domelement.php
 
+
     function __construct() {
         parent::__construct();
     }
@@ -1787,14 +1799,12 @@ class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.do
 
 
     function querySelector($selector){
-        return $this->querySelectorAll($selector)[0];
+        return document::searchElement($selector, $this, $this->ownerDocument);
     }
 
 
     function querySelectorAll($selector){
-        $xpath    = new \DOMXPath($this->ownerDocument);
-        $selector = document::selector2xpath($selector, $this);
-        return iterator_to_array($xpath->query($selector, $this));
+        return document::searchElement($selector, $this, $this->ownerDocument, true);
     }
 }
 
