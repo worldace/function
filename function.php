@@ -1481,20 +1481,21 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
     function __construct($str = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
         parent::__construct();
         $this->registerNodeClass('\DOMElement','HTMLElement');
+        $this->registerNodeClass('\DOMDocumentFragment','HTMLFragment');
         libxml_use_internal_errors(true);
 
         $html = substr($str, strpos($str, '<'));
         if($html[1] === '!'){
-            $this->contents_type = 'html';
+            $this->contentsType = 'html';
             $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT);
         }
         else if($html[1] === '?'){
-            $this->contents_type = 'xml';
+            $this->contentsType = 'xml';
             $this->loadXML($html, LIBXML_NONET | LIBXML_COMPACT); // https://www.php.net/manual/ja/libxml.constants.php
         }
         else{
             $html = '<?xml encoding="utf-8">' . $str;
-            $this->contents_type = 'fragment';
+            $this->contentsType = 'fragment';
             $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT);
         }
     }
@@ -1540,10 +1541,10 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
     function __toString(){
         $this->formatOutput = true;
 
-        if($this->contents_type === 'html'){
+        if($this->contentsType === 'html'){
             return $this->saveXML($this->doctype) . "\n" . $this->saveHTML($this->documentElement);
         }
-        else if($this->contents_type === 'xml'){
+        else if($this->contentsType === 'xml'){
             return $this->saveXML($this->doctype) . "\n" . $this->saveXML($this->documentElement);
         }
         else{
@@ -1632,12 +1633,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
     static function searchElement($selector, $context, $document, $all = false){
         $selector = self::selector2xpath($selector, $context);
         $result   = (new \DOMXPath($document))->query($selector, $context);
-        if($all){
-            return iterator_to_array($result);
-        }
-        else{
-            return $result ? $result[0] : null;
-        }
+        return $all ? iterator_to_array($result) : $result[0];
     }
 
 
@@ -1645,7 +1641,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
         $selector = trim($input_selector);
         $last     = '';
         $element  = true;
-        $parts[]  = $context ? '' : '//';
+        $parts[]  = $context ? './/' : '//';
         $regex    = [
             'element'    => '/^(\*|[a-z_][a-z0-9_-]*|(?=[#.\[]))/i',
             'id_class'   => '/^([#.])([a-z0-9*_-]*)/i',
@@ -1735,7 +1731,6 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
 
 class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.domelement.php
 
-
     function __construct() {
         parent::__construct();
     }
@@ -1805,6 +1800,56 @@ class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.do
 
     function querySelectorAll($selector){
         return document::searchElement($selector, $this, $this->ownerDocument, true);
+    }
+}
+
+
+
+class HTMLFragment extends \DOMDocumentFragment{ // https://www.php.net/manual/ja/class.domdocumentfragment.php
+
+    function __construct() {
+        parent::__construct();
+    }
+
+
+    function __get($name){
+        if($name === 'innerHTML'){
+            $result = '';
+            foreach($this->childNodes as $child){
+                $result .= $this->ownerDocument->saveHTML($child);
+            }
+            return $result;
+        }
+        else if($name === 'outerHTML'){
+            return $this->ownerDocument->saveHTML($this);
+        }
+        else if($name === 'children'){
+            $children = [];
+            foreach($this->childNodes as $v){
+                if($v->nodeType === XML_ELEMENT_NODE){
+                    $children[] = $v;
+                }
+            }
+            return $children;
+        }
+        else{
+            return document::searchElement("#$name", $this, $this->ownerDocument);
+        }
+    }
+
+
+    function querySelector($selector){
+        return document::searchElement($selector, $this, $this->ownerDocument);
+    }
+
+
+    function querySelectorAll($selector){
+        return document::searchElement($selector, $this, $this->ownerDocument, true);
+    }
+
+
+    function __toString(){
+        return $this->ownerDocument->saveHTML($this);
     }
 }
 
