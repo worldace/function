@@ -1483,16 +1483,19 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
         $this->registerNodeClass('\DOMDocumentFragment','HTMLFragment');
         libxml_use_internal_errors(true);
 
-        $html = $this->detect_string($str);
+        $pos = strpos($str, '<');
 
-        if($this->contentsType === 'html'){
-            $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT);
+        if($pos >= 0 and $str[$pos+1] === '!'){
+            $this->contentsType = 'html';
+            $this->loadHTML(substr($str, $pos), LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT);
         }
-        else if($this->contentsType === 'xml'){
-            $this->loadXML($html, LIBXML_NONET | LIBXML_COMPACT); // https://www.php.net/manual/ja/libxml.constants.php
+        else if($pos >= 0 and $str[$pos+1] === '?'){
+            $this->contentsType = 'xml';
+            $this->loadXML(substr($str, $pos), LIBXML_NONET | LIBXML_COMPACT); // https://www.php.net/manual/ja/libxml.constants.php
         }
         else{
-            $this->loadHTML('<?xml encoding="utf-8">'.$html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT);
+            $this->contentsType = 'fragment';
+            $this->loadHTML('<?xml encoding="utf-8">'.$str, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT);
         }
     }
 
@@ -1556,24 +1559,6 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
 
     function querySelectorAll($selector, $context = null){
         return self::searchElement($selector, $context, $this, true);
-    }
-
-
-    private function detect_string($str){
-        $pos = strpos($str, '<');
-
-        if($pos >= 0 and $str[$pos+1] === '!'){
-            $this->contentsType = 'html';
-            return substr($str, $pos);
-        }
-        else if($pos >= 0 and $str[$pos+1] === '?'){
-            $this->contentsType = 'xml';
-            return substr($str, $pos);
-        }
-        else{
-            $this->contentsType = 'fragment';
-            return $str;
-        }
     }
 
 
