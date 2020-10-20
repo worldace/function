@@ -1477,19 +1477,20 @@ class SQLite{
 
 class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domdocument.php
 
-
     function __construct($str = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
         parent::__construct();
         $this->registerNodeClass('\DOMElement','HTMLElement');
         $this->registerNodeClass('\DOMDocumentFragment','HTMLFragment');
         libxml_use_internal_errors(true);
 
-        $html = substr($str, strpos($str, '<'));
-        if($html[1] === '!'){
+        preg_match('/<(.)/', $str, $match);
+        if($match[1] === '!'){
+            $html = substr($str, strpos($str, '<'));
             $this->contentsType = 'html';
             $this->loadHTML($html, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED | LIBXML_NONET | LIBXML_COMPACT);
         }
-        else if($html[1] === '?'){
+        else if($match[1] === '?'){
+            $html = substr($str, strpos($str, '<'));
             $this->contentsType = 'xml';
             $this->loadXML($html, LIBXML_NONET | LIBXML_COMPACT); // https://www.php.net/manual/ja/libxml.constants.php
         }
@@ -1523,7 +1524,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
                 return $this->createHTMLElement($m[1], $text, $attr);
             }
             else{
-                return self::createFragment($this, $selector);
+                return self::createHTMLFragment($this, $selector);
             }
         }
         else if($selector[0] === '*'){
@@ -1620,7 +1621,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
     }
 
 
-    static function createFragment($document, $str){
+    static function createHTMLFragment($document, $str){
         $fragment = $document->createDocumentFragment();
         $dummy    = new self("<dummy>$str</dummy>");
         foreach($dummy->documentElement->childNodes as $child){
@@ -1764,12 +1765,12 @@ class HTMLElement extends \DOMElement{ // https://www.php.net/manual/ja/class.do
 
     function __set($name, $value){
         if($name === 'innerHTML'){
-            $fragment = document::createFragment($this->ownerDocument, $value);
+            $fragment = document::createHTMLFragment($this->ownerDocument, $value);
             $this->textContent = '';
             $this->appendChild($fragment);
         }
         else if($name === 'outerHTML'){
-            $fragment = document::createFragment($this->ownerDocument, $value);
+            $fragment = document::createHTMLFragment($this->ownerDocument, $value);
             $this->parentNode->replaceChild($fragment, $this);
         }
         else{

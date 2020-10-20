@@ -199,14 +199,16 @@ $document('<table>', [[1,2], [3,4]]);
 <h3>HTML文字列をDOM化</h3>
 
 <p>HTML文字列を一括してDOM化するには<var>$document('HTML文字列')</var>で可能です。<br>
-戻り値は<var>DocumentFragment</var>。これは<var>appendChild()</var>などに渡すと挿入できます。</p>
+コンポーネントの読み込みに適しています。</p>
 
 <code class="php" data-title="HTML文字列をDOM化"><!--
-$fragment = $document('<footer><a href="http://example.com/">Home</a></footer>');
+$component = $document('<footer><a id="footer_link">Home</a></footer>'); // コンポーネントの読み込み
 
-$document->body->appendChild($fragment); // <body>の最後に<footer>が挿入される
+$component->footer_link->href = 'http://example.com/'; // id短縮形が使える。querySelectorもある
+
+$document->body->appendChild($component); // <body>の最後に<footer>が挿入される
 --></code>
-
+<p>戻り値は<var>HTMLFragment</var></p>
 
 <h2>[付録] DOM操作の早見表</h2>
 
