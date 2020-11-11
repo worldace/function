@@ -1621,10 +1621,11 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
 
     static function createHTMLFragment($document, $str){
         $fragment = $document->createDocumentFragment();
-        $dummy    = new self("<dummy>$str</dummy>");
-        foreach($dummy->documentElement->childNodes as $child){
-            $fragment->appendChild($document->importNode($child, true));
-        }
+        $fragment->appendXML($str);
+        //$dummy    = new self("<dummy>$str</dummy>");
+        //foreach($dummy->documentElement->childNodes as $child){
+        //    $fragment->appendChild($document->importNode($child, true));
+        //}
         return $fragment;
     }
 

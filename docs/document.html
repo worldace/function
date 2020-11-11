@@ -20,8 +20,8 @@
 
 <p>PHPのDOMを使いやすくするクラス。HTMLの作成やスクレイピング用に</p>
 
-<h2>new</h2>
-<p>documentオブジェクトを作成する</p>
+<h2>HTMLの入力</h2>
+<p>最初にベースとなるHTML文字列を渡して document オブジェクトを作成します。</p>
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="option"><td>1</td><td>
@@ -33,7 +33,7 @@ documentオブジェクト
 </td></tr>
 </table>
 
-<code class="php" data-title="サンプル"><!--
+<code class="php"><!--
 $document = new document('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>');
 --></code>
 <p class="info-yellow">引数のHTMLは、全体を1つのタグで囲っておく必要があります</p>
@@ -41,57 +41,60 @@ $document = new document('<!DOCTYPE html><html lang="ja"><head><meta charset="ut
 
 <h2>HTMLの出力</h2>
 
-<p>documentオブジェクトは文脈により文字列に変換されるので、出力するだけでHTMLを表示できます。</p>
+<p>documentオブジェクトは自動的に文字列に変換されるので、出力するだけでHTMLを表示できます。</p>
 
-<code class="php" data-title="HTMLの出力"><!--
+<code class="php"><!--
 $document = new document();
 
-print $document; // HTMLが表示される
+print $document; // HTMLを表示する
 
-$html = "$document"; // 文字列としてコピーされる
+file_put_contents('example.html', $document); // HTMLをファイルに保存する
+
+$html = "$document"; // 文字列としてコピーする
 --></code>
 
 <p>DOM要素も同様に、自動的に文字列に変換されます</p>
 
-<code class="php" data-title="DOM要素の出力"><!--
+<code class="php"><!--
 print $document->body; // <body></body> が表示される
 --></code>
 
-<h2>id付タグの短縮構文</h2>
+<h2>id付タグの短縮形</h2>
 
 
-<p>id属性が付いているタグには<var>$document-&gt;id名</var>でアクセスできます。<br>
-操作したいタグにはあらかじめid属性を付けておくと、綺麗なコードが書けます。</p>
+<p>idが付いているタグには<var>$document-&gt;id名</var>でアクセスできます。<br>
+操作したいタグにはあらかじめidを付けておくと、綺麗なコードが書けます。</p>
 
 
 
-<code class="php" data-title="id付タグの短縮構文"><!--
+<code class="php"><!--
 $document->exapmle  // $document->getElementById('example') の短縮形
 --></code>
 <p>この値はDOM要素です。存在しなければnull</p>
 
 
-<h2>主要タグの短縮構文</h2>
+<h2>主要タグの短縮形</h2>
 
-<p><var>html</var><var>head</var><var>title</var><var>body</var>の4つタグには短縮構文があり<var>$document-&gt;タグ名</var>でアクセスできます。</p>
+<p><var>html</var><var>head</var><var>title</var><var>body</var>の主要タグには短縮形があり<var>$document-&gt;タグ名</var>でアクセスできます。</p>
 
-<code class="php" data-title="主要タグの短縮構文"><!--
+<code class="php"><!--
 $document->body  // $document->getElementsByTagName('body')[0] の短縮形
 
 $document->title->textContent = 'タイトル名'; // titleはweb標準と異なるので注意
 --></code>
-<p>この値はDOM要素です。存在しなければnull</p>
+<p>この値はDOM要素です。</p>
 
 
-<h2>属性アクセスの短縮構文</h2>
+<h2>属性アクセスの短縮形</h2>
 
-<p>属性へのアクセスは短縮構文があり<var>$el-&gt;属性名</var>と書けます。</p>
-<code class="php" data-title="属性アクセスの短縮構文"><!--
+<p>属性へのアクセスは短縮形があり、<var>$el-&gt;属性名</var>と書けます。</p>
+<code class="php"><!--
 $body = $document->body;
 
 $body->id            // $body->getAttribute('id') の短縮形
 $body->id = 'value'  // $body->setAttribute('id', 'value') の短縮形
 unset($body->id)     // $body->removeAttribute('id') の短縮形
+isset($body->id)     // $body->hasAttribute('id') の短縮形
 --></code>
 
 
@@ -101,16 +104,14 @@ unset($body->id)     // $body->removeAttribute('id') の短縮形
 <p>documentオブジェクトには、JavaScriptでお馴染みの<var>querySelector</var>があります。<br>
 CSSセレクタを使用して、ドキュメント全体からタグを検索できます。</p>
 
-<code class="php" data-title="タグの検索"><!--
-//単数検索。戻り値はDOM要素またはnull
-$document->querySelector('CSSセレクタ');
+<code class="php"><!--
+//単数検索
+$document->querySelector('CSSセレクタ');    // 戻り値はDOM要素またはnull
 
-//複数検索。戻り値は常に配列
-$document->querySelectorAll('CSSセレクタ');
+//複数検索
+$document->querySelectorAll('CSSセレクタ'); // 戻り値は常に配列
 --></code>
 
-<p class="info-green">querySelector()の第二引数にDOM要素を渡すと、その要素を基点に検索できますが、
-通常は<var>$el-&gt;querySelector()</var>を使用します。</p>
 
 <h3>対応セレクタ</h3>
 
@@ -129,18 +130,20 @@ $document->querySelectorAll('CSSセレクタ');
 </table>
 
 
-<h3>querySelector()の短縮構文</h3>
+<h3>querySelector()の短縮形</h3>
 
-<p><var>querySelector()</var>には短縮構文が用意されていて、jQuery風に書けます。<var>$document('セレクタ')</var></p>
+<p><var>querySelector()</var>には短縮形が用意されていて、jQuery風に書けます。<var>$document('セレクタ')</var></p>
 
-<code class="php" data-title="querySelector()の短縮構文"><!--
+<code class="php"><!--
 $document('.example') // $document->querySelector('.example') の短縮形
+--></code>
 
+<p>デフォルト動作は<b>単数検索</b>です。複数検索するには、セレクタの頭に<var>*</var>を付けます。</p>
+
+<code class="php"><!--
 $document('*.example') // $document->querySelectorAll('.example') の短縮形
 --></code>
 
-<p>この短縮構文のデフォルト動作は<b>単数検索</b>です。<br>
-複数検索するには、セレクタの頭に<var>*</var>を付けます。</p>
 
 
 <h2>タグの作成</h2>
@@ -149,7 +152,7 @@ $document('*.example') // $document->querySelectorAll('.example') の短縮形
 <p>タグの作成には短縮構文があり<var>$document(&lt;タグ名&gt;, 本文, [属性名=&gt;属性値])</var>で1つタグが作成できます。<br>
 戻り値はDOM要素で、本文と属性は省略できます。</p>
 
-<code class="php" data-title="タグを1つ作成する短縮構文"><!--
+<code class="php"><!--
 print $document('<div>', '本文', ['class'=>'example']); // <div class="example">本文</div> 
 
 // 次のコードの短縮形
@@ -201,18 +204,19 @@ $document('<table>', [[1,2], [3,4]]);
 <p>HTML文字列を一括してDOM化するには<var>$document('HTML文字列')</var>で可能です。<br>
 コンポーネントの読み込みに適しています。</p>
 
-<code class="php" data-title="HTML文字列をDOM化"><!--
+<code class="php"><!--
 $component = $document('<footer><a id="footer_link">Home</a></footer>'); // コンポーネントの読み込み
 
 $component->footer_link->href = 'http://example.com/'; // id短縮形が使える。querySelectorもある
 
 $document->body->appendChild($component); // <body>の最後に<footer>が挿入される
 --></code>
-<p>戻り値は<var>HTMLFragment</var></p>
+
 
 <h2>[付録] DOM操作の早見表</h2>
 
-<p>当クラスはDOMに慣れている人向けに作られていますが、DOMを知らない人でも次の早見表を使えば大丈夫。</p>
+<p>DOMでできる代表的な操作をまとめてみました。<br>
+DOMに不慣れな人でも次の早見表を使えば大丈夫。</p>
 
 <code class="php"><!--
 //タグを検索する
