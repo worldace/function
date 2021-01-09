@@ -26,7 +26,7 @@ async function call_method(...args){
     const json = await response.json()
 
     if(json.error){
-        throw json.error
+        throw `jrpc.js: program error (${json.error})`
     }
 
     return json.result

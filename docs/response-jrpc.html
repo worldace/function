@@ -17,7 +17,7 @@
 </header>
 <div id="contents">
 
-<p>JavaScriptに適したAPIを提供する。<br>
+<p>JavaScript向けにAPIを提供する。<br>
 JavaScriptからPHPのメソッドを実行する感覚のAPIが作れます</p>
 
 <table class="function">
@@ -53,9 +53,9 @@ jsファイル内で<b>APIのURL</b>を設定する必要があります。</p>
 
 <p>JavaScript側ではPHPのメソッドを実行する感覚で書けます。戻り値は常に<var>Promise</var>です</p>
 <code class="js" data-title="JavaScript側"><!--
-import api from './jrpc.js';
+import api from './jrpc.js'
 
-api.plus(1, 2).then(result => console.log(result)); // 3
+api.plus(1, 2).then(result => console.log(result)) // 3
 --></code>
 
 <p class="info-yellow">jrpc.js は IE に対応していません</p>
@@ -67,7 +67,7 @@ api.plus(1, 2).then(result => console.log(result)); // 3
 <input id="inputfile" type="file">
 
 <script type="module">
-import api from './jrpc.js';
+import api from './jrpc.js'
 
 inputfile.onchange = event => api.save_file(event.target.files[0])
 </script>
