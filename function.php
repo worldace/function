@@ -226,6 +226,35 @@ class response{
     static function nocache() :void{
         header('Cache-Control: no-store');
     }
+
+
+    static function jrpc(string $class) :void{
+        $js = json_decode(file_get_contents('php://input'));
+
+        if(!method_exists($class, $js->method) or strpos($js->method, '__') === 0){
+            $result = ['error' => "APIに'$js->method'は存在しません"];
+            goto response;
+        }
+
+        foreach($js->base64 as $i){
+            $js->args[$i] = base64_decode($js->args[$i]);
+        }
+
+        try{
+            $result = ['result' => [new $class, $js->method](...$js->args)];
+        }
+        catch(\Throwable $e){
+            $result = ['error' => $e->getMessage()];
+        }
+
+        response:
+        if(isset($_SERVER['HTTP_ORIGIN'])){
+            header('Access-Control-Allow-Origin:' . $_SERVER['HTTP_ORIGIN']);
+        }
+        header('Content-Type: application/json');
+        print json_encode($result);
+    }
+
 }
 
 
@@ -383,35 +412,6 @@ class html{
     }
 }
 
-
-
-class js{
-    static function api(object $object, array $option = []) :void{
-        $json = request::post('json');
-        $jrpc = json_decode($json);
-
-        if(!method_exists($object, $jrpc->method)){
-            response::json(['error'=>"api error: method '{$jrpc->method}' is missing"], $option);
-        }
-        if(str::match_start($jrpc->method, '__')){
-            response::json(['error'=>"api error: magic method"], $option);
-        }
-        if(!is_array($jrpc->args)){
-            response::json(['error'=>'api error: invalid arguments'], $option);
-        }
-
-        foreach($jrpc->base64 as $i){
-            $jrpc->args[$i] = base64_decode($jrpc->args[$i]);
-        }
-
-        try{
-            response::json(['result'=>[$object, $jrpc->method](...$jrpc->args)], $option);
-        }
-        catch(\Throwable $e){
-            response::json(['error'=>"api error: {$e->getMessage()}"], $option);
-        }
-    }
-}
 
 
 class url{
