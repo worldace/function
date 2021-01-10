@@ -1865,18 +1865,15 @@ class template{
     function __toString(){
         $tempLate = preg_replace('/\{\{(.+?)\}\}/', '<?= $1 ?>', $this->tempLate);
 
-        $tempLate = preg_replace_callback('/<(if|foreach|include) (.+?")>(.*?)<\/\1>/s', function($m){
+        $tempLate = preg_replace_callback('/<(if|foreach|include) (.+?)<\/\1>/s', function($m){
             if($m[1] === 'if'){
-                preg_match('/^is="(.+?)"/', $m[2], $n);
-                return sprintf('<?php if(%s){ ?> %s <?php } ?>', $n[1], $m[3]);
+                return preg_replace('/^is="(.+?)">(.+?)$/s', '<?php if($1){ ?> $2 <?php } ?>', $m[2]);
             }
             else if($m[1] === 'foreach'){
-                preg_match('/^var="(.+?)" as="(.+?)"/', $m[2], $n);
-                return sprintf('<?php foreach(%s as %s){ ?> %s <?php } ?>', $n[1], $n[2], $m[3]);
+                return preg_replace('/^var="(.+?)" as="(.+?)">(.+?)$/s', '<?php foreach($1 as $2){ ?> $3 <?php } ?>', $m[2]);
             }
             else if($m[1] === 'include'){
-                preg_match('/^src="(.+?)"/', $m[2], $n);
-                return sprintf('<?php include "%s" ?>', $n[1]);
+                return preg_replace('/^src="(.+?)"/s', '<?php include "$1" ?>', $m[2]);
             }
         }, $tempLate);
 
