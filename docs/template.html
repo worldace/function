@@ -15,6 +15,8 @@
 <h1>templateクラス</h1>
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
+
+
 <div id="contents">
 
 <p>HTML用の簡易テンプレートエンジン</p>
@@ -25,11 +27,7 @@
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-テンプレートとなるHTML。変数の書き方は<var>{{変数名}}</var>
-</td></tr>
-<tr class="option"><td>2</td><td>
-変換表を連想配列かオブジェクトで。<var>[変数名=&gt;文字列]</var><br>
-文字列はHTMLエスケープされます
+テンプレートとなるHTML文字列
 </td></tr>
 <tr class="return"><td>戻</td><td>
 templateオブジェクト<br>
@@ -39,70 +37,32 @@ templateオブジェクト<br>
 
 
 <code class="php" data-title="使用例"><!--
-print new template(<<<END
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8">
-  <title>{{title}}</title>
-</head>
-<body>
-
-{{h1.php}}
-
-</body>
-</html>
-END, [
-    'title'  => $title,
-    'h1.php' => compact('title'),
-]);
+$html = new template('テンプレート文字列');
+$html->data = [1,2,3];
+print $html;
 --></code>
 
-<h2>ガジェット</h2>
+<h2>テンプレート書式例</h2>
 
-<p>ガジェットを利用すると、HTMLの一部をコンポーネント化することができます。<br>
-HTMLだけでなく、CSSとJavaScriptにも対応しているのがガジェットの特徴です。</p>
-
-<p>上記の使用例だと<var>{{h1.php}}</var>がガジェットに該当します</p>
-<h3>利用方法</h3>
-
-<ol>
-<li><var>template::$dir</var>にガジェットファイルを設置するディレクトリを設定してください</li>
-<li>ガジェットの変数は<var>{{PHPファイル名}}</var>と書きます</li>
-<li>ガジェットに渡したいデータがあれば、変換表に連想配列かオブジェクトで渡してください</li>
-</ol>
-
-<h3>ガジェットファイルの書き方</h3>
-
+<code class="php" data-title="foreach"><!--
 <ul>
-  <li>ガジェットファイルはPHPです</li>
-  <li>ガジェット内から<b>出力したものが変数を置換</b>します</li>
-  <li>変換表から渡されたデータがあれば、ガジェット内では<var>$self-&gt;名前</var>として利用できます</li>
-  <li>ガジェット内に<var>$head</var><var>$body</var>という変数があれば、その内容がテンプレートのhead/bodyに1回だけ追加されます</li>
+<foreach var="$data" as="$v">
+  <li>{{$v}}</li>
+</foreach>
 </ul>
-
-<code class="php" data-title="ガジェットファイル記述例"><!--
-<?php
-
-print "<h1>$self->title</h1>";
-
-$head = <<<'END'
-<style>
-h1{
-    color: red;
-}
-</style>
-END;
-
-$body = <<<'END'
-<script>
-document.querySelector("h1").onclick = function (event){
-    alert(this.textContent);
-}
-</script>
-END;
 --></code>
-<p class="info-blue">ガジェットファイルから変換表(配列かオブジェクト)を返すと、ガジェットの出力を変換できます</p>
+
+<code class="php" data-title="if"><!--
+<if is="$var > 0">
+  <p>条件を満たした時に表示される</p>
+</if>
+--></code>
+
+
+<code class="php" data-title="include"><!--
+<include src="./example.php"></include>
+--></code>
+
 
 </div>
 </article>

@@ -1856,56 +1856,34 @@ class HTMLFragment extends \DOMDocumentFragment{ // https://www.php.net/manual/j
 
 
 class template{
-    public static $dir;
-    private $html;
-    private $rule;
-    private $head;
-    private $body;
+    private $tempLate;
 
-
-    function __construct(string $html, iterable $rule = []){
-        $this->html = $html;
-        $this->rule = (object)$rule;
+    function __construct($template){
+        $this->tempLate = $template;
     }
-
 
     function __toString(){
-        $html = $this->replace($this->html, $this->rule);
-        if($this->head){
-            $html = str::insert_before($html, '</head>', implode("\n", $this->head));
-        }
-        if($this->body){
-            $html = str::insert_before($html, '</body>', implode("\n", $this->body));
-        }
-        return $html;
-    }
+        $tempLate = preg_replace('/\{\{(.+?)\}\}/', '<?= $1 ?>', $this->tempLate);
 
+        $tempLate = preg_replace_callback('/<(if|foreach|include) (.+?")>(.*?)<\/\1>/s', function($m){
+            if($m[1] === 'if'){
+                preg_match('/^is="(.+?)"/', $m[2], $n);
+                return sprintf('<?php if(%s){ ?> %s <?php } ?>', $n[1], $m[3]);
+            }
+            else if($m[1] === 'foreach'){
+                preg_match('/^var="(.+?)" as="(.+?)"/', $m[2], $n);
+                return sprintf('<?php foreach(%s as %s){ ?> %s <?php } ?>', $n[1], $n[2], $m[3]);
+            }
+            else if($m[1] === 'include'){
+                preg_match('/^src="(.+?)"/', $m[2], $n);
+                return sprintf('<?php include "%s" ?>', $n[1]);
+            }
+        }, $tempLate);
 
-    private function replace($html, $rule){
-        return preg_replace_callback('/{{(.+?)}}/', function($m) use($rule){ return $this->callback($m[1], $rule); }, $html);
-    }
-
-
-    private function callback($m, $rule){
-        if(!str::match_end($m, '.php')){
-            return html::e($rule->$m);
-        }
-
-        if(isset($rule->$m)){
-            $self = (object)$rule->$m;
-        }
-
+        extract((array)$this);
         ob_start();
-        $gadget_rule = include sprintf('%s/%s', self::$dir, $m);
-
-        if(isset($head)){
-            $this->head[$m] = $head;
-        }
-        if(isset($body)){
-            $this->body[$m] = $body;
-        }
-
-        return is_iterable($gadget_rule) ? $this->replace(ob_get_clean(), (object)$gadget_rule) : ob_get_clean();
+        eval('?>'.$tempLate);
+        return ob_get_clean();
     }
 }
 
