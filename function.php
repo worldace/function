@@ -1870,14 +1870,14 @@ class template{
     }
 
     function compile(){
-        return preg_replace_callback(['/(\{\{)(.+?)\}\}/', '/<(if|foreach|include) (.+?")>/s', '/<(\/)(if|foreach)>/'], [$this, 'callback'], $this->tempLate);
+        return preg_replace_callback(['/(\{\{)(.+?)\}\}/', '/<(if|foreach|include) code="(.+?)">/s', '/<(\/)(if|foreach)>/'], 'self::callback', $this->tempLate);
     }
 
-    private function callback($m){
+    private static function callback($m){
         switch($m[1]){
-            case 'if'      : return preg_replace('/^is="(.+?)"/s', '<?php if($1){ ?>', $m[2]);
-            case 'foreach' : return preg_replace('/^array="(.+?)" as="(.+?)"/s', '<?php foreach($1 as $2){ ?>', $m[2]);
-            case 'include' : return preg_replace('/^src="(.+?)"/s', '<?php include "$1" ?>', $m[2]);
+            case 'if'      : return "<?php if($m[2]){ ?>";
+            case 'foreach' : return "<?php foreach($m[2]){ ?>";
+            case 'include' : return "<?php include '$m[2]' ?>";
             case '/'       : return '<?php } ?>';
             default        : return "<?= $m[2] ?>";
         }
