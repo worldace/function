@@ -1856,26 +1856,30 @@ class HTMLFragment extends \DOMDocumentFragment{ // https://www.php.net/manual/j
 
 
 class template{
-    private $tempLate;
+    private $template;
 
     function __construct($template){
-        $this->tempLate = $template;
+        $this->template = $template;
     }
 
     function __toString(){
-        $tempLate = preg_replace('/\{\{(.+?)\}\}/', '<?= $1 ?>', $this->tempLate);
-        $tempLate = preg_replace_callback('/<(if|foreach|include) (.+?)<\/\1>/s', [$this, 'callback'], $tempLate);
         extract((array)$this);
         ob_start();
-        eval('?>'.$tempLate);
+        eval('?>'.$this->compile());
         return ob_get_clean();
+    }
+
+    function compile(){
+        return preg_replace_callback(['/(\{\{)(.+?)\}\}/', '/<(if|foreach|include) (.+?")>/s', '/<(\/)(if|foreach)>/'], [$this, 'callback'], $this->template);
     }
 
     private function callback($m){
         switch($m[1]){
-            case 'if'      : return preg_replace('/^is="(.+?)">(.+?)$/s', '<?php if($1){ ?> $2 <?php } ?>', $m[2]);
-            case 'foreach' : return preg_replace('/^var="(.+?)" as="(.+?)">(.+?)$/s', '<?php foreach($1 as $2){ ?> $3 <?php } ?>', $m[2]);
+            case 'if'      : return preg_replace('/^is="(.+?)"/s', '<?php if($1){ ?>', $m[2]);
+            case 'foreach' : return preg_replace('/^array="(.+?)" as="(.+?)"/s', '<?php foreach($1 as $2){ ?>', $m[2]);
             case 'include' : return preg_replace('/^src="(.+?)"/s', '<?php include "$1" ?>', $m[2]);
+            case '/'       : return '<?php } ?>';
+            default        : return "<?= $m[2] ?>";
         }
     }
 }
