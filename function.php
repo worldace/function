@@ -1879,7 +1879,7 @@ class template{
             case 'foreach' : return "<?php foreach($m[2]){ ?>";
             case 'include' : return "<?php include '$m[2]' ?>";
             case '/'       : return '<?php } ?>';
-            default        : return "<?= $m[2] ?>";
+            default        : return "<?=$m[2]?>";
         }
     }
 }
@@ -1988,6 +1988,11 @@ class ftp{
 
 
     function __destruct(){
+        $this->close();
+    }
+
+
+    function close(){
         @ftp_close($this->ftp); // ftp_close() SSL_read on shutdown エラー抑制
     }
 
