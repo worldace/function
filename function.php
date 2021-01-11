@@ -1856,10 +1856,10 @@ class HTMLFragment extends \DOMDocumentFragment{ // https://www.php.net/manual/j
 
 
 class template{
-    private $template;
+    private $tempLate;
 
     function __construct($template){
-        $this->template = $template;
+        $this->tempLate = $template;
     }
 
     function __toString(){
@@ -1870,7 +1870,7 @@ class template{
     }
 
     function compile(){
-        return preg_replace_callback(['/(\{\{)(.+?)\}\}/', '/<(if|foreach|include) (.+?")>/s', '/<(\/)(if|foreach)>/'], [$this, 'callback'], $this->template);
+        return preg_replace_callback(['/(\{\{)(.+?)\}\}/', '/<(if|foreach|include) (.+?")>/s', '/<(\/)(if|foreach)>/'], [$this, 'callback'], $this->tempLate);
     }
 
     private function callback($m){
