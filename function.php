@@ -1870,16 +1870,18 @@ class template{
     }
 
     function compile(){
-        return preg_replace_callback(['/(\{\{)(.+?)\}\}/', '/<(if|foreach|include) code="(.+?)">/s', '/<(\/)(if|foreach)>/'], 'self::callback', $this->tempLate);
+        return preg_replace_callback(['/(\{\{)(.+?)\}\}/', '/<(if|elseif|foreach|include) code="(.+?)">/s', '/<(\/)(if|foreach)>/', '/<(else)>/'], 'self::callback', $this->tempLate);
     }
 
     private static function callback($m){
         switch($m[1]){
             case 'if'      : return "<?php if($m[2]){ ?>";
+            case 'elseif'  : return "<?php } elseif($m[2]){ ?>";
+            case 'else'    : return "<?php } else{ ?>";
             case 'foreach' : return "<?php foreach($m[2]){ ?>";
             case 'include' : return "<?php include '$m[2]' ?>";
             case '/'       : return '<?php } ?>';
-            default        : return "<?=$m[2]?>";
+            default        : return '<?='.trim($m[2]).'?>';
         }
     }
 }
