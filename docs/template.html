@@ -27,20 +27,21 @@
 <table class="function">
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
-テンプレート文字列
+テンプレートファイルのパス
 </td></tr>
 <tr class="return"><td>戻</td><td>
-templateオブジェクト<br>
-このオブジェクトは文字列として評価された時に、文字列に変換されます
+templateオブジェクト
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
 $html = new template('テンプレート文字列');
-$html->data = [1,2,3];
+$html->data = [1,2,3]; // 変数割り当て
 print $html;
 --></code>
+
+<p>templateオブジェクトは文字列として評価された時に、文字列に変換されます</p>
 
 <h2>テンプレート書式例</h2>
 
@@ -75,6 +76,11 @@ print $html;
 <include code="./example.php">
 --></code>
 
+<h2>キャッシュ</h2>
+
+
+<p>テンプレートファイルはコンパイルされた後にキャッシュされます。<br>
+キャッシュファイルは、テンプレートファイルのディレクトリに作成されます。</p>
 
 </div>
 </article>
