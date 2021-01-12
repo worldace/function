@@ -29,16 +29,19 @@
 <tr class="require"><td>1</td><td>
 テンプレートファイルのパス
 </td></tr>
-<tr class="return"><td>戻</td><td>
-templateオブジェクト
+<tr class="option"><td>2</td><td>
+割り当てる変数。配列・オブジェクト
 </td></tr>
 </table>
 
 
 <code class="php" data-title="使用例"><!--
 $html = new template('テンプレートファイルのパス');
-$html->data = [1,2,3]; // 変数割り当て
+$html->var = 15; // 変数を割り当て
 print $html;
+
+// 一括して変数を割り当てることも可能
+print new template('テンプレートファイルのパス', ['var'=>15]);
 --></code>
 
 <p>templateオブジェクトは文字列として評価された時に、文字列に変換されます</p>

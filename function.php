@@ -1858,8 +1858,11 @@ class HTMLFragment extends \DOMDocumentFragment{ // https://www.php.net/manual/j
 class template{
     private $tempLate;
 
-    function __construct($template){
+    function __construct($template, $assign = null){
         $this->tempLate = $template;
+        if($assign){
+            foreach($assign as $k => $v) $this->$k = $v;
+        }
     }
 
     function __toString(){
