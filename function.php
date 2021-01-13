@@ -1884,7 +1884,7 @@ class template{
     }
 
     function compile(){
-        $re = ['/(\{\{)(.+?)\}\}/s', '/<(if|elseif|foreach|include) code="(.+?)">/s', '/<(\/)(if|foreach)>/', '/<(else)>/'];
+        $re = ['/(\{\{)(.+?)\}\}/s', '/<(if|elseif|foreach|) code="(.+?)">/s', '/<(\/)(if|foreach)>/', '/<(else)>/'];
         return preg_replace_callback($re, 'self::callback', file_get_contents($this->tempLate));
     }
 
@@ -1894,7 +1894,6 @@ class template{
             case 'elseif'  : return "<?php } elseif($m[2]){ ?>";
             case 'else'    : return "<?php } else{ ?>";
             case 'foreach' : return "<?php foreach($m[2]){ ?>";
-            case 'include' : return "<?php include '$m[2]' ?>";
             case '/'       : return '<?php } ?>';
             default        : return '<?='.trim($m[2]).'?>';
         }

@@ -36,15 +36,16 @@
 
 
 <code class="php" data-title="使用例"><!--
+// 基本的な使い方
 $html = new template('テンプレートファイルのパス');
 $html->var = 15; // 変数を割り当て
 print $html;
 
-// 一括して変数を割り当てることも可能
+// 変数を一括して割り当てることも可能
 print new template('テンプレートファイルのパス', ['var'=>15]);
 --></code>
 
-<p>templateオブジェクトは文字列として評価された時に、文字列に変換されます</p>
+<p>templateオブジェクトは文字列として評価された時に、コンパイルされ実行されます</p>
 
 <h2>テンプレート書式例</h2>
 
@@ -73,17 +74,17 @@ print new template('テンプレートファイルのパス', ['var'=>15]);
 </if>
 --></code>
 
-
-
-<code class="php" data-title="include"><!--
-<include code="./example.php">
+<code class="php" data-title="php"><!--
+<?php 'PHPのコードを直接書く' ?>
 --></code>
+
+
 
 <h2>キャッシュ</h2>
 
 
-<p>テンプレートファイルはコンパイルされキャッシュされます。<br>
-キャッシュファイルは、テンプレートファイルのディレクトリに作成されます。</p>
+<p>テンプレートはコンパイルされキャッシュされます。<br>
+キャッシュはテンプレートと同じディレクトリに作成されます。</p>
 
 </div>
 </article>
