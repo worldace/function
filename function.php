@@ -1876,7 +1876,7 @@ class template{
         $cache = "$this->tempLate.php";
         $mtime = filemtime($this->tempLate);
 
-        if($mtime !== @filemtime($cache)){
+        if($mtime and $mtime !== @filemtime($cache)){
             file_put_contents($cache, $this->compile(), LOCK_EX);
             touch($cache, $mtime);
         }
