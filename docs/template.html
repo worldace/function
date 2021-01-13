@@ -19,7 +19,7 @@
 
 <div id="contents">
 
-<p>HTML用の簡易テンプレートエンジン</p>
+<p>テンプレートエンジン</p>
 
 <h2>new</h2>
 
@@ -52,6 +52,7 @@ print new template('テンプレートファイルのパス', ['var'=>15]);
 
 <code class="php" data-title="表示"><!--
 {{$v}}     //変数を表示
+{{ $v }}   //同上。両端の空白は無視される
 {{h($v)}}  //関数の実行結果を表示
 --></code>
 
@@ -72,16 +73,16 @@ print new template('テンプレートファイルのパス', ['var'=>15]);
 
 <code class="php" data-title="if-else"><!--
 <if code="$var == 1">
-  <p>1です</p>
+  <p>1の時に表示</p>
 <elseif code="$var == 2">
-  <p>2です</p>
+  <p>2の時に表示</p>
 <else>
-  <p>それ以外です</p>
+  <p>それ以外の時に表示</p>
 </if>
 --></code>
 
 <code class="php" data-title="php"><!--
-<?php 'PHPを直接書く' ?>
+<?php print 'PHPを直接書く' ?>
 --></code>
 
 
