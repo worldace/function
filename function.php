@@ -1475,6 +1475,184 @@ class SQLite{
 
 
 
+class kvs implements Countable{
+    private $pdo;
+
+
+    function __construct($file){
+        $file_exists = file_exists($file);
+        $this->pdo   = new \PDO("sqlite:$file");
+        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+
+        if(!$file_exists){
+            $this->pdo->query('create table db (id integer not null primary key autoincrement, key text unique not null, value text not null)');
+            $this->pdo->query('create index dbindex on db (key)');
+        }
+    }
+
+
+    function read(string $key){
+        $stmt   = $this->pdo->prepare("select value from db where key = ?");
+        $result = $stmt->execute([$key]);
+        return $result ? json_decode($stmt->fetchColumn()) : null;
+    }
+
+
+    function reads(int $offset, int $length, $where = '', $bind = []){
+        $order = 'desc';
+        if($offset < 0){
+            $offset = -$offset - 1;
+            $order = 'asc';
+        }
+        $stmt   = $this->pdo->prepare("select * from db $where order by id $order limit $length offset $offset");
+        $result = $stmt->execute($bind);
+
+        $data = [];
+        foreach($stmt->fetchAll(PDO::FETCH_NUM) as $v){
+            $data[$v[1]] = json_decode($v[2]);
+        }
+        return $data;
+    }
+
+
+    function search(string $word, int $offset, int $length){
+        $words = preg_split('/[[:space:]]+/u', $word);
+        $words = array_filter($words, 'strlen');
+
+        if(!$words){
+            return [];
+        }
+
+        foreach($words as $v){
+            $like[]  = ' value like ? ';
+            $bind[] = '%' . addcslashes($v, '\\_%') . '%';
+        }
+
+        return $this->reads($offset, $length, 'where '.implode($like,'or'), $bind);
+    }
+
+
+    function create(string $key, $value){
+        $stmt = $this->pdo->prepare('insert into db (key, value) values (?, ?)');
+        return $stmt->execute([$key, json_encode($value, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE)]);
+    }
+
+
+    function update(string $key, $value){
+        $stmt = $this->pdo->prepare("update db set value = ? where key = ?");
+        return $stmt->execute([json_encode($value, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE), $key]);
+    }
+
+
+    function delete(string $key){
+        $stmt = $this->pdo->prepare("delete from db where key = ?");
+        return $stmt->execute([$key]);
+    }
+
+
+    function count(){
+        return $this->pdo->query('select count (*) from db')->fetchColumn();
+    }
+
+
+    function has(string $key){
+        $stmt   = $this->pdo->prepare("select exists (select * from db where key = ?)");
+        $result = $stmt->execute([$key]);
+        return (bool)$stmt->fetchColumn();
+    }
+}
+
+
+
+class ivs implements Countable{
+    private $pdo;
+
+
+    function __construct($file){
+        $file_exists = file_exists($file);
+        $this->pdo   = new \PDO("sqlite:$file");
+        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+
+        if(!$file_exists){
+            $this->pdo->query('create table db (id integer not null primary key autoincrement, value text not null)');
+        }
+    }
+
+
+    function read(int $key){
+        $stmt   = $this->pdo->prepare("select value from db where id = ?");
+        $result = $stmt->execute([$key]);
+        return $result ? json_decode($stmt->fetchColumn()) : null;
+    }
+
+
+    function reads(int $offset, int $length, $where = '', $bind = []){
+        $order = 'desc';
+        if($offset < 0){
+            $offset = -$offset - 1;
+            $order = 'asc';
+        }
+        $stmt   = $this->pdo->prepare("select * from db $where order by id $order limit $length offset $offset");
+        $result = $stmt->execute($bind);
+
+        $data = [];
+        foreach($stmt->fetchAll(PDO::FETCH_NUM) as $v){
+            $data[(string)$v[0]] = json_decode($v[1]);
+        }
+        return $data;
+    }
+
+
+    function search(string $word, int $offset, int $length){
+        $words = preg_split('/[[:space:]]+/u', $word);
+        $words = array_filter($words, 'strlen');
+
+        if(!$words){
+            return [];
+        }
+
+        foreach($words as $v){
+            $like[]  = ' value like ? ';
+            $bind[] = '%' . addcslashes($v, '\\_%') . '%';
+        }
+
+        return $this->reads($offset, $length, 'where '.implode($like,'or'), $bind);
+    }
+
+
+    function create($value){
+        $stmt   = $this->pdo->prepare('insert into db (value) values (?)');
+        $result = $stmt->execute([json_encode($value, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE)]);
+        return $result ? $this->pdo->lastInsertId() : false;
+    }
+
+
+    function update(int $key, $value){
+        $stmt = $this->pdo->prepare("update db set value = ? where id = ?");
+        return $stmt->execute([json_encode($value, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE), $key]);
+    }
+
+
+    function delete(int $key){
+        $stmt = $this->pdo->prepare("delete from db where id = ?");
+        return $stmt->execute([$key]);
+    }
+
+
+    function count(){
+        return $this->pdo->query('select count (*) from db')->fetchColumn();
+    }
+
+
+    function has(int $key){
+        $stmt   = $this->pdo->prepare("select exists (select * from db where id = ?)");
+        $result = $stmt->execute([$key]);
+        return (bool)$stmt->fetchColumn();
+    }
+}
+
+
+
 class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domdocument.php
 
     function __construct($str = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
