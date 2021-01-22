@@ -1476,7 +1476,7 @@ class SQLite{
 
 
 class kvs implements Countable{
-    private $pdo;
+    public $pdo;
 
 
     function __construct($file){
@@ -1502,7 +1502,7 @@ class kvs implements Countable{
         $order = 'desc';
         if($offset < 0){
             $offset = -$offset - 1;
-            $order = 'asc';
+            $order  = 'asc';
         }
         $stmt   = $this->pdo->prepare("select * from db $where order by id $order limit $length offset $offset");
         $result = $stmt->execute($bind);
@@ -1560,12 +1560,20 @@ class kvs implements Countable{
         $result = $stmt->execute([$key]);
         return (bool)$stmt->fetchColumn();
     }
+
+
+    function transaction(callable $fn, ...$args){
+        $this->pdo->beginTransaction();
+        $result = $fn($this, ...$args);
+        $result !== false ? $this->pdo->commit() : $this->pdo->rollBack();
+        return $result;
+    }
 }
 
 
 
 class ivs implements Countable{
-    private $pdo;
+    public $pdo;
 
 
     function __construct($file){
@@ -1590,14 +1598,14 @@ class ivs implements Countable{
         $order = 'desc';
         if($offset < 0){
             $offset = -$offset - 1;
-            $order = 'asc';
+            $order  = 'asc';
         }
         $stmt   = $this->pdo->prepare("select * from db $where order by id $order limit $length offset $offset");
         $result = $stmt->execute($bind);
 
         $data = [];
         foreach($stmt->fetchAll(PDO::FETCH_NUM) as $v){
-            $data[(string)$v[0]] = json_decode($v[1]);
+            $data[$v[0]] = json_decode($v[1]);
         }
         return $data;
     }
@@ -1648,6 +1656,14 @@ class ivs implements Countable{
         $stmt   = $this->pdo->prepare("select exists (select * from db where id = ?)");
         $result = $stmt->execute([$key]);
         return (bool)$stmt->fetchColumn();
+    }
+
+
+    function transaction(callable $fn, ...$args){
+        $this->pdo->beginTransaction();
+        $result = $fn($this, ...$args);
+        $result !== false ? $this->pdo->commit() : $this->pdo->rollBack();
+        return $result;
     }
 }
 

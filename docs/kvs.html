@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>kvsクラス</title>
+<link href="style.css" rel="stylesheet">
+<script src="script.js"></script>
+</head>
+
+<body>
+
+<article>
+<header>
+<h1>kvsクラス</h1>
+<nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
+</header>
+<div id="contents">
+
+<p>key-value形式のデータベース。連想配列型<br>
+保存にはSQLiteを使用し、1ファイル＝1テーブル。値はJSONで保存します。</p>
+
+
+
+<h2>new</h2>
+<p>データベースに接続する</p>
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+データベースファイルのパス。<br>
+ファイルが存在しなければ、ファイルが作成されます。
+</td></tr>
+<tr class="return"><td>戻</td><td>
+kvsオブジェクト
+</td></tr>
+</table>
+
+<code class="php"><!--
+$db = new kvs('./example.db'); //ファイルパスを渡す
+--></code>
+<p class="info-blue">index-value形式のデータベース「<a href="ivs.html">ivsクラス</a>」もあります</p>
+
+<h2>read</h2>
+<p>レコードを1件取得する。</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+取得するキー名
+</td></tr>
+<tr class="return"><td>戻</td><td>
+成功したら値を返します。失敗ならnull
+</td></tr>
+</table>
+
+<code class="php" data-title="レコードを1件取得"><!--
+$db->read('キー名');
+--></code>
+
+<h2>reads</h2>
+<p>レコードを複数件取得する。</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+開始位置。0で最新、-1で最古
+</td></tr>
+<tr class="require"><td>2</td><td>
+取得件数
+</td></tr>
+<tr class="return"><td>戻</td><td>
+連想配列<br>取得できなかった場合は空配列(falsy)
+</td></tr>
+</table>
+
+<code class="php" data-title="最新のレコードを30件取得"><!--
+foreach($db->reads(0, 30) as $k => $v){
+    // $kはキー名、$vは値
+}
+
+--></code>
+
+
+<h2>search</h2>
+
+<p>文字列検索をする。</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+検索ワード。空白で区切るとOR検索
+</td></tr>
+<tr class="require"><td>2</td><td>
+開始位置。0で最新、-1で最古
+</td></tr>
+<tr class="require"><td>3</td><td>
+取得件数
+</td></tr>
+<tr class="return"><td>戻</td><td>
+連想配列<br>取得できなかった場合は空配列(falsy)
+</td></tr>
+</table>
+
+<code class="php" data-title="文字列検索"><!--
+foreach($db->search('検索文字', 0, 30) as $k => $v){
+    // $kはキー名、$vは値
+}
+--></code>
+
+
+
+<h2>create</h2>
+
+<p>レコードを1件追加する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+追加するキー名。一意であること。
+</td></tr>
+<tr class="require"><td>2</td><td>
+追加するデータ。JSONに変換できる形式(null以外)
+</td></tr>
+<tr class="return"><td>戻</td><td>
+成功したらtrue、失敗したらfalse
+</td></tr>
+</table>
+
+<code class="php" data-title="レコードを1件追加"><!--
+$db->create('キー名', $data);
+--></code>
+
+<p class="info-blue">キー名が既に存在する場合は、追加されずにfalseが返ります</p>
+
+
+<h2>update</h2>
+
+<p>レコードを1件更新する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+更新するキー名
+</td></tr><tr class="require"><td>2</td><td>
+更新するデータ。JSONに変換できる形式(null以外)
+</td></tr>
+<tr class="return"><td>戻</td><td>
+成功したらtrue、失敗したらfalse
+</td></tr>
+</table>
+
+<code class="php" data-title="レコードを1件更新"><!--
+$db->update('キー名', $data);
+--></code>
+
+<h2>delete</h2>
+
+<p>レコードを1件削除する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+削除するキー名
+</td></tr>
+<tr class="return"><td>戻</td><td>
+成功したらtrue、失敗したらfalse
+</td></tr>
+</table>
+
+<code class="php" data-title="レコードを1件削除"><!--
+$db->delete('キー名');
+--></code>
+
+
+
+
+
+
+
+<h2>has</h2>
+
+<p>データベースにキーが存在するか確認する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+キー名
+</td></tr>
+<tr class="return"><td>戻</td><td>
+キー名が存在すればtrue、存在しなければfalse
+</td></tr>
+</table>
+
+<code class="php" data-title="キーが存在するか確認"><!--
+$db->has('キー名');
+--></code>
+
+
+
+<h2>count</h2>
+
+<p>レコードの全件数を取得する。</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="noarg"><td>-</td><td>
+引数はありません
+</td></tr>
+<tr class="return"><td>戻</td><td>
+件数
+</td></tr>
+</table>
+
+<code class="php" data-title="全件数"><!--
+print $db->count();
+--></code>
+
+
+<h2>transaction</h2>
+<p>トランザクション処理を実行する。</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+<a href="https://www.php.net/manual/ja/language.types.callable.php" target="_blank">コールバック関数</a>。トランザクションを行う処理を記述する<br>
+失敗したら関数内でfalseを返してください。ロールバックされます
+</td></tr>
+<tr class="option"><td>2</td><td>
+コールバック関数に渡したい引数。第3引数以降にも続けて渡せます。
+</td></tr>
+<tr class="return"><td>戻</td><td>
+コールバック関数の戻り値がそのまま返ります
+</td></tr>
+</table>
+<code class="php" data-title="transaction"><!--
+$db->transaction(function($db){
+    //ここにトランザクションが必要な処理を記述する
+    //失敗したらfalseを返す
+});
+
+
+--></code>
+
+<p class="info-blue">コールバック関数の第一引数には当オブジェクトが渡されます。<br>
+コールバック関数に引数を渡したい場合は、use()を使うか、当メソッドの第二引数以降に渡します。</p>
+
+
+
+
+
+</div>
+</article>
+
+
+<script>
+table_of_contents()
+</script>
+
+</body>
+</html>
