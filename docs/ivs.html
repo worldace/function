@@ -165,7 +165,7 @@ $db->update($id番号, $data);
 更新するid番号
 </td></tr><tr class="require"><td>2</td><td>
 コールバック関数。第一引数にはid番号のデータが渡されます。<br>
-関数内で返したものが保存されます。保存したくない場合はfalseを返してください。
+コールバック関数内で返したものが保存されます。保存したくない場合はfalseを返してください。
 </td></tr>
 <tr class="option"><td>3</td><td>
 コールバック関数に渡したい引数。第4引数以降にも続けて渡せます。
@@ -255,7 +255,8 @@ print $db->count();
 <tr><th>引数</th><th>説明</th></tr>
 <tr class="require"><td>1</td><td>
 <a href="https://www.php.net/manual/ja/language.types.callable.php" target="_blank">コールバック関数</a>。トランザクションを行う処理を記述する<br>
-失敗したら関数内でfalseを返してください。ロールバックされます
+コールバック関数の第一引数には当オブジェクトが渡されます。<br>
+コールバック関数内でfalseを返すとロールバックされます
 </td></tr>
 <tr class="option"><td>2</td><td>
 コールバック関数に渡したい引数。第3引数以降にも続けて渡せます。
