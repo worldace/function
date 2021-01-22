@@ -1363,7 +1363,7 @@ class SQLite{
         foreach($data as $k => $v){
             $sql_create[] = "`$k` $v";
         }
-        $sql = sprintf('create table if not exists `%s` (%s)', $this->table, implode($sql_create, ','));
+        $sql = sprintf('create table if not exists `%s` (%s)', $this->table, implode(',', $sql_create));
         $this->query($sql);
     }
 
@@ -1380,7 +1380,7 @@ class SQLite{
             $sql_holder[] = '?';
         }
 
-        $sql = sprintf('insert into `%s` (%s) values (%s)', $this->table, implode($sql_keys, ','), implode($sql_holder, ','));
+        $sql = sprintf('insert into `%s` (%s) values (%s)', $this->table, implode(',', $sql_keys), implode(',', $sql_holder));
         $this->query($sql, array_values($data));
 
         return $this->pdo->lastInsertId();
@@ -1391,7 +1391,7 @@ class SQLite{
         foreach($data as $k => $v){
             $sql_set[] = "`$k` = ?";
         }
-        $sql = sprintf('update `%s` set %s where id = %s', $this->table, implode($sql_set, ','), $id);
+        $sql = sprintf('update `%s` set %s where id = %s', $this->table, implode(',', $sql_set), $id);
         $this->query($sql, array_values($data));
     }
 
@@ -1429,7 +1429,7 @@ class SQLite{
 
         foreach($words as $v){
             $bind[]     = sprintf('%%%s%%', addcslashes($v, '\\_%'));
-            $sql_like[] = sprintf('((%s) like ?)', implode($keys, '||'));
+            $sql_like[] = sprintf('((%s) like ?)', implode('||', $keys));
         }
 
         $sql = sprintf('select * from `%s` where %s order by id desc limit %s offset %s', $this->table, implode($sql_like, ' or '), $length, $start);
@@ -1528,7 +1528,7 @@ class kvs implements Countable{
             $bind[] = '%' . addcslashes($v, '\\_%') . '%';
         }
 
-        return $this->reads($offset, $length, 'where '.implode($like,'or'), $bind);
+        return $this->reads($offset, $length, 'where '.implode('or',$like), $bind);
     }
 
 
@@ -1620,11 +1620,11 @@ class ivs implements Countable{
         }
 
         foreach($words as $v){
-            $like[]  = ' value like ? ';
+            $like[] = ' value like ? ';
             $bind[] = '%' . addcslashes($v, '\\_%') . '%';
         }
 
-        return $this->reads($offset, $length, 'where '.implode($like,'or'), $bind);
+        return $this->reads($offset, $length, 'where '.implode('or',$like), $bind);
     }
 
 
