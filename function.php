@@ -1568,6 +1568,30 @@ class kvs implements Countable{
         $result !== false ? $this->pdo->commit() : $this->pdo->rollBack();
         return $result;
     }
+
+
+    function edit(string $key, callable $fn, ...$args){
+        $this->pdo->beginTransaction();
+
+        $contents = $this->read($key);
+        if($contents === null){
+            goto error;
+        }
+
+        $value = $fn($contents, ...$args);
+        if($value === false or $value === null){
+            goto error;
+        }
+
+        if($this->update($key, $value)){
+            $this->pdo->commit();
+            return $value;
+        }
+
+        error:
+        $this->pdo->rollBack();
+        return false;
+    }
 }
 
 
@@ -1664,6 +1688,30 @@ class ivs implements Countable{
         $result = $fn($this, ...$args);
         $result !== false ? $this->pdo->commit() : $this->pdo->rollBack();
         return $result;
+    }
+
+
+    function edit(int $key, callable $fn, ...$args){
+        $this->pdo->beginTransaction();
+
+        $contents = $this->read($key);
+        if($contents === null){
+            goto error;
+        }
+
+        $value = $fn($contents, ...$args);
+        if($value === false or $value === null){
+            goto error;
+        }
+
+        if($this->update($key, $value)){
+            $this->pdo->commit();
+            return $value;
+        }
+
+        error:
+        $this->pdo->rollBack();
+        return false;
     }
 }
 

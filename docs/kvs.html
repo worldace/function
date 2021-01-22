@@ -131,7 +131,7 @@ foreach($db->reads(0, 30) as $k => $v){
 </table>
 
 <code class="php" data-title="文字列検索"><!--
-foreach($db->search('検索文字', 0, 30) as $k => $v){
+foreach($db->search('検索ワード', 0, 30) as $k => $v){
     // $kはキー名、$vは値
 }
 --></code>
@@ -157,6 +157,37 @@ foreach($db->search('検索文字', 0, 30) as $k => $v){
 <code class="php" data-title="レコードを1件更新"><!--
 $db->update('キー名', $data);
 --></code>
+
+
+
+<h2>edit</h2>
+
+<p>レコードを1件取得し更新する。トランザクション付き</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+更新するキー名
+</td></tr><tr class="require"><td>2</td><td>
+コールバック関数。第一引数にはキー名のデータが渡されます。<br>
+関数内で返したものが保存されます。保存したくない場合はfalseを返してください。
+</td></tr>
+<tr class="option"><td>3</td><td>
+コールバック関数に渡したい引数。第4引数以降にも続けて渡せます。
+</td></tr>
+<tr class="return"><td>戻</td><td>
+コールバック関数の戻り値がそのまま返ります。<br>
+失敗時はfalse
+</td></tr>
+</table>
+
+<code class="php" data-title="レコードを1件更新"><!--
+$db->edit('キー名', function($value){
+    // ここで$valueを編集する
+    return $value; // $valueが保存される
+});
+--></code>
+
 
 <h2>delete</h2>
 
