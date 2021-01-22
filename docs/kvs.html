@@ -40,6 +40,35 @@ $db = new kvs('./example.db'); //ファイルパスを渡す
 --></code>
 <p class="info-blue">index-value形式のデータベース「<a href="ivs.html">ivsクラス</a>」もあります</p>
 
+
+
+
+
+<h2>create</h2>
+
+<p>レコードを1件追加する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+追加するキー名。一意であること。
+</td></tr>
+<tr class="require"><td>2</td><td>
+追加するデータ。JSONに変換できる形式(null以外)
+</td></tr>
+<tr class="return"><td>戻</td><td>
+成功したらtrue、失敗したらfalse
+</td></tr>
+</table>
+
+<code class="php" data-title="レコードを1件追加"><!--
+$db->create('キー名', $data);
+--></code>
+
+<p class="info-blue">キー名が既に存在する場合は、追加されずにfalseが返ります</p>
+
+
+
 <h2>read</h2>
 <p>レコードを1件取得する。</p>
 
@@ -107,30 +136,6 @@ foreach($db->search('検索文字', 0, 30) as $k => $v){
 }
 --></code>
 
-
-
-<h2>create</h2>
-
-<p>レコードを1件追加する</p>
-
-<table class="function">
-<tr><th>引数</th><th>説明</th></tr>
-<tr class="require"><td>1</td><td>
-追加するキー名。一意であること。
-</td></tr>
-<tr class="require"><td>2</td><td>
-追加するデータ。JSONに変換できる形式(null以外)
-</td></tr>
-<tr class="return"><td>戻</td><td>
-成功したらtrue、失敗したらfalse
-</td></tr>
-</table>
-
-<code class="php" data-title="レコードを1件追加"><!--
-$db->create('キー名', $data);
---></code>
-
-<p class="info-blue">キー名が既に存在する場合は、追加されずにfalseが返ります</p>
 
 
 <h2>update</h2>

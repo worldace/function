@@ -40,6 +40,30 @@ $db = new ivs('./example.db'); //ファイルパスを渡す
 --></code>
 <p class="info-blue">key-value形式のデータベース「<a href="kvs.html">kvsクラス</a>」もあります</p>
 
+
+
+
+<h2>create</h2>
+
+<p>レコードを1件追加する</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="require"><td>1</td><td>
+追加するデータ。JSONに変換できる形式(null以外)
+</td></tr>
+<tr class="return"><td>戻</td><td>
+成功したら登録されたid番号を返します。1以上の一意の整数です。<br>
+失敗したらfalse
+</td></tr>
+</table>
+
+<code class="php" data-title="レコードを1件追加"><!--
+$db->create($data);
+--></code>
+
+
+
 <h2>read</h2>
 <p>レコードを1件取得する。</p>
 
@@ -108,25 +132,6 @@ foreach($db->search('検索文字', 0, 30) as $k => $v){
 --></code>
 
 
-
-<h2>create</h2>
-
-<p>レコードを1件追加する</p>
-
-<table class="function">
-<tr><th>引数</th><th>説明</th></tr>
-<tr class="require"><td>1</td><td>
-追加するデータ。JSONに変換できる形式(null以外)
-</td></tr>
-<tr class="return"><td>戻</td><td>
-成功したら登録されたid番号を返します。1以上の整数です。<br>
-失敗したらfalse
-</td></tr>
-</table>
-
-<code class="php" data-title="レコードを1件追加"><!--
-$db->create($data);
---></code>
 
 
 
