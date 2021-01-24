@@ -1562,6 +1562,11 @@ class kvs implements Countable{
     }
 
 
+    function keys(){
+        return $this->pdo->query("select key from db order by id desc")->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+
     function transaction(callable $fn, ...$args){
         $this->pdo->beginTransaction();
         $result = $fn($this, ...$args);

@@ -232,6 +232,27 @@ $db->has('キー名');
 --></code>
 
 
+<h2>keys</h2>
+
+<p>レコードの全キーを取得する。</p>
+
+<table class="function">
+<tr><th>引数</th><th>説明</th></tr>
+<tr class="noarg"><td>-</td><td>
+引数はありません
+</td></tr>
+<tr class="return"><td>戻</td><td>
+配列。最新順
+</td></tr>
+</table>
+
+<code class="php" data-title="全キー"><!--
+foreach($db->keys() as $k){ // 全キーを表示する
+    print "$k\n";
+}
+--></code>
+
+
 
 <h2>count</h2>
 
