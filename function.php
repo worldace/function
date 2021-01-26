@@ -1485,8 +1485,9 @@ class kvs implements Countable{
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
         if(!$file_exists){
-            $this->pdo->query('create table db (id integer not null primary key autoincrement, key text unique not null, value text not null)');
-            $this->pdo->query('create index dbindex on db (key)');
+            $this->pdo->query("create table db (id integer not null primary key autoincrement, key text unique not null, value text not null, created_at text not null default (datetime('now', 'localtime')), updated_at text not null default (datetime('now', 'localtime')))");
+            $this->pdo->query('create index db_index on db (key)');
+            $this->pdo->query("create trigger db_trigger after update on db begin update db set updated_at = datetime('now', 'localtime') where rowid == new.rowid; end");
         }
     }
 
@@ -1611,7 +1612,8 @@ class ivs implements Countable{
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
         if(!$file_exists){
-            $this->pdo->query('create table db (id integer not null primary key autoincrement, value text not null)');
+            $this->pdo->query("create table db (id integer not null primary key autoincrement, value text not null, created_at text not null default (datetime('now', 'localtime')), updated_at text not null default (datetime('now', 'localtime')))");
+            $this->pdo->query("create trigger db_trigger after update on db begin update db set updated_at = datetime('now', 'localtime') where rowid == new.rowid; end");
         }
     }
 
