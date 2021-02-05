@@ -2483,6 +2483,145 @@ class printer_item{
 
 
 
+class markdownj{
+
+    function __construct($sourse){
+        $this->html = $sourse;
+        $this->html = preg_replace_callback(['/(【)(.+?)】/u', '/(「)(.+?)」/u'], 'self::inline', $this->html);
+        $this->html = $this->block($this->html);
+    }
+
+
+    static function inline($m){
+        if($m[1] === '【'){
+            $url = explode('：', $m[2]);
+            $url[1] ??= './' . $url[0];
+            return preg_match('|^https?://|', $url[1]) ? "<a href=\"$url[1]\" target=\"_blank\">$url[0]</a>" : "<a href=\"$url[1]\">$url[0]</a>";
+        }
+        else if($m[1] === '「'){
+            return $m[2];
+        }
+    }
+
+
+    function block($sourse){
+        $html = '';
+        $type = '';
+        $text = [];
+
+        foreach(preg_split("/\r?\n/", $sourse."\n") as $v){
+            $text[] = $v;
+            $symbol = mb_substr($v, 0, 1);
+
+            if($v === ''){
+                if(!$type){
+                    array_pop($text);
+                    continue;
+                }
+                else if($type === 'pre-start'){
+                    continue;
+                }
+                else{
+                    array_pop($text);
+                    $html .= $this->$type($text);
+                    $type = '';
+                    $text = [];
+                }
+            }
+            else if($symbol === '＃'){
+                $type = 'h';
+            }
+            else if($symbol === '｜'){
+                $type = 'table';
+            }
+            else if($symbol === '・'){
+                $type = 'ul';
+            }
+            else if($symbol === '＞'){
+                $type = 'blockquote';
+            }
+            else if($symbol === '；'){
+                array_pop($text);
+            }
+            else if($symbol === '‘' and strpos($v, '‘‘‘') === 0){
+                $type = ($type !== 'pre-start') ? 'pre-start' : 'pre';
+            }
+            else if(preg_match('/^[１-９]/u', $symbol)){
+                $type = 'ol';
+            }
+            else if(!in_array($type, ['pre-start','ol','ul'])){
+                $type = 'p';
+            }
+        }
+        return $html;
+    }
+
+
+    function h($text){
+        preg_match('/^(＃+)(.*)$/u', $text[0], $m);
+        $tag = 'h' . mb_strlen($m[1]);
+        return "<$tag>$m[2]</$tag>\n";
+    }
+
+
+    function p($text){
+        return "<p>".implode("<br>",$text)."</p>\n";
+    }
+
+
+    function pre($text){
+        array_pop($text);
+        array_shift($text);
+        return "<pre>".implode("\n", $text)."</pre>\n";
+    }
+
+
+    function blockquote($text){
+        foreach($text as $i => $v){
+            $text[$i] = ltrim($v, '＞');
+        }
+        return "<blockquote>".implode("<br>\n", $text)."</blockquote>\n";
+    }
+
+
+    function ol($text){
+        foreach($text as $i => $v){
+            $text[$i] = "<li>" . preg_replace('/^[１-９]+/u', '', $v) . "</li>\n";
+        }
+        return "<ol>\n".implode("", $text)."</ol>\n";
+    }
+
+
+    function ul($text){
+        foreach($text as $i => $v){
+            $text[$i] = "<li>" . preg_replace('/^・/u', '', $v) . "</li>\n";
+        }
+        return "<ul>\n".implode("", $text)."</ul>\n";
+    }
+
+
+    function table($text){
+        foreach($text as $i => $v){
+            $v = preg_replace('/｜\s*$/u', '', $v);
+            $text[$i] = "<tr>".preg_replace_callback('/(｜＃?)/u', 'self::table_td', $v)."</tr>\n";
+        }
+        return "<table>\n".implode("", $text)."</table>\n";
+    }
+
+
+    static function table_td($m){
+        return $m[1] === '｜' ? '<td>' : '<th>';
+    }
+
+
+    function __toString(){
+        return $this->html;
+    }
+}
+
+
+
+
 trait immutable{
     private $property = [];
 
