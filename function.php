@@ -2484,6 +2484,27 @@ class printer_item{
 
 
 class markdownj{
+    private const ATTR = [
+        '太い'  => 'font-weight:bold',
+        '大きい'=> 'font-size:150%',
+        '小さい'=> 'font-size:75%',
+        '下線'  => 'text-decolation:underline solid',
+        '点線'  => 'text-decolation:underline dotted red',
+        '波線'  => 'text-decolation:underline wavy red',
+        '赤'    => 'color:red',
+        '青'    => 'color:blue',
+        '緑'    => 'color:green',
+        '黄色'  => 'color:yellow',
+        '灰色'  => 'color:gray',
+        '茶色'  => 'color:brown',
+        'オレンジ'=> 'color:orange',
+        'ピンク'=> 'color:pink',
+        '紫'    => 'color:purple',
+        '金'    => 'color:gold',
+        '銀'    => 'color:silver',
+        '黒'    => 'color:black',
+        '白'    => 'color:white',
+    ];
 
     function __construct($sourse){
         $this->html = $sourse;
@@ -2499,7 +2520,31 @@ class markdownj{
             return preg_match('|^https?://|', $url[1]) ? "<a href=\"$url[1]\" target=\"_blank\">$url[0]</a>" : "<a href=\"$url[1]\">$url[0]</a>";
         }
         else if($m[1] === '「'){
-            return $m[2];
+            $attr = explode('：', $m[2]);
+            $text = array_shift($attr);
+            if(!count($attr)){
+                return "「$text」";
+            }
+            $style = [];
+            $tag   = 'span';
+            foreach($attr as $v){
+                if(isset(self::ATTR[$v])){
+                    $style[] = self::ATTR[$v];
+                }
+                else if($v === '上付き'){
+                    $tag = 'sup';
+                }
+                else if($v === '下付き'){
+                    $tag = 'sub';
+                }
+                else if($v === '削除'){
+                    $tag = 'del';
+                }
+                else if($v === '強調'){
+                    $tag = 'em';
+                }
+            }
+            return "<$tag style=\"".implode(';', $style)."\">$text</$tag>";
         }
     }
 
