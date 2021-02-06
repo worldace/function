@@ -2484,45 +2484,61 @@ class printer_item{
 
 
 class markdownj{
-    private const ATTR = [
-        '太い'    => 'font-weight:bold',
-        '大きい'  => 'font-size:150%',
-        '小さい'  => 'font-size:75%',
-        '下線'    => 'text-decolation:underline solid',
-        '点線'    => 'text-decolation:underline dotted red',
-        '波線'    => 'text-decolation:underline wavy red',
-        '赤'      => 'color:red',
-        '青'      => 'color:blue',
-        '緑'      => 'color:green',
-        '黄色'    => 'color:yellow',
-        '灰色'    => 'color:gray',
-        '茶色'    => 'color:brown',
-        'オレンジ'=> 'color:orange',
-        'ピンク'  => 'color:pink',
-        '紫'      => 'color:purple',
-        '金'      => 'color:gold',
-        '銀'      => 'color:silver',
-        '黒'      => 'color:black',
-        '白'      => 'color:white',
-        '背景赤'      => 'background-color:red',
-        '背景青'      => 'background-color:blue',
-        '背景緑'      => 'background-color:green',
-        '背景黄色'    => 'background-color:yellow',
-        '背景灰色'    => 'background-color:gray',
-        '背景茶色'    => 'background-color:brown',
-        '背景オレンジ'=> 'background-color:orange',
-        '背景ピンク'  => 'background-color:pink',
-        '背景紫'      => 'background-color:purple',
-        '背景金'      => 'background-color:gold',
-        '背景銀'      => 'background-color:silver',
-        '背景黒'      => 'background-color:black',
-        '背景白'      => 'background-color:white',
-        'マーカー'      =>'background:linear-gradient(transparent 60%, #ff6 60%)',
-        'マーカー黄色'  =>'background:linear-gradient(transparent 60%, #ff6 60%)',
-        'マーカー青'    =>'background:linear-gradient(transparent 60%, #6cf 60%)',
-        'マーカー緑'    =>'background:linear-gradient(transparent 60%, #6f6 60%)',
-        'マーカーピンク'=>'background:linear-gradient(transparent 60%, #f6c 60%)',
+    private const STYLE = [
+        '太い',
+        '大きい',
+        '小さい',
+        '下線',
+        '点線',
+        '波線',
+        '赤',
+        '青',
+        '緑',
+        '黄色',
+        '灰色',
+        '茶色',
+        'オレンジ',
+        'ピンク',
+        '紫',
+        '金',
+        '銀',
+        '黒',
+        '白',
+        '背景赤',
+        '背景青',
+        '背景緑',
+        '背景黄色',
+        '背景灰色',
+        '背景茶色',
+        '背景オレンジ',
+        '背景ピンク',
+        '背景紫',
+        '背景金',
+        '背景銀',
+        '背景黒',
+        '背景白',
+        'マーカー',
+        'マーカー黄色',
+        'マーカー青',
+        'マーカー緑',
+        'マーカーピンク',
    ];
+
+    private $count = [
+        'h'    => 0,
+        'h1'   => 0,
+        'h2'   => 0,
+        'h3'   => 0,
+        'h4'   => 0,
+        'h5'   => 0,
+        'h6'   => 0,
+        'ul'   => 0,
+        'ol'   => 0,
+        'table'=> 0,
+        'pre'  => 0,
+        'p'    => 0,
+        'blockquote' => 0,
+    ];
 
     function __construct($sourse){
         $this->html = $sourse;
@@ -2546,8 +2562,8 @@ class markdownj{
             $style = [];
             $tag   = 'span';
             foreach($attr as $v){
-                if(isset(self::ATTR[$v])){
-                    $style[] = self::ATTR[$v];
+                if(in_array($v, self::STYLE, true)){
+                    $style[] = $v;
                 }
                 else if($v === '上付き'){
                     $tag = 'sup';
@@ -2561,8 +2577,11 @@ class markdownj{
                 else if($v === '強調'){
                     $tag = 'em';
                 }
+                else if($v === 'コード'){
+                    $tag = 'code';
+                }
             }
-            return "<$tag style=\"".implode(';', $style)."\">$text</$tag>";
+            return "<$tag class=\"".implode(' ', $style)."\">$text</$tag>";
         }
     }
 
@@ -2586,6 +2605,7 @@ class markdownj{
                 }
                 else{
                     array_pop($text);
+                    $this->count[$type]++;
                     $html .= $this->$type($text);
                     $type = '';
                     $text = [];
@@ -2623,19 +2643,20 @@ class markdownj{
     function h($text){
         preg_match('/^(＃+)(.*)$/u', $text[0], $m);
         $tag = 'h' . mb_strlen($m[1]);
-        return "<$tag>$m[2]</$tag>\n";
+        $this->count[$tag]++;
+        return "<$tag id=\"{$tag}_{$this->count[$tag]}\">$m[2]</$tag>\n";
     }
 
 
     function p($text){
-        return "<p>".implode("<br>",$text)."</p>\n";
+        return "<p id=\"p_{$this->count['p']}\">".implode("<br>\n",$text)."</p>\n";
     }
 
 
     function pre($text){
         array_pop($text);
         array_shift($text);
-        return "<pre>".implode("\n", $text)."</pre>\n";
+        return "<pre id=\"pre_{$this->count['pre']}\">".implode("\n", $text)."</pre>\n";
     }
 
 
@@ -2643,7 +2664,7 @@ class markdownj{
         foreach($text as $i => $v){
             $text[$i] = ltrim($v, '＞');
         }
-        return "<blockquote>".implode("<br>\n", $text)."</blockquote>\n";
+        return "<blockquote id=\"blockquote_{$this->count['blockquote']}\">".implode("<br>\n", $text)."</blockquote>\n";
     }
 
 
@@ -2651,7 +2672,7 @@ class markdownj{
         foreach($text as $i => $v){
             $text[$i] = "<li>" . preg_replace('/^[１-９]+/u', '', $v) . "</li>\n";
         }
-        return "<ol>\n".implode("", $text)."</ol>\n";
+        return "<ol id=\"ol_{$this->count['ol']}\">\n".implode("", $text)."</ol>\n";
     }
 
 
@@ -2659,7 +2680,7 @@ class markdownj{
         foreach($text as $i => $v){
             $text[$i] = "<li>" . preg_replace('/^・/u', '', $v) . "</li>\n";
         }
-        return "<ul>\n".implode("", $text)."</ul>\n";
+        return "<ul id=\"ul_{$this->count['ul']}\">\n".implode("", $text)."</ul>\n";
     }
 
 
@@ -2668,7 +2689,7 @@ class markdownj{
             $v = preg_replace('/｜\s*$/u', '', $v);
             $text[$i] = "<tr>".preg_replace_callback('/(｜＃?)/u', 'self::table_td', $v)."</tr>\n";
         }
-        return "<table>\n".implode("", $text)."</table>\n";
+        return "<table id=\"table_{$this->count['table']}\">\n".implode("", $text)."</table>\n";
     }
 
 
