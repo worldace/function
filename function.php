@@ -2133,17 +2133,18 @@ class template{
     }
 
     function compile(){
-        $re = ['/(\{\{)(.+?)\}\}/s', '/<(if|elseif|foreach|) code="(.+?)">/s', '/<(\/)(if|foreach)>/', '/<(else)>/'];
+        $re = ['/(\{\{)(.+?)\}\}/s', '/<(if|elseif|else|foreach|\/if|\/foreach)( code="(.+?)")*>/s'];
         return preg_replace_callback($re, 'self::callback', file_get_contents($this->tempLate));
     }
 
     private static function callback($m){
         switch($m[1]){
-            case 'if'      : return "<?php if($m[2]){ ?>";
-            case 'elseif'  : return "<?php } elseif($m[2]){ ?>";
+            case 'if'      : return "<?php if($m[3]){ ?>";
+            case 'elseif'  : return "<?php } elseif($m[3]){ ?>";
             case 'else'    : return "<?php } else{ ?>";
-            case 'foreach' : return "<?php foreach($m[2]){ ?>";
-            case '/'       : return '<?php } ?>';
+            case 'foreach' : return "<?php foreach($m[3]){ ?>";
+            case '/if'     : return '<?php } ?>';
+            case '/foreach': return '<?php } ?>';
             default        : return '<?='.trim($m[2]).'?>';
         }
     }
