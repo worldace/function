@@ -228,32 +228,35 @@ class response{
 
 
     static function jrpc(string $class) :void{
-        $js = json_decode(file_get_contents('php://input'));
 
-        if(!method_exists($class, $js->method) or strpos($js->method, '__') === 0){
-            $result = ['error' => "APIに'$js->method'は存在しません"];
-            goto response;
+        $json = json_decode(file_get_contents('php://input'));
+
+        if(!isset($json->fn) or strpos($json->fn, '__') === 0){
+            self::jrpc_error('不正なアクセスです。');
         }
 
-        foreach($js->base64 as $i){
-            $js->args[$i] = base64_decode($js->args[$i]);
+        foreach($json->base64 as $i){
+            $json->args[$i] = base64_decode($json->args[$i]);
         }
 
         try{
-            $result = ['result' => [new $class, $js->method](...$js->args)];
+            $result = [new $class, $json->fn](...$json->args);
         }
         catch(\Throwable $e){
-            $result = ['error' => $e->getMessage()];
+            self::jrpc_error($e->getMessage());
         }
 
-        response:
-        if(isset($_SERVER['HTTP_ORIGIN'])){
-            header('Access-Control-Allow-Origin:' . $_SERVER['HTTP_ORIGIN']);
-        }
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         print json_encode($result);
     }
 
+
+    static function jrpc_error($str){
+        http_response_code(400);
+        header('Content-Type: text/plain; charset=UTF-8');
+        print $str;
+        exit;
+    }
 }
 
 
