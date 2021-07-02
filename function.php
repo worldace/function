@@ -232,7 +232,8 @@ class response{
         $json = json_decode(file_get_contents('php://input'));
 
         if(!isset($json->fn) or strpos($json->fn, '__') === 0){
-            self::jrpc_error('不正なアクセスです。');
+            $error = '不正なアクセスです。';
+            goto response;
         }
 
         foreach($json->base64 as $i){
@@ -243,19 +244,20 @@ class response{
             $result = [new $class, $json->fn](...$json->args);
         }
         catch(\Throwable $e){
-            self::jrpc_error($e->getMessage());
+            $error = $e->getMessage();
         }
 
-        header('Content-Type: application/json; charset=UTF-8');
-        print json_encode($result);
-    }
 
-
-    static function jrpc_error($str){
-        http_response_code(400);
-        header('Content-Type: text/plain; charset=UTF-8');
-        print $str;
-        exit;
+        response:
+        if(isset($error)){
+            http_response_code(400);
+            header('Content-Type: text/plain; charset=UTF-8');
+            print $error;
+        }
+        else{
+            header('Content-Type: application/json; charset=UTF-8');
+            print json_encode($result);
+        }
     }
 }
 
