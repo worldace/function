@@ -228,35 +228,26 @@ class response{
 
 
     static function jrpc(string $class) :void{
-
-        $json = json_decode(file_get_contents('php://input'));
-
-        if(!isset($json->fn) or strpos($json->fn, '__') === 0){
-            $error = '不正なアクセスです。';
-            goto response;
-        }
-
-        foreach($json->base64 as $i){
-            $json->args[$i] = base64_decode($json->args[$i]);
-        }
-
         try{
+            $json = json_decode(file_get_contents('php://input'));
+
+            if(!isset($json->fn) or strpos($json->fn, '__') === 0){
+                throw new Exception('不正なアクセスです。');
+            }
+
+            foreach($json->base64 as $i){
+                $json->args[$i] = base64_decode($json->args[$i]);
+            }
+
             $result = [new $class, $json->fn](...$json->args);
-        }
-        catch(\Throwable $e){
-            $error = $e->getMessage();
-        }
 
-
-        response:
-        if(isset($error)){
-            http_response_code(400);
-            header('Content-Type: text/plain; charset=UTF-8');
-            print $error;
-        }
-        else{
             header('Content-Type: application/json; charset=UTF-8');
             print json_encode($result);
+        }
+        catch(Throwable $e){
+            http_response_code(400);
+            header('Content-Type: text/plain; charset=UTF-8');
+            print $e->getMessage();
         }
     }
 }
