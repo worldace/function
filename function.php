@@ -245,7 +245,6 @@ class response{
             print json_encode($result);
         }
         catch(Throwable $e){
-            http_response_code(400);
             header('Content-Type: text/plain; charset=UTF-8');
             print $e->getMessage();
         }
