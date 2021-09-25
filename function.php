@@ -291,6 +291,12 @@ class str{
     }
 
 
+    static function capture(string $str, string $regex){
+        preg_match($regex, $str, $match);
+        return $match[1] ?? null;
+    }
+
+
     static function replace_once(?string $str, string $needle, string $replace) :string{
         $needle = preg_quote($needle, '/');
         return preg_replace("/$needle/u", $replace, $str, 1);
