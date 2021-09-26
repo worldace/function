@@ -10,8 +10,8 @@
 
 
 <table id="menu">
-<tr><th colspan="6">function.php</th></tr>
-<!--
+<thead><tr><th colspan="6">function.php</th></tr></thead>
+<tbody><!--
 ivsクラス
 kvsクラス
 sqliteクラス
@@ -127,47 +127,33 @@ php::class_toString
 php::benchmark
 os::clipboard
 os::is_windows
---></table>
+--></tbody></table>
 
 
 <script>
-columnTable(document.querySelector("table"), function(td, content){
-    if(content){
-        var href = content.replace('クラス', '').replace('トレイト', '').replace('::', '-') + '.html';
-        td.insertAdjacentHTML('afterbegin', '<a href="' + href + '">' + content + '</a>');
-    }
-});
+const comment = Array.from(menu.tBodies[0].childNodes).find(v => v.nodeType === Node.COMMENT_NODE)
+menu.tBodies[0].innerHTML = textable(comment.textContent)
 
+function textable(text){
+    const items = text.trim().split('\n\n').map(v => v.split('\n'))
+    const max   = Math.max(...items.map(v => v.length))
+    let   html  = ''
 
-function columnTable(table, callback){
-    for(var i = 0; i < table.childNodes.length; i++){
-        if(table.childNodes[i].nodeType === Node.COMMENT_NODE){
-            var comment = table.childNodes[i];
-            break;
+    for(let y = 0; y < max; y++){
+        html += '<tr>'
+        for(let x = 0; x < items.length; x++){
+            if(items[x][y] != null){
+                const href = items[x][y].replace('クラス', '').replace('トレイト', '').replace('::', '-')
+                html += `<td><a href="${href}.html">${items[x][y]}</a></td>`
+            }
+            else{
+                html += `<td></td>`
+            }
         }
-        else if(table.childNodes[i].tagName === 'TBODY' && !comment){
-            return columnTable(table.childNodes[i], callback);
-        }
+        html += '</tr>'
     }
 
-    var array    = comment.textContent.trim().split(/\n{2,}/);
-    var fragment = document.createDocumentFragment();
-
-    for(var i = 0; i < array.length; i++){
-        array[i] = array[i].split("\n");
-        var max = Math.max(array[i].length, max || 1);
-    }
-
-    for(var i = 0; i < max; i++){
-        var tr = document.createElement('tr');
-        fragment.appendChild(tr);
-        for(var n = 0; n < array.length; n++){
-            var td = document.createElement('td');
-            tr.appendChild(td);
-            callback(td, array[n][i]);
-        }
-    }
-    comment.parentNode.replaceChild(fragment, comment);
+    return html
 }
 </script>
 
