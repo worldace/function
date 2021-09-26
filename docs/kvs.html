@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width">
 <title>kvsクラス</title>
 <link href="style.css" rel="stylesheet">
-<script src="script.js"></script>
 </head>
 
 <body>
@@ -20,6 +19,7 @@
 <p>key-value形式のデータベース。連想配列型<br>
 保存にはSQLiteを使用し、1ファイル＝1テーブル。値はJSONで保存します。</p>
 
+<my-index></my-index>
 
 
 <h2>new</h2>
@@ -310,9 +310,6 @@ $db->transaction(function($db){
 </article>
 
 
-<script>
-table_of_contents()
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>

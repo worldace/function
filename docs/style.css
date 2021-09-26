@@ -224,32 +224,6 @@ code[data-title]::before{
     color: #008000; /* 緑 */
 }
 
-/* table-of-contentsブロック ------------ */
-#table-of-contents{
-    display: inline-block;
-    border: solid 1px #bbb;
-    background-color: #f9f9f9;
-    border-radius: 3px;
-    min-width: 15rem;
-    position: relative;
-    margin: 1.5rem 0;
-    padding: 3rem 1rem 1rem 3rem;
-}
-#table-of-contents::before{
-    content: '目次';
-    letter-spacing: 0.3rem;
-    display: inline-block;
-    font-weight: bold;
-    color: #444;
-    position: absolute;
-    left: 50%;
-    top: 1rem;
-    transform: translateX(-50%);
-}
-#table-of-contents > li{
-    line-height: 1.45;
-}
-
 
 /* infoブロック ------------ */
 .info-blue{
