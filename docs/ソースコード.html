@@ -21,21 +21,17 @@
 </ul>
 
 
-<code class="php"></code>
+<code id="code" class="php"></code>
 
 
 </div>
 </article>
 
 <script>
-var xhr = new XMLHttpRequest();
-xhr.open("GET", "https://raw.githubusercontent.com/worldace/function/master/function.php");
-xhr.addEventListener("load", function(){
-    var code = document.querySelector("code");
-    code.textContent = xhr.responseText;
-    hljs.highlightBlock(code);
-});
-xhr.send();
+(async function(){
+    const response   = await fetch('https://raw.githubusercontent.com/worldace/function/master/function.php')
+    code.textContent = await response.text()
+})()
 </script>
 
 </body>
