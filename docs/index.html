@@ -132,23 +132,18 @@ os::is_windows
 
 <script>
 const comment = Array.from(menu.tBodies[0].childNodes).find(v => v.nodeType === Node.COMMENT_NODE)
-menu.tBodies[0].innerHTML = textable(comment.textContent)
+menu.tBodies[0].innerHTML = textable(comment.textContent.trim())
 
 function textable(text){
-    const items = text.trim().split('\n\n').map(v => v.split('\n'))
+    const items = text.split('\n\n').map(v => v.split('\n'))
     const max   = Math.max(...items.map(v => v.length))
     let   html  = ''
 
     for(let y = 0; y < max; y++){
         html += '<tr>'
         for(let x = 0; x < items.length; x++){
-            if(items[x][y] != null){
-                const href = items[x][y].replace('クラス', '').replace('トレイト', '').replace('::', '-')
-                html += `<td><a href="${href}.html">${items[x][y]}</a></td>`
-            }
-            else{
-                html += `<td></td>`
-            }
+            const href = items[x][y]?.replace('クラス', '').replace('トレイト', '').replace('::', '-')
+            html += href ? `<td><a href="${href}.html">${items[x][y]}</a></td>` : `<td></td>`
         }
         html += '</tr>'
     }
