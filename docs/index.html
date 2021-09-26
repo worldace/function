@@ -131,15 +131,14 @@ os::is_windows
 
 
 <script>
-const comment = Array.from(menu.tBodies[0].childNodes).find(v => v.nodeType === Node.COMMENT_NODE)
-menu.tBodies[0].innerHTML = textable(comment.textContent.trim())
+menu.tBodies[0].innerHTML = textable(menu.tBodies[0].firstChild.textContent.trim())
 
 function textable(text){
     const items = text.split('\n\n').map(v => v.split('\n'))
-    const max   = Math.max(...items.map(v => v.length))
+    const ymax  = Math.max(...items.map(v => v.length))
     let   html  = ''
 
-    for(let y = 0; y < max; y++){
+    for(let y = 0; y < ymax; y++){
         html += '<tr>'
         for(let x = 0; x < items.length; x++){
             const href = items[x][y]?.replace('クラス', '').replace('トレイト', '').replace('::', '-')
