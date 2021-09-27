@@ -33,7 +33,7 @@ JavaScriptからPHPのメソッドを実行する感覚のAPIが作れます</p>
 <h3>PHP側</h3>
 
 <p>準備としてクラスを作成します。このクラスのメソッドがAPIとなります。</p>
-<code class="php" data-title="PHP側"><!--
+<my-code class="php" data-title="PHP側"><!--
 class api{
     function plus($a, $b){
         return $a + $b;
@@ -41,7 +41,7 @@ class api{
 }
 
 response::jrpc('api');
---></code>
+--></my-code>
 <p class="info-red">引数は外部からの入力となるため、セキュリティに注意する必要があります</p>
 
 <p class="info-green">プライベートメソッド、マジックメソッド、静的メソッドはAPIとして実行できません</p>
@@ -51,18 +51,18 @@ response::jrpc('api');
 jsファイル内で<b>APIのURL</b>を設定する必要があります。</p>
 
 <p>JavaScript側ではPHPのメソッドを実行する感覚で書けます。戻り値は常に<var>Promise</var>です</p>
-<code class="js" data-title="JavaScript側"><!--
+<my-code class="js" data-title="JavaScript側"><!--
 import api from './jrpc.js'
 
 api.plus(1, 2).then(result => console.log(result)) // 3
---></code>
+--></my-code>
 
 <p class="info-yellow">jrpc.js は IE に対応していません</p>
 
 
 <h3>ファイル送信</h3>
 <p>APIの引数にはファイルを渡すことができます。</p>
-<code class="html" data-title="ファイル送信例"><!--
+<my-code class="html" data-title="ファイル送信例"><!--
 <input id="inputfile" type="file">
 
 <script type="module">
@@ -70,7 +70,7 @@ import api from './jrpc.js'
 
 inputfile.onchange = event => api.save_file(event.target.files[0])
 </script>
---></code>
+--></my-code>
 
 <p>PHP側では第1引数にファイルの内容が渡され、そのまま保存できます。</p>
 </div>

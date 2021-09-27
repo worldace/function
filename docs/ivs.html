@@ -35,9 +35,9 @@ ivsオブジェクト
 </td></tr>
 </table>
 
-<code class="php"><!--
+<my-code class="php"><!--
 $db = new ivs('./example.db'); //ファイルパスを渡す
---></code>
+--></my-code>
 <p class="info-blue">key-value形式のデータベース「<a href="kvs.html">kvsクラス</a>」もあります</p>
 
 
@@ -58,9 +58,9 @@ $db = new ivs('./example.db'); //ファイルパスを渡す
 </td></tr>
 </table>
 
-<code class="php" data-title="レコードを1件追加"><!--
+<my-code class="php" data-title="レコードを1件追加"><!--
 $db->create($data);
---></code>
+--></my-code>
 
 
 
@@ -77,9 +77,9 @@ $db->create($data);
 </td></tr>
 </table>
 
-<code class="php" data-title="レコードを1件取得"><!--
+<my-code class="php" data-title="レコードを1件取得"><!--
 $db->read($id番号);
---></code>
+--></my-code>
 
 <h2>reads</h2>
 <p>レコードを複数件取得する。</p>
@@ -97,12 +97,12 @@ $db->read($id番号);
 </td></tr>
 </table>
 
-<code class="php" data-title="最新のレコードを30件取得"><!--
+<my-code class="php" data-title="最新のレコードを30件取得"><!--
 foreach($db->reads(0, 30) as $k => $v){
     // $kはid番号、$vは値
 }
 
---></code>
+--></my-code>
 
 
 <h2>search</h2>
@@ -125,11 +125,11 @@ foreach($db->reads(0, 30) as $k => $v){
 </td></tr>
 </table>
 
-<code class="php" data-title="文字列検索"><!--
+<my-code class="php" data-title="文字列検索"><!--
 foreach($db->search('検索ワード', 0, 30) as $k => $v){
     // $kはid番号、$vは値
 }
---></code>
+--></my-code>
 
 
 
@@ -151,9 +151,9 @@ foreach($db->search('検索ワード', 0, 30) as $k => $v){
 </td></tr>
 </table>
 
-<code class="php" data-title="レコードを1件更新"><!--
+<my-code class="php" data-title="レコードを1件更新"><!--
 $db->update($id番号, $data);
---></code>
+--></my-code>
 
 <h2>edit</h2>
 
@@ -176,12 +176,12 @@ $db->update($id番号, $data);
 </td></tr>
 </table>
 
-<code class="php" data-title="レコードを1件更新"><!--
+<my-code class="php" data-title="レコードを1件更新"><!--
 $db->edit($id番号, function($value){
     // ここで$valueを編集する
     return $value; // $valueが保存される
 });
---></code>
+--></my-code>
 
 
 
@@ -199,9 +199,9 @@ $db->edit($id番号, function($value){
 </td></tr>
 </table>
 
-<code class="php" data-title="レコードを1件削除"><!--
+<my-code class="php" data-title="レコードを1件削除"><!--
 $db->delete($id番号);
---></code>
+--></my-code>
 
 
 
@@ -223,9 +223,9 @@ id番号が存在すればtrue、存在しなければfalse
 </td></tr>
 </table>
 
-<code class="php" data-title="id番号が存在するか確認"><!--
+<my-code class="php" data-title="id番号が存在するか確認"><!--
 $db->has($id番号);
---></code>
+--></my-code>
 
 
 
@@ -243,9 +243,9 @@ $db->has($id番号);
 </td></tr>
 </table>
 
-<code class="php" data-title="全件数"><!--
+<my-code class="php" data-title="全件数"><!--
 print $db->count();
---></code>
+--></my-code>
 
 
 <h2>transaction</h2>
@@ -265,14 +265,14 @@ print $db->count();
 コールバック関数の戻り値がそのまま返ります
 </td></tr>
 </table>
-<code class="php" data-title="transaction"><!--
+<my-code class="php" data-title="transaction"><!--
 $db->transaction(function($db){
     //ここにトランザクションが必要な処理を記述する
     //失敗したらfalseを返す
 });
 
 
---></code>
+--></my-code>
 
 <p class="info-blue">コールバック関数の第一引数には当オブジェクトが渡されます。<br>
 コールバック関数に引数を渡したい場合は、use()を使うか、当メソッドの第二引数以降に渡します。</p>

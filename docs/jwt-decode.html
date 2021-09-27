@@ -33,13 +33,13 @@ JWT文字列
 </table>
 
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 $jwt  = jwt::encode(['iss'=>'user_id', 'exp'=>1300819380], 'password');
 $data = jwt::decode($jwt);
 
 print $data['iss']; // user_id
 
---></code>
+--></my-code>
 
 <p class="info-blue">JWT文字列を作成するには <a href="jwt-encode.html">jwt::encode()</a> をご利用ください</p>
 </div>

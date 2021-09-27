@@ -38,7 +38,7 @@
 <h2>定数の展開</h2>
 
 <p>定数はプロパティのようにアクセスできます</p>
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 $print = new printer;
 
 print <<<END
@@ -46,7 +46,7 @@ $print->PHP_VERSION
 END;
 
 // 7.3.8
---></code>
+--></my-code>
 
 <p><small>マジック定数は未対応です</small></p>
 
@@ -57,7 +57,7 @@ END;
 <h2>関数の実行</h2>
 <p>関数はメソッドのように実行できます</p>
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print <<<END
 {$print->example(1,2)}
 END;
@@ -67,42 +67,42 @@ function exapmle($a, $b){
 }
 
 // 1:2
---></code>
+--></my-code>
 
 
 <h2>クラス関数の実行</h2>
 <p>クラス関数も、メソッドのように実行できます</p>
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print <<<END
 {$print->random::id()}
 END;
 
 // lbCQ2MR7077
---></code>
+--></my-code>
 
 
 <h2>クラス定数の展開</h2>
 
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print <<<END
 {$print(DateTime::ISO8601)}
 END;
 
 // Y-m-d\TH:i:sO
---></code>
+--></my-code>
 
 
 
 <h2>クラス変数の展開</h2>
 
 <p>クラス定数と同様な形で展開できます</p>
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print <<<END
 {$print(example::$sample)}
 END;
---></code>
+--></my-code>
 
 
 <h2>if</h2>
@@ -121,13 +121,13 @@ END;
 </td></tr>
 </table>
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print <<<END
 {$print->if(PHP_SAPI === 'cli', 'ok', 'ng')}
 END;
 
 // ok
---></code>
+--></my-code>
 
 
 
@@ -146,7 +146,7 @@ END;
 </td></tr>
 </table>
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print <<<END
 {$print->for([1,2,3], fn($v) => "<li>$v</li>\n")}
 END;
@@ -154,7 +154,7 @@ END;
 // <li>1</li>
 // <li>2</li>
 // <li>3</li>
---></code>
+--></my-code>
 
 
 <p>またforメソッドは、繰り返し回数を指定して実行することもできます。</p>
@@ -170,7 +170,7 @@ END;
 </td></tr>
 </table>
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print <<<END
 {$print->for(3, fn($i) => "<li>$i</li>\n")}
 END;
@@ -178,7 +178,7 @@ END;
 // <li>0</li>
 // <li>1</li>
 // <li>2</li>
---></code>
+--></my-code>
 
 
 
@@ -193,11 +193,11 @@ END;
 </td></tr>
 </table>
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print <<<END
 {$print->file('./example.txt')}
 END;
---></code>
+--></my-code>
 
 
 <h2>e</h2>
@@ -210,20 +210,20 @@ END;
 </td></tr>
 </table>
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print <<<END
 {$print->e('<br>')}
 END;
 
 // &lt;br&gt;
---></code>
+--></my-code>
 
 
 <h2>HTMLエスケープ</h2>
 
 <p>当オブジェクトの結果に<var>-&gt;e()</var>を加えると、HTMLエスケープができます</p>
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print <<<END
 
 //定数をエスケープ
@@ -239,7 +239,7 @@ print <<<END
 {$print->file('./example.txt')->e()}
 
 END;
---></code>
+--></my-code>
 </div>
 </article>
 

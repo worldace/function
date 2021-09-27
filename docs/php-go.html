@@ -36,7 +36,7 @@ PHPファイル側では<var>$arg</var>で内容が取得できます。
 </table>
 
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 //簡易ルーター
 switch(request::get('action')){
     case ''                : php::go('./action/index.php');
@@ -45,7 +45,7 @@ switch(request::get('action')){
     case 'video-post-form' : php::go('./action/video-post-form.php');
     default                : php::go('./action/index.php');
 }
---></code>
+--></my-code>
 
 <p class="info-blue">PHPファイルで<var>return 値</var>とすると、次のPHPファイルに<var>$arg</var>として渡せます。<br>
 何も返さなければスルーされ、以前に返したものが取得できます。</p>

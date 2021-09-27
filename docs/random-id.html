@@ -30,16 +30,16 @@ ID文字列。<br>
 </table>
 
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print random::id(); // Cr2E0Pkq0UF
 print random::id(); // u74v42cqfuG
---></code>
+--></my-code>
 
 <p class="info-blue">時計と乱数を組み合わせたIDです。100万分の1秒毎×確率1/4200 で一意です</p>
 
-<code class="php" data-title="発行したIDから発行時間を逆算できます"><!--
+<my-code class="php" data-title="発行したIDから発行時間を逆算できます"><!--
 $time = substr(str::base_decode($id), -10); //UNIX秒が得られる
---></code>
+--></my-code>
 
 
 </div>

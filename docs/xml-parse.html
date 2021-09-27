@@ -31,23 +31,23 @@ SimpleXMLオブジェクト
 </td></tr>
 </table>
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 $xml = file_get_contents('https://news.yahoo.co.jp/pickup/rss.xml');
 $xml = xml::parse($xml);
 
 foreach($xml->channel->item as $news){
     print $news->title . "\n"; // Yahooのニュースヘッドライン
 }
---></code>
+--></my-code>
 
-<code class="php" data-title="配列で受け取る"><!--
+<my-code class="php" data-title="配列で受け取る"><!--
 $xml = file_get_contents('https://news.yahoo.co.jp/pickup/rss.xml');
 $xml = xml::parse($xml, true);
 
 foreach($xml['rss']['channel']['item'] as $news){
     print $news['title'] . "\n"; // Yahooのニュースヘッドライン
 }
---></code>
+--></my-code>
 
 
 </div>

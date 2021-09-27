@@ -36,7 +36,7 @@
 </table>
 
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 // 基本的な使い方
 $html = new template('テンプレートファイルのパス');
 $html->var = 15; // 変数を割り当て
@@ -44,35 +44,35 @@ print $html;
 
 // 変数を一括して割り当てる
 print new template('テンプレートファイルのパス', ['var'=>15]);
---></code>
+--></my-code>
 
 <p>templateオブジェクトは文字列として評価された時に、コンパイルされ実行されます。<br>
 コンパイル結果はキャッシュされ、テンプレートと同じディレクトリに保存されます。</p>
 
 <h2>テンプレート書式例</h2>
 
-<code class="php" data-title="表示"><!--
+<my-code class="php" data-title="表示"><!--
 {{$v}}     //変数を表示
 {{ $v }}   //同上。両端の空白は無視される
 {{h($v)}}  //関数の実行結果を表示
---></code>
+--></my-code>
 
-<code class="php" data-title="foreach"><!--
+<my-code class="php" data-title="foreach"><!--
 <ul>
 <foreach code="$data as $v">
   <li>{{$v}}</li>
 </foreach>
 </ul>
---></code>
+--></my-code>
 
-<code class="php" data-title="if"><!--
+<my-code class="php" data-title="if"><!--
 <if code="$var > 0">
   <p>条件を満たした時に表示される</p>
 </if>
---></code>
+--></my-code>
 
 
-<code class="php" data-title="if-else"><!--
+<my-code class="php" data-title="if-else"><!--
 <if code="$var == 1">
   <p>1の時に表示</p>
 <elseif code="$var == 2">
@@ -80,11 +80,11 @@ print new template('テンプレートファイルのパス', ['var'=>15]);
 <else>
   <p>それ以外の時に表示</p>
 </if>
---></code>
+--></my-code>
 
-<code class="php" data-title="php"><!--
+<my-code class="php" data-title="php"><!--
 <?php print 'PHPを直接書く' ?>
---></code>
+--></my-code>
 
 
 

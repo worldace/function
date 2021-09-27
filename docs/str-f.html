@@ -30,11 +30,11 @@
 変換後の文字列
 </td></tr>
 </table>
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print str::f('<a href="%h">%h</a>%n', $url, $title);
 
 print str::f('http://%s/?key=%u&name=%u', $host, $key, $name);
---></code>
+--></my-code>
 
 <table>
 <caption>変換ルール</caption>
@@ -61,12 +61,12 @@ print str::f('http://%s/?key=%u&name=%u', $host, $key, $name);
 <tr><td>%%</td><td>%に変換</td></tr>
 </table>
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 print str::f('<li>%k:%v</li>%n', [10, 20]);
 
 // <li>0:10</li>
 // <li>1:20</li>
---></code>
+--></my-code>
 
 <p class="info-blue">配列を渡したときにキーと値をエスケープしたい場合は、第三引数にtrueを指定してください</p>
 

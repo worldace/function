@@ -30,14 +30,14 @@
 
 <p class="info-blue">この関数はアップロードの本処理は行いません。本処理は<a href="request-upload.html"> request::upload()</a> をご利用ください</p>
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 $upload = request::file('example');
 
 if(!$upload['error']){
     //アップロードに成功
     move_uploaded_file($upload['tmp_name'], './example.jpg');
 }
---></code>
+--></my-code>
 
 <table>
 <caption>アップロード情報の連想配列</caption>

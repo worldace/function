@@ -34,18 +34,18 @@ PHPファイルに渡す引数があれば。シリアライズ化できる形�
 </table>
 
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 php::async('./example.php', ['data']);
---></code>
+--></my-code>
 
-<code class="php" data-title="ファイル側"><!--
+<my-code class="php" data-title="ファイル側"><!--
 <?php
 if(PHP_SAPI !== 'cli'){ //シェル経由以外は終了する
     exit;
 }
 $arg; // ['data']
 
---></code>
+--></my-code>
 
 <p class="info-blue">非同期PHPはシェル経由で実行されます。結果を受け取る仕組みはありません</p>
 </div>

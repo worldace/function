@@ -35,7 +35,7 @@
 </table>
 
 
-<code class="php" data-title="第2引数 送信データの例"><!--
+<my-code class="php" data-title="第2引数 送信データの例"><!--
 //ファイルを1つ送信する [フォームのname名 => [ファイル名=>ファイルパス]]
 $data = ["file" => ["test.jpg" => "../test1.jpg"]];
 
@@ -47,7 +47,7 @@ $data = ["file" => ["test.jpg" => "../test1.jpg"], "password" => "example"];
 
 //送信
 http::post_file($url, $data);
---></code>
+--></my-code>
 
 <p class="info-blue">この関数を実行すると、レスポンスヘッダが配列として<var>http::$header</var>にセットされます</p>
 

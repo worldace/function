@@ -35,20 +35,20 @@
 </td></tr>
 </table>
 
-<code class="html" data-title="フォームの記述例"><!--
+<my-code class="html" data-title="フォームの記述例"><!--
 <form action="upload.php" method="POST" enctype="multipart/form-data">
 <input type="file" name="example" accept=".jpg,.jpeg">
 <input type="submit" name="submit" value="送信する">
 </form>
---></code>
+--></my-code>
 
-<code class="php" data-title="使用例"><!--
+<my-code class="php" data-title="使用例"><!--
 $upload = request::upload('example', './upload', ['jpg','jpeg']);
 
 if($upload['file']){
     //アップロードに成功
 }
---></code>
+--></my-code>
 
 <table>
 <caption>アップロード結果の連想配列</caption>

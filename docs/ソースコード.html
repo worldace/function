@@ -15,22 +15,14 @@
 <nav><a href="./"><img src="back.svg" width="24" height="24" title="ホームに戻る"></a></nav>
 </header>
 <div id="contents">
-
-<ul>
-  <li><a href="https://spelunker2.wordpress.com/2019/08/26/function-php/" target="_blank">開発室</a></li>
-</ul>
-
-
-<code id="code" class="php"></code>
-
-
 </div>
 </article>
 
+<script src="script.js"></script>
 <script>
 (async function(){
-    const response   = await fetch('https://raw.githubusercontent.com/worldace/function/master/function.php')
-    code.textContent = await response.text()
+    const response = await fetch('https://raw.githubusercontent.com/worldace/function/master/function.php')
+    contents.insertAdjacentHTML('beforeend', `<my-code class="php" data-title="function.php"><!--${await response.text()}--></my-code>`)
 })()
 </script>
 

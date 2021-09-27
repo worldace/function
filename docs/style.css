@@ -186,7 +186,7 @@ my-index li{
 
 
 /* codeブロック --------------- */
-code{
+my-code{
     font-family: "MS Gothic", monospace;/* Consolas */
     color: #222;
     line-height: 1.4;
@@ -202,11 +202,11 @@ code{
     display: block;
     white-space: pre;
 }
-code[data-title]{
+my-code[data-title]{
     position: relative;
     padding-top: 2.5rem;
 }
-code[data-title]::before{
+my-code[data-title]::before{
     content: attr(data-title);
     color: #444;
     font-family: meiryo, sans-serif;
