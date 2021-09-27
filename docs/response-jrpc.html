@@ -63,12 +63,12 @@ api.plus(1, 2).then(result => console.log(result)) // 3
 <h3>ファイル送信</h3>
 <p>APIの引数にはファイルを渡すことができます。</p>
 <my-code class="html" data-title="ファイル送信例"><!--
-<input id="inputfile" type="file">
+<input id="input" type="file">
 
 <script type="module">
 import api from './jrpc.js'
 
-inputfile.onchange = event => api.save_file(event.target.files[0])
+input.onchange = event => api.save(event.target.files[0])
 </script>
 --></my-code>
 
