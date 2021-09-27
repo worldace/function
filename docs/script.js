@@ -17,39 +17,10 @@ class MyIndex extends HTMLElement{
             el.id = el.textContent
             li += `<li><a href="#${encodeURIComponent(el.textContent)}">${el.textContent}</a></li>`
         }
-        this.attachShadow({mode:'open'}).innerHTML = `<ol>${li}</ol><style>${this.css}</style>`
+        this.innerHTML = `<ol>${li}</ol>`
     }
-
-    css = `
-    ol{
-        display: inline-block;
-        border: solid 1px #bbb;
-        background-color: #f9f9f9;
-        border-radius: 3px;
-        min-width: 15rem;
-        position: relative;
-        margin: 1.5rem 0;
-        padding: 3rem 1rem 1rem 3rem;
-    }
-    ol::before{
-        content: '目次';
-        letter-spacing: 0.3rem;
-        display: inline-block;
-        font-weight: bold;
-        color: #444;
-        position: absolute;
-        left: 50%;
-        top: 1rem;
-        transform: translateX(-50%);
-    }
-    li{
-        line-height: 1.45;
-    }
-    a{
-        text-decoration: none;
-    }
-    `
 }
+
 
 highlight()
 customElements.define('my-index', MyIndex)
