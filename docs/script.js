@@ -3,7 +3,7 @@
 
 class MyCode extends HTMLElement{
     connectedCallback(){
-        const code = this.firstChild.textContent.trim().replace(/＜ーー/g, '<--').replace(/ーー＞/g, '-->')
+        const code = this.firstChild.textContent.trim().replace(/＜！ーー/g, '<!--').replace(/ーー＞/g, '-->')
         this.innerHTML = hljs.highlight(this.className, code).value
     }
 }
