@@ -1354,11 +1354,6 @@ class SQLite{
     }
 
 
-    function __invoke($table){
-        return $this->table($table);
-    }
-
-
     function table_create(array $data){
         foreach($data as $k => $v){
             $sql_create[] = "`$k` $v";
@@ -1402,8 +1397,12 @@ class SQLite{
     }
 
 
-    function select(int $start, $length = 0, bool $reverse = false){
-        if(is_string($length)){
+    function select($start, $length = 0, bool $reverse = false){
+        if(is_string($start)){
+            $sql = sprintf('select `%s` from `%s` where id = %s', $start, $this->table, $length);
+            return $this->query($sql)->fetchColumn();
+        }
+        else if(is_string($length)){
             $sql = sprintf('select `%s` from `%s` where id = %s', $length, $this->table, $start);
             return $this->query($sql)->fetchColumn();
         }
@@ -1437,18 +1436,26 @@ class SQLite{
     }
 
 
+    function __invoke(string $sql, array $bind = []){
+        return $this->query($sql, $bind);
+    }
+
+
     function query(string $sql, array $bind = []){
-        if($bind){
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($bind);
-        }
-        else{
-            $stmt = $this->pdo->query($sql);
-        }
+        $stmt = $this->pdo->prepare($sql);
 
         if($this->table_class){
             $stmt->setFetchMode(PDO::FETCH_CLASS, $this->table_class);
         }
+
+        foreach($bind as $k => $v){
+            $name = is_int($k) ? $k+1 : $k;
+            $type = is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR;
+            $stmt->bindValue($name, $v, $type);
+        }
+
+        $stmt->execute();
+
         return $stmt;
     }
 

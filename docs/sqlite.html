@@ -63,11 +63,6 @@ SQLiteオブジェクト
 $db->table('fruit');
 --></my-code>
 
-<p class="info-blue">SQLiteオブジェクトを直接実行しても、テーブルを変更できます</p>
-
-<my-code class="php"><!--
-$db('fruit'); // $db->table('fruit') の省略形
---></my-code>
 
 
 <h2>table_create</h2>
@@ -85,7 +80,7 @@ $db->table_create([
     'id'    => 'integer primary key autoincrement', //当クラスの仕様上、この列が必須
     'name'  => 'text(10) not null',
     'price' => 'integer default 100',
-];
+]);
 --></my-code>
 
 <h3>SQLiteで設定できる型</h3>
@@ -195,6 +190,7 @@ $db->delete(5);
 
 <my-code class="php" data-title="1セル取得"><!--
 $result = $db->select(4, 'price'); //引数が「id番号」と「列名」だと1セル取得
+$result = $db->select('price', 4); //引数順は逆でもOK
 
 print $result; //戻り値は該当セルの値
 --></my-code>
@@ -286,9 +282,13 @@ $db->query('select * from fruit where name = ?', ['みかん']);
 
 //プレースホルダに「:」を使う
 $db->query('select * from fruit where name = :name', ['name'=>'みかん']); //[':name'=>'みかん']でも可
-
-
 --></my-code>
+
+<p class="info-blue">SQLiteオブジェクトを直接実行しても、SQLを実行できます</p>
+
+
+
+
 
 <h2>count</h2>
 
