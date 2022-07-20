@@ -1334,6 +1334,7 @@ class SQLite{
 
     function __construct(string $file, string $table = ''){
         $this->pdo = new \PDO("sqlite:$file", null, null);
+        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $this->table($table);
     }
 
@@ -1449,7 +1450,9 @@ class SQLite{
     function query(string $sql, array $bind = []){
         $stmt = $this->pdo->prepare($sql);
 
-        $this->table_class ? $stmt->setFetchMode(PDO::FETCH_CLASS, $this->table_class) : $stmt->setFetchMode(PDO::FETCH_OBJ);
+        if($this->table_class){
+            $stmt->setFetchMode(PDO::FETCH_CLASS, $this->table_class);
+        }
 
         foreach($bind as $k => $v){
             $name = is_int($k) ? $k+1 : $k;
