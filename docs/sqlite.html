@@ -185,18 +185,18 @@ $db->delete(5);
 --></my-code>
 
 
-<h2>select</h2>
+<h2>取得</h2>
 <p>データを取得する。引数により3パターンあります。</p>
 
 <my-code class="php" data-title="1セル取得"><!--
-$result = $db->select(4, 'price'); //引数が「id番号」と「列名」だと1セル取得
-$result = $db->select('price', 4); //引数順は逆でもOK
+$result = $db(4, 'price'); //引数が「id番号」と「列名」だと1セル取得
+$result = $db('price', 4); //引数順は逆でもOK
 
 print $result; //戻り値は該当セルの値
 --></my-code>
 
 <my-code class="php" data-title="1行取得"><!--
-$result = $db->select(4); //引数が「id番号」のみだと1行取得
+$result = $db(4); //引数が「id番号」のみだと1行取得
 
 //戻り値はオブジェクト
 print $result->name;
@@ -204,17 +204,17 @@ print $result->price;
 --></my-code>
 
 <my-code class="php" data-title="複数行取得"><!--
-$result = $db->select(0, 10); //引数が「開始位置」と「取得件数」だと複数行取得。開始位置は0から
+$result = $db(0, 10); //引数が「開始位置」と「取得件数」だと複数行取得。開始位置は0から
 
 //戻り値は「配列＋オブジェクト」の2重配列
 foreach($result as $fruit){
     print $fruit->name;
     print $fruit->price;
 }
+
+//※idの小さい順に選択される。逆順にしたい時は件数をマイナスにする。
 --></my-code>
 
-
-<p class="info-blue">複数行取得では、idの大きい順から選択されます。逆順にしたい場合は第3引数にtrueを渡してください</p>
 
 <h2>search</h2>
 

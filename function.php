@@ -1397,27 +1397,6 @@ class SQLite{
     }
 
 
-    function select($start, $length = 0, bool $reverse = false){
-        if(is_string($start)){
-            $sql = sprintf('select `%s` from `%s` where id = %s', $start, $this->table, $length);
-            return $this->query($sql)->fetchColumn();
-        }
-        else if(is_string($length)){
-            $sql = sprintf('select `%s` from `%s` where id = %s', $length, $this->table, $start);
-            return $this->query($sql)->fetchColumn();
-        }
-        else if($length === 0){
-            $sql = sprintf('select * from `%s` where id = %s', $this->table, $start);
-            return $this->query($sql)->fetch();
-        }
-        else{
-            $order = ($reverse) ? 'asc' : 'desc';
-            $sql = sprintf('select * from `%s` order by id %s limit %s offset %s', $this->table, $order, $length, $start);
-            return $this->query($sql)->fetchAll();
-        }
-    }
-
-
     function search(string $word, $key, int $start, int $length){
         $words = preg_split('/[[:space:]　]+/u', $word);
         $words = array_filter($words, 'strlen');
@@ -1436,8 +1415,37 @@ class SQLite{
     }
 
 
-    function __invoke(string $sql, array $bind = []){
-        return $this->query($sql, $bind);
+    function __invoke($a, $b = null){
+        if(is_int($a)){
+            if(is_int($b)){
+                if($b >= 0){
+                    $order = 'asc';
+                }
+                else{
+                    $b = -$b;
+                    $order = 'desc';
+                }
+                $sql = sprintf('select * from `%s` order by id %s limit %s offset %s', $this->table, $order, $b, $a);
+                return $this->query($sql)->fetchAll();
+            }
+            elseif(is_null($b)){
+                $sql = sprintf('select * from `%s` where id = %s', $this->table, $a);
+                return $this->query($sql)->fetch();
+            }
+            elseif(is_string($b)){
+                $sql = sprintf('select `%s` from `%s` where id = %s', $b, $this->table, $a);
+                return $this->query($sql)->fetchColumn();
+            }
+        }
+        elseif(is_string($a)){
+            if(is_int($b)){
+                $sql = sprintf('select `%s` from `%s` where id = %s', $a, $this->table, $b);
+                return $this->query($sql)->fetchColumn();
+            }
+            elseif(is_array($b) or is_null($b)){
+                return $this->query($a, (array)$b);
+            }
+        }
     }
 
 
