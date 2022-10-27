@@ -11,7 +11,7 @@
 
 <table id="menu">
 <thead><tr><th colspan="6">function.php</th></tr></thead>
-<tbody><!--
+<tbody data-item="
 ivsクラス
 kvsクラス
 sqliteクラス
@@ -127,27 +127,26 @@ php::class_toString
 php::benchmark
 os::clipboard
 os::is_windows
---></tbody></table>
+"></tbody></table>
 
 
 <script>
-menu.tBodies[0].innerHTML = textable(menu.tBodies[0].firstChild.textContent.trim())
+textable(menu.tBodies[0])
 
-function textable(text){
-    const items = text.split('\n\n').map(v => v.split('\n'))
+function textable(tbody){
+    const items = tbody.dataset.item.trim().split('\n\n').map(v => v.split('\n'))
     const ymax  = Math.max(...items.map(v => v.length))
-    let   html  = ''
 
     for(let y = 0; y < ymax; y++){
-        html += '<tr>'
+        const tr = tbody.insertRow()
         for(let x = 0; x < items.length; x++){
+            const td = tr.insertCell()
             const href = items[x][y]?.replace('クラス', '').replace('トレイト', '').replace('::', '-')
-            html += href ? `<td><a href="${href}.html">${items[x][y]}</a></td>` : `<td></td>`
+            if(href){
+                td.insertAdjacentHTML('afterbegin', `<a href="${href}.html">${items[x][y]}</a>`)
+            }
         }
-        html += '</tr>'
     }
-
-    return html
 }
 </script>
 </body>
