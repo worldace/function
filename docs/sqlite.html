@@ -65,7 +65,7 @@ $db->table('fruit');
 
 
 
-<h2>table_create</h2>
+<h2>new</h2>
 <p>テーブルを作成する。</p>
 
 <table class="function">
@@ -76,7 +76,7 @@ $db->table('fruit');
 </table>
 
 <my-code class="php" data-title="テーブル作成"><!--
-$db->table_create([
+$db->new([
     'id'    => 'integer primary key autoincrement', //当クラスの仕様上、この列が必須
     'name'  => 'text(10) not null',
     'price' => 'integer default 100',
@@ -117,7 +117,7 @@ $db->table_create([
 
 --></my-code>
 
-<h2>table_keys</h2>
+<h2>keys</h2>
 <p>現在のテーブルの列名一覧を取得する</p>
 
 <table class="function">
@@ -131,7 +131,7 @@ $db->table_create([
 </table>
 
 <my-code class="php" data-title="列名一覧を取得"><!--
-$db->table_keys();
+$db->keys();
 --></my-code>
 
 <h2>取得</h2>
@@ -328,7 +328,7 @@ print $db->count();
 </td></tr>
 </table>
 <my-code class="php" data-title="transaction"><!--
-$db->transaction(function($db){
+$db(function($db){
     //ここにトランザクションが必要な処理を記述する
     //失敗したら例外を投げてください
 });

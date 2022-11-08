@@ -140,10 +140,10 @@ function textable(tbody){
     for(let y = 0; y < ymax; y++){
         const tr = tbody.insertRow()
         for(let x = 0; x < items.length; x++){
-            const td = tr.insertCell()
-            const href = items[x][y]?.replace('クラス', '').replace('トレイト', '').replace('::', '-')
-            if(href){
-                td.insertAdjacentHTML('afterbegin', `<a href="${href}.html">${items[x][y]}</a>`)
+            const td   = tr.insertCell()
+            const item = items[x][y]?.replace('クラス', '').replace('トレイト', '').replace('::', '-')
+            if(item){
+                td.innerHTML = `<a href="${item}.html">${items[x][y]}</a>`
             }
         }
     }

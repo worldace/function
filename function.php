@@ -1352,7 +1352,7 @@ class SQLite{
     }
 
 
-    function table_create(array $data){
+    function new(array $data){
         foreach($data as $k => $v){
             $sql_create[] = "`$k` $v";
         }
@@ -1361,7 +1361,7 @@ class SQLite{
     }
 
 
-    function table_keys(){
+    function keys(){
         $sql = sprintf('pragma table_info (`%s`)', $this->table);
         return array_column($this->query($sql)->fetchAll(), 'name');
     }
@@ -1443,6 +1443,9 @@ class SQLite{
             elseif(is_array($b) or is_null($b)){
                 return $this->query($a, (array)$b);
             }
+        }
+        elseif(is_callable($a)){
+            return $this->transaction($a, ...$b);
         }
     }
 
