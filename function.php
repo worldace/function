@@ -1443,9 +1443,14 @@ class SQLite{
             elseif(is_array($b) or is_null($b)){
                 return $this->query($a, (array)$b);
             }
+            elseif(is_callable($a)){
+                return $this->transaction($a);
+            }
+        }
+
         }
         elseif(is_callable($a)){
-            return $this->transaction($a, ...$b);
+            return $this->transaction($a);
         }
     }
 
@@ -1475,10 +1480,10 @@ class SQLite{
     }
 
 
-    function transaction(callable $fn, ...$args){
+    function transaction(callable $fn){
         try{
             $this->pdo->beginTransaction();
-            $result = $fn($this, ...$args);
+            $result = $fn($this);
             $this->pdo->commit();
             return $result;
         }
