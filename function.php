@@ -1831,13 +1831,13 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
     }
 
 
-    function x($query){
+    function xpath($query){
         $nodelist = (new DOMXpath($this))->query($query);
         return $nodelist ? $nodelist[0] : null;
     }
 
 
-    function xAll($query){
+    function xpathAll($query){
         $result   = [];
         $nodelist = (new DOMXpath($this))->query($query);
 
