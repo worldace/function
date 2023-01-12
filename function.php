@@ -1448,7 +1448,6 @@ class SQLite{
             }
         }
 
-        }
         elseif(is_callable($a)){
             return $this->transaction($a);
         }
@@ -1832,6 +1831,26 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
     }
 
 
+    function x($query){
+        $nodelist = (new DOMXpath($this))->query($query);
+        return $nodelist ? $nodelist[0] : null;
+    }
+
+
+    function xAll($query){
+        $result   = [];
+        $nodelist = (new DOMXpath($this))->query($query);
+
+        if($nodelist){
+            foreach($nodelist as $v){
+                $result[] = $v;
+            }
+        }
+
+        return $result;
+    }
+
+
     private function createHTMLElement($tagName, $text = '', $attr = []){
         $el = $this->createElement($tagName);
         foreach($attr as $k => $v){
@@ -1891,11 +1910,11 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
 
     static function createHTMLFragment($document, $str){
         $fragment = $document->createDocumentFragment();
-        $fragment->appendXML($str);
-        //$dummy    = new self("<dummy>$str</dummy>");
-        //foreach($dummy->documentElement->childNodes as $child){
-        //    $fragment->appendChild($document->importNode($child, true));
-        //}
+        //$fragment->appendXML($str);
+        $dummy    = new self("<dummy>$str</dummy>");
+        foreach($dummy->documentElement->childNodes as $child){
+            $fragment->appendChild($document->importNode($child, true));
+        }
         return $fragment;
     }
 
@@ -1920,7 +1939,7 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
             'combinator' => '/^(\s*[>+~\s,])/i',
         ];
 
-        $pregMatchDelete = function ($pattern, &$subject, &$matches){ // 正規表現でマッチをしつつ、マッチ部分を削除
+        $pregMatchDelete = function ($pattern, &$subject, &$matches){
             if (preg_match($pattern, $subject, $matches)) {
                 $subject = substr($subject, strlen($matches[0]));
                 return true;
@@ -1930,7 +1949,6 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
         while (strlen(trim($selector)) && ($last !== $selector)){
             $selector = $last = trim($selector);
 
-            // Elementを取得
             if($element){
                 if ($pregMatchDelete($regex['element'], $selector, $e)){
                     $parts[] = ($e[1] === '') ? '*' : $e[1];
@@ -1938,7 +1956,6 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
                 $element = false;
             }
 
-            // IDとClassの指定を取得
             if($pregMatchDelete($regex['id_class'], $selector, $e)) {
                 switch ($e[1]){
                     case '.':
@@ -1950,9 +1967,8 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
                 }
             }
 
-            // atribauteを取得
             if($pregMatchDelete($regex['attribute'], $selector, $e)) {
-                switch ($e[2]){ // 二項(比較)
+                switch ($e[2]){
                     case '!=':
                         $parts[] = '[@' . $e[1] . '!=' . $e[3] . ']';
                         break;
@@ -1968,10 +1984,9 @@ class document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domd
                 }
             }
             else if ($pregMatchDelete($regex['attr_box'], $selector, $e)) {
-                $parts[] = '[@' . $e[1] . ']';  // 単項(存在性)
+                $parts[] = '[@' . $e[1] . ']';
             }
 
-             // combinatorとカンマがあったら、区切りを追加。また、次は型選択子又は汎用選択子でなければならない
             if ($pregMatchDelete($regex['combinator'], $selector, $e)) {
                 switch (trim($e[1])) {
                     case ',':
@@ -2122,7 +2137,6 @@ class HTMLFragment extends \DOMDocumentFragment{ // https://www.php.net/manual/j
         return $this->ownerDocument->saveHTML($this);
     }
 }
-
 
 
 class template{
