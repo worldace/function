@@ -2,6 +2,7 @@
 // https://spelunker2.wordpress.com/2019/08/26/function-php/
 
 
+
 class request{
     static function get(string $name, $default = ''){
         return (isset($_GET[$name]) and !is::empty($_GET[$name])) ? $_GET[$name] : $default;
